@@ -8,6 +8,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from apps.core import views as core_views
+from apps.core import admin_views
 from apps.topics import views as topic_views
 from apps.explainers import views as explainer_views
 from apps.library import views as library_views
@@ -22,7 +23,20 @@ admin.site.site_title = "Gujarat UCC Admin"
 admin.site.index_title = "Publishing Queue & Legal Provenance Dashboard"
 
 urlpatterns = [
+    # Standard Django Admin
     path('admin/', admin.site.urls),
+    
+    # Custom Editorial & Legal Review Admin Dashboard
+    path('portal-admin/', admin_views.admin_dashboard_home, name='portal_admin_home'),
+    path('portal-admin/login/', admin_views.portal_login_view, name='portal_admin_login'),
+    path('portal-admin/logout/', admin_views.portal_logout_view, name='portal_admin_logout'),
+    path('portal-admin/content/', admin_views.admin_content_list, name='portal_admin_content'),
+    path('portal-admin/content/explainer/add/', admin_views.admin_explainer_edit, name='portal_admin_explainer_add'),
+    path('portal-admin/content/explainer/<int:pk>/edit/', admin_views.admin_explainer_edit, name='portal_admin_explainer_edit'),
+    path('portal-admin/review-queue/', admin_views.admin_review_queue, name='portal_admin_review_queue'),
+    path('portal-admin/settings/', admin_views.admin_settings_view, name='portal_admin_settings'),
+    path('portal-admin/roles/', admin_views.admin_roles_view, name='portal_admin_roles'),
+    path('portal-admin/audit-logs/', admin_views.admin_audit_logs_view, name='portal_admin_audit_logs'),
     
     # Core Public Pages
     path('', core_views.home, name='home'),

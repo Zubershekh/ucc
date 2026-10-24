@@ -1,0 +1,110 @@
+{% load static core_tags %}
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>સંપાદકીય લોગિન | Gujarat UCC Editorial Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            background: #0F172A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            font-family: var(--font-sans-gu);
+            padding: 20px;
+        }
+        .login-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 440px;
+            overflow: hidden;
+        }
+        .login-head {
+            background: #1E293B;
+            padding: 30px;
+            text-align: center;
+            color: #FFFFFF;
+        }
+        .login-body {
+            padding: 32px 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+        .form-control {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border 0.15s;
+        }
+        .form-control:focus {
+            border-color: #B45309;
+            box-shadow: 0 0 0 3px rgba(180, 83, 9, 0.15);
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-card">
+    <div class="login-head">
+        <svg class="icon-svg icon-xl" style="color: #F59E0B; margin-bottom: 10px;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <h2 style="font-size: 1.25rem; font-weight: 800; margin-bottom: 4px;">ગુજરાત UCC સંચાલન મંચ</h2>
+        <p style="font-size: 0.82rem; color: #94A3B8;">Editorial CMS & Legal Verification Desk</p>
+    </div>
+
+    <div class="login-body">
+        {% if messages %}
+            {% for message in messages %}
+            <div style="padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 0.86rem; font-weight: 600; background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5;">
+                {{ message }}
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'portal_admin_login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">વપરાશકર્તા નામ (Username)</label>
+                <input type="text" name="username" class="form-control" placeholder="admin" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">પાસવર્ડ (Password)</label>
+                <input type="password" name="password" class="form-control" placeholder="••••••••" required>
+            </div>
+
+            <div style="margin-top: 26px;">
+                <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 0.95rem; font-weight: 700; border-radius: 6px;">
+                    પ્રવેશ કરો (Sign In to CMS)
+                </button>
+            </div>
+        </form>
+
+        <div style="margin-top: 22px; text-align: center;">
+            <a href="{% url 'home' %}" style="font-size: 0.84rem; color: #64748B; text-decoration: none; font-weight: 600;">
+                ← જાહેર વેબસાઇટ પર પાછા જાઓ
+            </a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

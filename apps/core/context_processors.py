@@ -98,6 +98,22 @@ def site_context(request):
     status_label = StatusTaxonomy.LABELS_GU.get(status_key) if is_gujarati else StatusTaxonomy.LABELS_EN.get(status_key)
     status_badge_class = StatusTaxonomy.BADGE_CLASSES.get(status_key, 'status-badge-neutral')
     
+    # Get current theme and accent
+    default_theme = getattr(settings, 'default_theme', 'light') if settings else 'light'
+    current_theme = request.session.get('site_theme', default_theme)
+    primary_accent = getattr(settings, 'primary_accent_color', '#B45309') if settings else '#B45309'
+
+    user_profile = None
+    if request.user.is_authenticated:
+        try:
+            from apps.core.models import UserProfile, UserRole
+            user_profile, _ = UserProfile.objects.get_or_create(
+                user=request.user,
+                defaults={'role': UserRole.ADMIN if request.user.is_superuser else UserRole.EDITOR}
+            )
+        except Exception:
+            user_profile = None
+
     return {
         'current_lang': current_lang,
         'is_gujarati': is_gujarati,
@@ -105,7 +121,11 @@ def site_context(request):
         'site_settings': settings,
         'current_status_label': status_label,
         'current_status_badge_class': status_badge_class,
+        'current_theme': current_theme,
+        'primary_accent_color': primary_accent,
+        'user_profile': user_profile,
         'STATUS_LABELS_EN': StatusTaxonomy.LABELS_EN,
         'STATUS_LABELS_GU': StatusTaxonomy.LABELS_GU,
         'STATUS_BADGE_CLASSES': StatusTaxonomy.BADGE_CLASSES,
     }
+

@@ -25,8 +25,17 @@ class Topic(models.Model):
         verbose_name = "UCC Topic"
         verbose_name_plural = "UCC Topics"
 
+    @property
+    def title_gu(self):
+        return self.name_gu
+
+    @property
+    def title_en(self):
+        return self.name_en
+
     def __str__(self):
         return f"{self.name_en} ({self.name_gu})"
 
     def get_absolute_url(self):
         return reverse('topic_detail', kwargs={'slug': self.slug})
+

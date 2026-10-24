@@ -120,12 +120,68 @@ class SiteSettings(models.Model):
         default="સ્વતંત્ર જાહેર કાનૂની માહિતી મંચ. આ સામગ્રી માત્ર સામાન્ય માહિતી માટે છે, કાનૂની સલાહ નથી. વ્યક્તિગત કાનૂની પરિસ્થિતિ માટે સક્ષમ વકીલનો સંપર્ક કરો. આ વેબસાઇટ કોઈપણ સરકારી સંસ્થા સાથે જોડાયેલ નથી."
     )
 
+    default_theme = models.CharField(
+        max_length=20,
+        choices=[("light", "Light Mode"), ("dark", "Dark Mode"), ("contrast", "High Contrast Accessibility")],
+        default="light"
+    )
+    primary_accent_color = models.CharField(max_length=30, default="#B45309", help_text="Hex color code for platform primary accent")
+    default_language = models.CharField(
+        max_length=10,
+        choices=[("gu", "ગુજરાતી (Gujarati)"), ("en", "English")],
+        default="gu"
+    )
+
     class Meta:
         verbose_name = "Site Setting & Live Legal Status"
         verbose_name_plural = "Site Settings & Live Legal Status"
 
     def __str__(self):
         return f"{self.site_name_en} (Status: {self.current_status})"
+
+
+class UserRole:
+    ADMIN = "ADMIN"
+    LEGAL_REVIEWER = "LEGAL_REVIEWER"
+    EDITOR = "EDITOR"
+
+    CHOICES = [
+        (ADMIN, "Platform Administrator (સંપૂર્ણ સંચાલક)"),
+        (LEGAL_REVIEWER, "Legal Advocate Reviewer (કાનૂની સમીક્ષક વકીલ)"),
+        (EDITOR, "Content Editor (સામગ્રી સંપાદક)"),
+    ]
+
+
+class UserProfile(models.Model):
+    """User role and editorial profile for Custom Admin Dashboard."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    role = models.CharField(max_length=30, choices=UserRole.CHOICES, default=UserRole.EDITOR)
+    bar_council_reg_number = models.CharField(
+        max_length=100, 
+        blank=True, 
+        help_text="Bar Council Enrollment No. (Required for Legal Reviewers)"
+    )
+    phone_number = models.CharField(max_length=20, blank=True)
+    preferred_theme = models.CharField(
+        max_length=20, 
+        choices=[("light", "Light Mode"), ("dark", "Dark Mode"), ("contrast", "High Contrast")],
+        default="light"
+    )
+
+    def __str__(self):
+        return f"{self.user.username} ({self.get_role_display()})"
+
+    @property
+    def is_portal_admin(self):
+        return self.role == UserRole.ADMIN or self.user.is_superuser
+
+    @property
+    def is_legal_reviewer(self):
+        return self.role in [UserRole.LEGAL_REVIEWER, UserRole.ADMIN] or self.user.is_superuser
+
+    @property
+    def is_editor(self):
+        return True
 
 
 class AuditLog(models.Model):
@@ -146,3 +202,4 @@ class AuditLog(models.Model):
 
     def __str__(self):
         return f"[{self.timestamp.strftime('%Y-%m-%d %H:%M')}] {self.user} - {self.action} on {self.model_name}"
+

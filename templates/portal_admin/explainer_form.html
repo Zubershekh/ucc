@@ -1,0 +1,174 @@
+{% extends 'portal_admin/base_admin.html' %}
+{% load core_tags %}
+
+{% block admin_heading %}
+    {% if explainer %}માર્ગદર્શિકા સંપાદન: {{ explainer.title_gu }}{% else %}નવી કાનૂની માર્ગદર્શિકા ઉમેરો{% endif %}
+{% endblock %}
+
+{% block admin_content %}
+
+<div class="card-panel" style="max-width: 980px;">
+    <div class="card-header-flex">
+        <div>
+            <h3>{% if explainer %}કાનૂની માર્ગદર્શિકા સુધારો (Edit Explainer){% else %}નવી માર્ગદર્શિકા રચના{% endif %}</h3>
+            <p style="font-size: 0.82rem; color: var(--muted-grey); margin-top: 2px;">
+                તમામ કલમો સત્તાવાર ગુજરાત UCC ગેઝેટ અને એક્ટ ૧૭/૨૦૨૬ આધારિત હોવી આવશ્યક છે.
+            </p>
+        </div>
+        <a href="{% url 'portal_admin_content' %}" class="btn-portal-outline">
+            ← પરત જાઓ
+        </a>
+    </div>
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    શીર્ષક (ગુજરાતી) *
+                </label>
+                <input type="text" name="title_gu" value="{{ explainer.title_gu|default:'' }}" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.95rem;">
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    Title (English) *
+                </label>
+                <input type="text" name="title_en" value="{{ explainer.title_en|default:'' }}" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.95rem;">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    મુખ્ય વિષય (Topic) *
+                </label>
+                <select name="topic_id" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+                    {% for t in topics %}
+                    <option value="{{ t.id }}" {% if explainer.topic_id == t.id %}selected{% endif %}>{{ t.title_gu }} ({{ t.title_en }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    વૈધાનિક સ્થિતિ બેજ (Legal Status Badge)
+                </label>
+                <select name="legal_status_badge" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+                    {% for val, label in status_choices %}
+                    <option value="{{ val }}" {% if explainer.legal_status_badge == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    સંપાદકીય પ્રક્રિયા સ્થિતિ (Editorial Stage)
+                </label>
+                <select name="editorial_status" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+                    {% for val, label in editorial_choices %}
+                    <option value="{{ val }}" {% if explainer.editorial_status == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Plain-Language Summary Deck -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    સાદી ભાષામાં સારાંશ (ગુજરાતી) *
+                </label>
+                <textarea name="summary_deck_gu" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.summary_deck_gu|default:'' }}</textarea>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    Plain-Language Summary (English) *
+                </label>
+                <textarea name="summary_deck_en" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.summary_deck_en|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Section 1: What Text Says -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    કાયદાની મૂળ કલમો શું કહે છે? (ગુજરાતી) *
+                </label>
+                <textarea name="what_the_text_says_gu" rows="4" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.what_the_text_says_gu|default:'' }}</textarea>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    What the Statutory Text States (English) *
+                </label>
+                <textarea name="what_the_text_says_en" rows="4" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.what_the_text_says_en|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Section 2: Who is covered -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    કોના પર અને શું લાગુ પડશે? (ગુજરાતી) *
+                </label>
+                <textarea name="who_is_covered_gu" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.who_is_covered_gu|default:'' }}</textarea>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    Who & What is Covered (English) *
+                </label>
+                <textarea name="who_is_covered_en" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.who_is_covered_en|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Section 3: Exceptions -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    અપવાદો અને વિશેષ જોગવાઈઓ (ગુજરાતી) *
+                </label>
+                <textarea name="exceptions_gu" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.exceptions_gu|default:'' }}</textarea>
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    Exceptions & Statutory Conditions (English) *
+                </label>
+                <textarea name="exceptions_en" rows="3" required style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ explainer.exceptions_en|default:'' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Citations & Advocate Attribution -->
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; margin-bottom: 26px;">
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    સત્તાવાર કલમ સંદર્ભો (Statutory Citations) *
+                </label>
+                <input type="text" name="source_citations" value="{{ explainer.source_citations|default:'' }}" required placeholder="e.g. Sections 8, 9, 14 of Gujarat Act 17 of 2026" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+            </div>
+
+            <div>
+                <label style="display: block; font-size: 0.88rem; font-weight: 700; margin-bottom: 6px;">
+                    કાનૂની સમીક્ષક વકીલનું નામ (Legal Reviewer Attribution)
+                </label>
+                <input type="text" name="legal_reviewer_name" value="{{ explainer.legal_reviewer_name|default:'Adv. H. S. Trivedi, High Court of Gujarat (Legal QA)' }}" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
+            <button type="submit" class="btn-portal-primary" style="padding: 12px 28px; font-size: 0.95rem;">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                માર્ગદર્શિકા સાચવો (Save Explainer)
+            </button>
+            <a href="{% url 'portal_admin_content' %}" class="btn-portal-outline" style="padding: 12px 20px;">
+                રદ કરો
+            </a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

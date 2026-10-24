@@ -1,215 +1,202 @@
 {% extends 'base.html' %}
 {% load core_tags %}
 
-{% block title %}{% if is_gujarati %}મુખ્ય પૃષ્ઠ | ગુજરાત UCC માહિતી મંચ{% else %}Home | Gujarat UCC Legal Information Portal{% endif %}{% endblock %}
+{% block title %}{% if is_gujarati %}મુખ્ય પૃષ્ઠ | ગુજરાત UCC કાનૂની માહિતી મંચ{% else %}Home | Gujarat UCC Public Information Platform{% endif %}{% endblock %}
 
 {% block content %}
-<div class="container section-py" style="padding-top: 32px;">
+<div class="container section-py" style="padding-top: 24px;">
 
-    <!-- 1. Hero Introduction: Understand at a Glance -->
-    <section class="portal-hero">
-        <div class="portal-hero-tag">
-            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-            <span>{% if is_gujarati %}સ્વતંત્ર જાહેર કાનૂની માહિતી મંચ{% else %}Independent Public Legal Information Platform{% endif %}</span>
-        </div>
-
-        <h1 class="portal-hero-title">
-            {% if is_gujarati %}
-            ગુજરાત સમાન નાગરિક સંહિતા (UCC) ૨૦૨૬
-            {% else %}
-            Gujarat Uniform Civil Code, 2026
-            {% endif %}
-        </h1>
-
-        <p class="portal-hero-lead">
-            {% if is_gujarati %}
-            નાગરિકો, પરિવારો અને સંશોધકો માટે કાયદાની કલમોનું સાદી ભાષામાં નિષ્પક્ષ વિશ્લેષણ, સત્તાવાર સરકારી ગેઝેટ અને વકીલો દ્વારા ચકાસાયેલ માહિતી.
-            {% else %}
-            A plain-language legal reference library linking Gujarat UCC statutory provisions to primary government gazettes, verified updates, and objective editorial reviews.
-            {% endif %}
-        </p>
-
-        <!-- 4-Stage Legislative Pipeline Tracker -->
-        <div class="pipeline-tracker">
-            <div class="pipeline-header">
-                <span>{% if is_gujarati %}કાયદાકીય માર્ગ અને વર્તમાન સ્થિતિ{% else %}Legislative Journey & Verified Status{% endif %}</span>
-                <span>{{ ui.last_verified }}: {{ site_settings.last_verified_date|date:"d M Y" }}</span>
+    <!-- =========================================================================
+         1. HERO SECTION: Simple, Visual & Easy to Scan with Bold Gujarati Typography
+         ========================================================================= -->
+    <section class="portal-hero-redesigned">
+        <div class="hero-content-wrapper">
+            <div class="portal-hero-tag">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                <span>{% if is_gujarati %}સ્વતંત્ર જાહેર કાનૂની માહિતી મંચ • ૨૦૨૬{% else %}Independent Legal Public Information Platform • 2026{% endif %}</span>
             </div>
 
-            <div class="pipeline-steps-grid">
+            <h1 class="portal-hero-title-bold">
+                {% if is_gujarati %}
+                ગુજરાત સમાન નાગરિક સંહિતા (UCC) ૨૦૨૬
+                {% else %}
+                Gujarat Uniform Civil Code, 2026
+                {% endif %}
+            </h1>
+
+            <p class="portal-hero-lead-short">
+                {% if is_gujarati %}
+                નાગરિકો અને પરિવારો માટે સાદી ભાષામાં કાયદાની કલમો અને સત્તાવાર સરકારી ગેઝેટનું નિષ્પક્ષ વિશ્લેષણ.
+                {% else %}
+                Plain-language legal explainers, official gazette citations, and verified legislative tracking for citizens and legal scholars.
+                {% endif %}
+            </p>
+
+            <!-- Compact Search Bar -->
+            <div class="hero-search-container">
+                <form action="{% url 'search_page' %}" method="get" class="hero-search-form">
+                    <svg class="nav-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" name="q" placeholder="{% if is_gujarati %}વિષય, કલમ અથવા કાનૂની પ્રશ્ન શોધો (દા.ત. વારસાઈ, લગ્ન, લિવ-ઇન)...{% else %}Search topics, sections or FAQs (e.g. inheritance, marriage, live-in)...{% endif %}" class="hero-search-input">
+                    <button type="submit" class="hero-search-btn">
+                        {% if is_gujarati %}શોધો{% else %}Search{% endif %}
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- =====================================================================
+             2. COMPACT 4-STAGE LEGISLATIVE STATUS PIPELINE
+             ===================================================================== -->
+        <div class="pipeline-compact-box">
+            <div class="pipeline-compact-header">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span class="status-badge {{ current_status_badge_class }}">
+                        {{ current_status_label }}
+                    </span>
+                    <span style="font-size: 0.84rem; font-weight: 700; color: var(--ink-charcoal);">
+                        {% if is_gujarati %}કાયદાકીય સ્થિતિ અને માર્ગ{% else %}Verified Legislative Status{% endif %}
+                    </span>
+                </div>
+                <div style="font-size: 0.78rem; color: var(--muted-grey);">
+                    {{ ui.last_verified }}: <strong>{{ site_settings.last_verified_date|date:"d M Y" }}</strong>
+                </div>
+            </div>
+
+            <!-- 4 Visual Compact Pills -->
+            <div class="pipeline-pills-row">
                 <!-- Step 1 -->
-                <div class="pipeline-step step-completed">
-                    <div class="step-status-top" style="color: #1B5E20;">
-                        <span>Step 1</span>
-                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="16 9 10 15 7 12"/></svg>
+                <div class="pipeline-pill step-done">
+                    <span class="pill-check">✓</span>
+                    <div class="pill-text">
+                        <span class="pill-title">{% if is_gujarati %}વિધાનસભા પસાર{% else %}Assembly Passed{% endif %}</span>
+                        <span class="pill-meta">માર્ચ ૨૦૨૬</span>
                     </div>
-                    <div class="step-title">{% if is_gujarati %}વિધાનસભા પસાર{% else %}Assembly Passed{% endif %}</div>
-                    <div class="step-date">March 2026</div>
                 </div>
 
                 <!-- Step 2 -->
-                <div class="pipeline-step step-completed">
-                    <div class="step-status-top" style="color: #1B5E20;">
-                        <span>Step 2</span>
-                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="16 9 10 15 7 12"/></svg>
+                <div class="pipeline-pill step-done">
+                    <span class="pill-check">✓</span>
+                    <div class="pill-text">
+                        <span class="pill-title">{% if is_gujarati %}રાષ્ટ્રપતિ મંજૂરી{% else %}Presidential Assent{% endif %}</span>
+                        <span class="pill-meta">૧૭ સપ્ટે ૨૦૨૬</span>
                     </div>
-                    <div class="step-title">{% if is_gujarati %}રાષ્ટ્રપતિ મંજૂરી{% else %}Presidential Assent{% endif %}</div>
-                    <div class="step-date">17 Sept 2026</div>
                 </div>
 
                 <!-- Step 3 -->
-                <div class="pipeline-step step-completed">
-                    <div class="step-status-top" style="color: #1B5E20;">
-                        <span>Step 3</span>
-                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="16 9 10 15 7 12"/></svg>
+                <div class="pipeline-pill step-done">
+                    <span class="pill-check">✓</span>
+                    <div class="pill-text">
+                        <span class="pill-title">{% if is_gujarati %}ગેઝેટ પ્રકાશન{% else %}Gazette Published{% endif %}</span>
+                        <span class="pill-meta">૧ ઓક્ટો ૨૦૨૬</span>
                     </div>
-                    <div class="step-title">{% if is_gujarati %}ગેઝેટ પ્રકાશન{% else %}Gazette Published{% endif %}</div>
-                    <div class="step-date">1 Oct 2026</div>
                 </div>
 
                 <!-- Step 4 -->
-                <div class="pipeline-step step-pending">
-                    <div class="step-status-top" style="color: var(--coral-red);">
-                        <span>Step 4</span>
-                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    </div>
-                    <div class="step-title">{% if is_gujarati %}અમલવારી જાહેરનામું{% else %}Commencement Date{% endif %}</div>
-                    <div class="step-date" style="color: var(--coral-red); font-weight: 600;">
-                        {% if is_gujarati %}સરકારી જાહેરનામું બાકી{% else %}Awaited from State Govt{% endif %}
+                <div class="pipeline-pill step-awaiting">
+                    <span class="pill-clock">⏳</span>
+                    <div class="pill-text">
+                        <span class="pill-title" style="color: #B45309;">{% if is_gujarati %}અમલવારી જાહેરનામું{% else %}Commencement Date{% endif %}</span>
+                        <span class="pill-meta" style="color: #D97706; font-weight: 700;">
+                            {% if is_gujarati %}સરકારી જાહેરનામું બાકી{% else %}Awaited from State Govt{% endif %}
+                        </span>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- 3 Quick Pathways for Visitor Action -->
-        <div class="user-pathways-grid">
-            <div class="pathway-card">
-                <div>
-                    <div class="pathway-icon-row">
-                        <div class="icon-circle" style="margin-bottom: 0;">
-                            <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
-                        </div>
-                        <h3 class="pathway-title">{{ ui.explainers }}</h3>
-                    </div>
-                    <p class="pathway-desc">
-                        {% if is_gujarati %}
-                        લગ્ન નોંધણી, દીકરીઓના વારસાઈ હક અને લિવ-ઇન નિયમોનું સાદી ભાષામાં સરળ વિશ્લેષણ.
-                        {% else %}
-                        Understand statutory provisions in plain English and Gujarati, who is covered, and exemptions.
-                        {% endif %}
-                    </p>
-                </div>
-                <a href="{% url 'explainers_list' %}" class="pathway-link">
-                    <span>{{ ui.read_more }}</span>
-                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-            </div>
-
-            <div class="pathway-card">
-                <div>
-                    <div class="pathway-icon-row">
-                        <div class="icon-circle" style="margin-bottom: 0;">
-                            <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                        </div>
-                        <h3 class="pathway-title">{{ ui.library }}</h3>
-                    </div>
-                    <p class="pathway-desc">
-                        {% if is_gujarati %}
-                        અસાધારણ ગેઝેટ વોલ્યુમ LXVII, વિધાનસભા બિલ ૧૭/૨૦૨૬ અને સત્તાવાર કમિટી અહેવાલો.
-                        {% else %}
-                        Access verified Extraordinary Gazettes, assented enactments, and government notifications.
-                        {% endif %}
-                    </p>
-                </div>
-                <a href="{% url 'library_list' %}" class="pathway-link">
-                    <span>{{ ui.library_head }}</span>
-                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-            </div>
-
-            <div class="pathway-card">
-                <div>
-                    <div class="pathway-icon-row">
-                        <div class="icon-circle" style="margin-bottom: 0;">
-                            <svg class="icon-svg icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                        </div>
-                        <h3 class="pathway-title">{{ ui.faq }} & {{ ui.glossary }}</h3>
-                    </div>
-                    <p class="pathway-desc">
-                        {% if is_gujarati %}
-                        શું કાયદો અત્યારે અમલમાં છે? અફવાઓ સામે કાયદાકીય સત્ય અને વૈધાનિક શબ્દકોશ.
-                        {% else %}
-                        Search factual answers to common public questions and definitions of statutory terms.
-                        {% endif %}
-                    </p>
-                </div>
-                <a href="{% url 'faq_glossary' %}" class="pathway-link">
-                    <span>{{ ui.faq }} & {{ ui.glossary }}</span>
-                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <!-- Factual Notice -->
+            <div class="pipeline-subnote">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24" style="color: #B45309;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>
+                    {% if is_gujarati %}
+                    <strong>કાનૂની સ્પષ્ટતા:</strong> ગુજરાત UCC કાયદો ૧ ઓક્ટોબર ૨૦૨૬ના રોજ ગેઝેટમાં પ્રકાશિત થયો છે, પરંતુ કલમ ૧(૨) મુજબ રાજ્ય સરકાર દ્વારા અલગથી અમલવારી જાહેરનામું બહાર ન પડે ત્યાં સુધી કાયદો અમલી ગણાશે નહીં.
+                    {% else %}
+                    <strong>Legal Status Note:</strong> While published in Extraordinary Gazette Vol LXVII on 1 Oct 2026, Section 1(2) mandates that the Act comes into force only upon separate government notification.
+                    {% endif %}
+                </span>
+                <a href="{{ site_settings.verified_official_source_url }}" target="_blank" rel="noopener noreferrer" style="font-weight: 700; color: #B45309; text-decoration: none; white-space: nowrap;">
+                    {% if is_gujarati %}સત્તાવાર ગેઝેટ PDF જુઓ ↗{% else %}View NeVA Gazette PDF ↗{% endif %}
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- 2. Core 6 Subject Pillars with Distinct Rich SVGs -->
+    <!-- =========================================================================
+         3. ATTRACTIVE 6 CORE TOPIC TILES
+         ========================================================================= -->
     <section class="section-py" style="padding-top: 10px;">
-        <div class="section-head">
+        <div class="section-head-redesigned">
             <div>
-                <h2 class="section-title">{{ ui.explore_topics }}</h2>
-                <div style="font-size: 0.9rem; color: var(--muted-grey); margin-top: 4px;">
+                <h2 class="section-title-bold">
+                    {% if is_gujarati %}મુખ્ય કાનૂની વિષયો{% else %}Key UCC Provisions by Subject{% endif %}
+                </h2>
+                <div class="section-subtitle-muted">
                     {% if is_gujarati %}
-                    ગુજરાત સમાન નાગરિક સંહિતા હેઠળ નિયંત્રિત ૬ મુખ્ય પારિવારિક અને સંપત્તિ વિષયો
+                    ગુજરાત સમાન નાગરિક સંહિતા હેઠળ નિયંત્રિત ૬ મુખ્ય પારિવારિક અને સંપત્તિ વિષયોની સરળ સમજૂતી
                     {% else %}
-                    The 6 core civil law pillars governed under the Gujarat Uniform Civil Code, 2026
+                    Explore the six core legal subject domains governed under the Gujarat Uniform Civil Code, 2026.
                     {% endif %}
                 </div>
             </div>
-            <a href="{% url 'topics_list' %}" class="section-view-all" style="display: inline-flex; align-items: center; gap: 4px;">
-                <span>{% if is_gujarati %}તમામ વિષયો{% else %}View All{% endif %}</span>
+            <a href="{% url 'topics_list' %}" class="section-action-link">
+                <span>{% if is_gujarati %}તમામ વિષયો વિગતવાર જુઓ{% else %}View All Topics{% endif %}</span>
                 <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
         </div>
 
-        <div class="topics-grid">
-            {% for topic in topics %}
-            <div class="topic-card">
-                <div>
-                    <div class="icon-circle">
-                        {% if topic.slug == 'marriage-registration' %}
-                        <!-- Marriage Rings SVG -->
+        <div class="topic-tiles-grid">
+            {% for t in topics %}
+            <div class="topic-tile-card">
+                <div class="tile-top">
+                    <div class="tile-icon-box">
+                        {% if 'marriage' in t.slug %}
+                        <!-- Marriage Rings -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>
-                        {% elif topic.slug == 'divorce-dissolution' %}
-                        <!-- Justice Scale SVG -->
+                        {% elif 'divorce' in t.slug %}
+                        <!-- Scales of Justice -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
-                        {% elif topic.slug == 'succession-inheritance' %}
-                        <!-- Succession Family Tree SVG -->
+                        {% elif 'succession' in t.slug %}
+                        <!-- Family Inheritance Tree -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M5 8h14"/><rect x="2" y="8" width="6" height="4" rx="1"/><rect x="16" y="8" width="6" height="4" rx="1"/><path d="M5 12v6"/><path d="M19 12v6"/><rect x="2" y="18" width="6" height="4" rx="1"/><rect x="9" y="18" width="6" height="4" rx="1"/><rect x="16" y="18" width="6" height="4" rx="1"/><path d="M12 8v10"/></svg>
-                        {% elif topic.slug == 'wills-estates' %}
-                        <!-- Wills Document SVG -->
+                        {% elif 'will' in t.slug %}
+                        <!-- Wills Document -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                        {% elif topic.slug == 'live-in-relationships' %}
-                        <!-- Partnership / Home SVG -->
+                        {% elif 'live-in' in t.slug %}
+                        <!-- Live-in Partnership -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
                         {% else %}
-                        <!-- Maintenance Shield SVG -->
+                        <!-- Shield / Maintenance -->
                         <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
                         {% endif %}
                     </div>
-                    <h3 class="topic-card-title">
-                        <a href="{% url 'topic_detail' topic.slug %}">
-                            {% get_bilingual topic 'name' %}
-                        </a>
-                    </h3>
-                    <p class="topic-card-summary">
-                        {% get_bilingual topic 'summary' %}
-                    </p>
-                </div>
-                <div style="border-top: 1px solid var(--border-subtle); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.8rem; color: var(--muted-grey);">
-                        {{ topic.explainers.count }} {% if is_gujarati %}માર્ગદર્શિકા{% else %}Guides{% endif %}
+                    <span class="tile-badge-counter">
+                        {{ t.explainers.count }} {% if is_gujarati %}માર્ગદર્શિકા{% else %}Guides{% endif %}
                     </span>
-                    <a href="{% url 'topic_detail' topic.slug %}" style="font-size: 0.84rem; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
-                        <span>{% if is_gujarati %}વિગત જુઓ{% else %}Explore{% endif %}</span>
+                </div>
+
+                <h3 class="tile-title">
+                    <a href="{% url 'topic_detail' t.slug %}">
+                        {% if is_gujarati %}{{ t.title_gu }}{% else %}{{ t.title_en }}{% endif %}
+                    </a>
+                </h3>
+
+                <!-- Short, Scannable 1-Line Summary -->
+                <p class="tile-summary-short">
+                    {% if is_gujarati %}
+                        {% if 'marriage' in t.slug %}તમામ લગ્નોની ફરજિયાત નોંધણી, કાયદાકીય વય અને બાળલગ્ન પર કડક પ્રતિબંધ.
+                        {% elif 'divorce' in t.slug %}એકસમાન અદાલતી છૂટાછેડા, મૌખિક છૂટાછેડાની નાબૂદી અને ન્યાયી ભરણપોષણ સુરક્ષા.
+                        {% elif 'succession' in t.slug %}વારસાઈ સંપત્તિમાં દીકરીઓ અને દીકરાઓને સમાન હિસ્સો આપતી એકસમાન જોગવાઈ.
+                        {% elif 'will' in t.slug %}આશ્રિતોના ભરણપોષણને આધીન મુક્તપણે વસિયતનામું (Will) કરવાનો અધિકાર.
+                        {% elif 'live-in' in t.slug %}સંબંધ નોંધણી નિવેદન, શોષણ સામે રક્ષણ અને જન્મેલા બાળકોને કાયદેસર દરજ્જો.
+                        {% else %}આશ્રિત માતાપિતા અને સંતાનોનું ભરણપોષણ અને બાળકના શ્રેષ્ઠ હિતને સર્વોચ્ચતા.
+                        {% endif %}
+                    {% else %}
+                        {{ t.summary_en|truncatewords:14 }}
+                    {% endif %}
+                </p>
+
+                <div class="tile-footer">
+                    <a href="{% url 'topic_detail' t.slug %}" class="tile-cta-link">
+                        <span>{% if is_gujarati %}વિગતવાર જોગવાઈઓ વાંચો{% else %}Read Detailed Provisions{% endif %}</span>
                         <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                     </a>
                 </div>
@@ -218,233 +205,243 @@
         </div>
     </section>
 
-    <!-- 3. Editorial Lead News & Side Updates -->
-    <section class="section-py" style="padding-top: 20px;">
-        <div class="lead-story-grid">
-            <!-- Lead Article -->
-            {% if breaking_news %}
-            <article class="lead-article-card">
-                <div>
-                    <div class="lead-badge-row">
-                        <span class="category-tag">{{ breaking_news.get_category_display }}</span>
-                        <span class="status-badge status-badge-info">
-                            {% if is_gujarati %}સત્તાવાર ગેઝેટ અપડેટ{% else %}Verified Official Record{% endif %}
-                        </span>
-                        <span style="font-size: 0.8rem; color: var(--muted-grey);">{{ breaking_news.published_date|date:"d M Y" }}</span>
-                    </div>
-                    <h2 class="lead-title">
-                        <a href="{% url 'news_detail' breaking_news.slug %}">
-                            {% get_bilingual breaking_news 'headline' %}
-                        </a>
-                    </h2>
-                    <p class="lead-excerpt">
-                        {% get_bilingual breaking_news 'excerpt' %}
-                    </p>
-                </div>
-                <div class="meta-footer">
-                    <div>
-                        <span>{% if is_gujarati %}સંપાદક:{% else %}Reporting Desk:{% endif %} <strong>{{ breaking_news.author_name }}</strong></span>
-                    </div>
-                    <div>
-                        <a href="{% url 'news_detail' breaking_news.slug %}" class="btn-primary" style="padding: 7px 16px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 6px;">
-                            <span>{{ ui.read_more }}</span>
-                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </article>
-            {% endif %}
-
-            <!-- Side Stream of Recent Updates -->
-            <div class="lead-side-stream">
-                <div style="border-bottom: 2px solid var(--ink-charcoal); padding-bottom: 6px; margin-bottom: 4px;">
-                    <h3 style="font-size: 1.15rem; font-family: var(--font-serif-gu), var(--font-serif-en);">
-                        {% if is_gujarati %}તાજા કાનૂની સમાચાર અને વિશ્લેષણ{% else %}Recent Legal Bulletins & Updates{% endif %}
-                    </h3>
-                </div>
-
-                {% for article in recent_news %}
-                <div class="side-article-item">
-                    <div style="font-size: 0.76rem; color: var(--coral-red); font-weight: 700; text-transform: uppercase;">
-                        {{ article.get_category_display }} • {{ article.published_date|date:"d M Y" }}
-                    </div>
-                    <h4 class="side-article-title">
-                        <a href="{% url 'news_detail' article.slug %}">
-                            {% get_bilingual article 'headline' %}
-                        </a>
-                    </h4>
-                    <p style="font-size: 0.86rem; color: #555; line-height: 1.5;">
-                        {% get_bilingual article 'excerpt' 18 %}
-                    </p>
-                </div>
-                {% empty %}
-                <div class="side-article-item">
-                    <h4 class="side-article-title">
-                        <a href="{% url 'library_list' %}">
-                            {% if is_gujarati %}સત્તાવાર ગેઝેટ અને વિધેયકની અસલ નકલ પુસ્તકાલયમાં ઉપલબ્ધ{% else %}Official Gazette & Bill Text Archived in Library{% endif %}
-                        </a>
-                    </h4>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
-
-    <!-- 4. Featured Plain-Language Explainers -->
-    <section class="section-py" style="background-color: var(--paper-white); padding: 36px; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); margin-bottom: 40px;">
-        <div class="section-head" style="margin-bottom: 24px;">
-            <div>
-                <h2 class="section-title">{{ ui.explainers }}</h2>
-                <div style="font-size: 0.9rem; color: var(--muted-grey); margin-top: 4px;">
-                    {% if is_gujarati %}
-                    કાયદાની અટપટી કલમોનું સાદી ભાષામાં સરળ વિશ્લેષણ, વકીલો દ્વારા ચકાસાયેલ
-                    {% else %}
-                    Plain-language breakdowns of statutory provisions reviewed by qualified legal advocates
-                    {% endif %}
-                </div>
-            </div>
-            <a href="{% url 'explainers_list' %}" class="section-view-all" style="display: inline-flex; align-items: center; gap: 4px;">
-                <span>{% if is_gujarati %}તમામ માર્ગદર્શિકા{% else %}Browse All Guides{% endif %}</span>
-                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-        </div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
-            {% for exp in featured_explainers %}
-            <div style="border: 1px solid var(--border-subtle); padding: 22px; border-radius: var(--radius-sm); background: #FCFAF8; display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <span class="category-tag">{% get_bilingual exp.topic 'name' %}</span>
-                        <span class="status-badge {% status_badge_class exp.legal_status_badge %}" style="font-size: 0.72rem;">
-                            {% get_status_label exp.legal_status_badge %}
-                        </span>
-                    </div>
-                    <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.25rem; font-weight: 700; line-height: 1.3; margin-bottom: 10px;">
-                        <a href="{% url 'explainer_detail' exp.slug %}" style="color: var(--ink-charcoal);">
-                            {% get_bilingual exp 'title' %}
-                        </a>
-                    </h3>
-                    <p style="font-size: 0.9rem; color: #555; margin-bottom: 16px; line-height: 1.6;">
-                        {% get_bilingual exp 'summary_deck' 24 %}
-                    </p>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--muted-grey); border-top: 1px solid var(--border-subtle); padding-top: 10px;">
-                    <span style="display: inline-flex; align-items: center; gap: 5px;">
-                        <svg class="icon-svg icon-sm" style="color: #1B5E20;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-                        <span>{{ exp.legal_reviewer_name }}</span>
-                    </span>
-                    <span>{{ exp.last_verified_date|date:"d M Y" }}</span>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </section>
-
-    <!-- 5. Primary Legal Documents Library -->
+    <!-- =========================================================================
+         4. DUAL COLUMN: Visual Timeline Stepper & Plain-Language Explainer Highlights
+         ========================================================================= -->
     <section class="section-py" style="padding-top: 10px;">
-        <div class="section-head">
-            <div>
-                <h2 class="section-title">{{ ui.library_head }}</h2>
-                <div style="font-size: 0.9rem; color: var(--muted-grey); margin-top: 4px;">
-                    {% if is_gujarati %}
-                    અધિકૃત ગેઝેટ, સરકારી વિધેયક અને સમિતિના મૂળ દસ્તાવેજો
-                    {% else %}
-                    Primary legal sources, Extraordinary Gazettes, and government notifications
-                    {% endif %}
+        <div style="display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px;">
+            
+            <!-- Left: Visual Legislative Stepper Timeline -->
+            <div class="home-card-container">
+                <div class="home-card-header">
+                    <div>
+                        <h3 class="home-card-title">
+                            {% if is_gujarati %}વિઝ્યુઅલ સમયરેખા (Legislative Timeline){% else %}Legislative Milestones Timeline{% endif %}
+                        </h3>
+                        <p class="home-card-sub">
+                            {% if is_gujarati %}કમિટી રચનાથી લઈને ગેઝેટ પ્રકાશન સુધીના ઐતિહાસિક તબક્કા{% else %}Chronological progress from committee formation to gazette publication.{% endif %}
+                        </p>
+                    </div>
+                    <a href="{% url 'timeline_page' %}" class="section-action-link" style="font-size: 0.82rem;">
+                        {% if is_gujarati %}સંપૂર્ણ સમયરેખા →{% else %}Full Timeline →{% endif %}
+                    </a>
                 </div>
-            </div>
-            <a href="{% url 'library_list' %}" class="section-view-all" style="display: inline-flex; align-items: center; gap: 4px;">
-                <span>{% if is_gujarati %}સંપૂર્ણ લાઈબ્રેરી{% else %}Full Library{% endif %}</span>
-                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-        </div>
 
-        <table class="legal-library-table">
-            <thead>
-                <tr>
-                    <th>{% if is_gujarati %}દસ્તાવેજ શીર્ષક અને ક્રમાંક{% else %}Document Title & Number{% endif %}</th>
-                    <th>{% if is_gujarati %}પ્રકાર{% else %}Type{% endif %}</th>
-                    <th>{% if is_gujarati %}તારીખ{% else %}Date{% endif %}</th>
-                    <th>{% if is_gujarati %}કાનૂની સ્થિતિ{% else %}Status{% endif %}</th>
-                    <th>{% if is_gujarati %}સ્ત્રોત લિંક{% else %}Official Source{% endif %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for doc in official_documents %}
-                <tr>
-                    <td class="doc-title-cell">
-                        <strong>
-                            <a href="{% url 'document_detail' doc.slug %}">
-                                {% get_bilingual doc 'title' %}
-                            </a>
-                        </strong>
-                        <div class="doc-meta-sub">
-                            {{ doc.document_number }} • {% get_bilingual doc 'issuing_authority' %}
+                <!-- Visual Stepper -->
+                <div class="visual-stepper">
+                    <!-- Milestone 1 -->
+                    <div class="stepper-item">
+                        <div class="stepper-marker done"></div>
+                        <div class="stepper-content">
+                            <div class="stepper-date">૧ ઓક્ટોબર ૨૦૨૬</div>
+                            <h4 class="stepper-title">
+                                {% if is_gujarati %}અસાધારણ ગેઝેટ વોલ્યુમ LXVII પ્રકાશન{% else %}Extraordinary Gazette Vol LXVII Published{% endif %}
+                            </h4>
+                            <p class="stepper-desc">
+                                {% if is_gujarati %}
+                                ગુજરાત એક્ટ નં. ૧૭/૨૦૨૬ સત્તાવાર રીતે પ્રકાશિત. અમલવારી તારીખ રાજ્ય સરકાર દ્વારા અલગથી જાહેર કરાશે.
+                                {% else %}
+                                Gujarat Act No. 17 of 2026 published following Presidential assent.
+                                {% endif %}
+                            </p>
                         </div>
-                    </td>
-                    <td>
-                        <span style="font-size: 0.8rem; font-weight: 600; background: #EEE9E3; padding: 2px 8px; border-radius: 3px;">
-                            {{ doc.get_document_type_display }}
-                        </span>
-                    </td>
-                    <td style="font-size: 0.86rem; color: var(--muted-grey); white-space: nowrap;">
-                        {{ doc.publication_date|date:"d M Y" }}
-                    </td>
-                    <td>
-                        <span class="status-badge {% status_badge_class doc.status %}">
-                            {% get_status_label doc.status %}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ doc.official_source_url }}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="padding: 5px 12px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px;">
-                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                            <span>NeVA ↗</span>
-                        </a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </div>
+
+                    <!-- Milestone 2 -->
+                    <div class="stepper-item">
+                        <div class="stepper-marker done"></div>
+                        <div class="stepper-content">
+                            <div class="stepper-date">૧૭ સપ્ટેમ્બર ૨૦૨૬</div>
+                            <h4 class="stepper-title">
+                                {% if is_gujarati %}ભારતના માનનીય રાષ્ટ્રપતિ દ્વારા મંજૂરી{% else %}Presidential Assent Granted{% endif %}
+                            </h4>
+                            <p class="stepper-desc">
+                                {% if is_gujarati %}
+                                ભારતીય બંધારણની કલમ ૨૫૪(૨) હેઠળ રાષ્ટ્રપતિ દ્વારા વિધેયકને ઔપચારિક મંજૂરી આપવામાં આવી.
+                                {% else %}
+                                Presidential assent obtained under Article 254(2) of the Constitution of India.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 3 -->
+                    <div class="stepper-item">
+                        <div class="stepper-marker done"></div>
+                        <div class="stepper-content">
+                            <div class="stepper-date">માર્ચ ૨૦૨૬</div>
+                            <h4 class="stepper-title">
+                                {% if is_gujarati %}ગુજરાત વિધાનસભા દ્વારા વિધેયક પસાર{% else %}Passed by Gujarat Legislative Assembly{% endif %}
+                            </h4>
+                            <p class="stepper-desc">
+                                {% if is_gujarati %}
+                                વિધાનસભામાં બિલ નં. ૧૭/૨૦૨૬ તરીકે રજૂ કરી વિસ્તૃત ચર્ચા બાદ બહુમતીથી પસાર કરાયું.
+                                {% else %}
+                                Introduced as Assembly Bill 17 of 2026 and passed by the State Legislature.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Milestone 4 -->
+                    <div class="stepper-item">
+                        <div class="stepper-marker awaiting"></div>
+                        <div class="stepper-content">
+                            <div class="stepper-date" style="color: #B45309; font-weight: 700;">આગામી તબક્કો</div>
+                            <h4 class="stepper-title" style="color: #B45309;">
+                                {% if is_gujarati %}અમલવારી જાહેરનામું અને નિયમો{% else %}Implementation Date & Rules Notification{% endif %}
+                            </h4>
+                            <p class="stepper-desc">
+                                {% if is_gujarati %}
+                                રાજ્ય સરકાર દ્વારા નિયમો અધિસૂચિત કરી અમલવારીની તારીખ નક્કી કરવાનું બાકી છે.
+                                {% else %}
+                                State Government notification appointing the date of enforcement is awaited.
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Featured Legal Guides / Explainers -->
+            <div class="home-card-container">
+                <div class="home-card-header">
+                    <div>
+                        <h3 class="home-card-title">
+                            {% if is_gujarati %}કાનૂની માર્ગદર્શિકાઓ (Plain Guides){% else %}Plain-Language Legal Guides{% endif %}
+                        </h3>
+                        <p class="home-card-sub">
+                            {% if is_gujarati %}કલમવાર ઊંડાણપૂર્વક વિશ્લેષણ સમર્પિત પેજ પર વાંચો{% else %}Read comprehensive section-by-section guides on dedicated pages.{% endif %}
+                        </p>
+                    </div>
+                    <a href="{% url 'explainers_list' %}" class="section-action-link" style="font-size: 0.82rem;">
+                        {% if is_gujarati %}બધી ગાઇડ્સ જુઓ →{% else %}View All Guides →{% endif %}
+                    </a>
+                </div>
+
+                <div class="guides-cards-list">
+                    {% for exp in featured_explainers|slice:":3" %}
+                    <div class="guide-item-card">
+                        <div class="guide-meta-top">
+                            <span class="category-tag">{{ exp.topic.title_gu }}</span>
+                            <span class="status-badge status-badge-warning" style="font-size: 0.68rem;">
+                                {{ exp.get_legal_status_badge_display }}
+                            </span>
+                        </div>
+                        <h4 class="guide-title">
+                            <a href="{% url 'explainer_detail' exp.slug %}">
+                                {% if is_gujarati %}{{ exp.title_gu }}{% else %}{{ exp.title_en }}{% endif %}
+                            </a>
+                        </h4>
+                        <p class="guide-summary-short">
+                            {% if is_gujarati %}
+                                {{ exp.summary_deck_gu|truncatewords:16 }}
+                            {% else %}
+                                {{ exp.summary_deck_en|truncatewords:16 }}
+                            {% endif %}
+                        </p>
+                        <div class="guide-footer-flex">
+                            <span style="font-size: 0.74rem; color: var(--muted-grey);">
+                                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                {{ exp.legal_reviewer_name|truncatechars:28 }}
+                            </span>
+                            <a href="{% url 'explainer_detail' exp.slug %}" class="guide-link-btn">
+                                <span>{% if is_gujarati %}વાંચો{% else %}Read Guide{% endif %}</span>
+                                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
     </section>
 
-    <!-- 6. FAQs Section -->
+    <!-- =========================================================================
+         5. OFFICIAL DOCUMENTS & VERIFIED PROVENANCE
+         ========================================================================= -->
     <section class="section-py" style="padding-top: 10px;">
-        <div class="section-head">
-            <div>
-                <h2 class="section-title">{{ ui.faq }}</h2>
-                <div style="font-size: 0.9rem; color: var(--muted-grey); margin-top: 4px;">
-                    {% if is_gujarati %}નાગરિકોના મનમાં ઉદ્ભવતા સામાન્ય સવાલોના સાચા કાનૂની જવાબો{% else %}Direct legal answers to common public questions{% endif %}
+        <div class="home-card-container">
+            <div class="home-card-header">
+                <div>
+                    <h3 class="home-card-title">
+                        {% if is_gujarati %}સત્તાવાર ગેઝેટ અને કાનૂની દસ્તાવેજો{% else %}Official Gazettes & Primary Legal Records{% endif %}
+                    </h3>
+                    <p class="home-card-sub">
+                        {% if is_gujarati %}
+                        સરકારી ગેઝેટ, વિધાનસભા વિધેયક અને અહેવાલોની સીધી PDF કડીઓ
+                        {% else %}
+                        Direct access to official Extraordinary Gazettes and statutory legislative papers.
+                        {% endif %}
+                    </p>
                 </div>
+                <a href="{% url 'library_list' %}" class="section-action-link" style="font-size: 0.82rem;">
+                    {% if is_gujarati %}કાનૂની પુસ્તકાલય જુઓ →{% else %}Browse Complete Library →{% endif %}
+                </a>
             </div>
-            <a href="{% url 'faq_glossary' %}" class="section-view-all" style="display: inline-flex; align-items: center; gap: 4px;">
-                <span>{% if is_gujarati %}બધા પ્રશ્નો{% else %}All FAQs{% endif %}</span>
-                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-        </div>
 
-        <div>
-            {% for faq in featured_faqs %}
-            <div class="faq-item">
-                <button type="button" class="faq-question-btn">
-                    <span>{% get_bilingual faq 'question' %}</span>
-                    <span class="faq-indicator" style="font-size: 1.3rem; color: var(--coral-red); font-weight: 300;">+</span>
-                </button>
-                <div class="faq-answer-pane" style="display: none;">
-                    <p style="font-weight: 600; color: var(--ink-charcoal); margin-bottom: 10px;">
-                        {% get_bilingual faq 'short_answer' %}
-                    </p>
-                    <p style="font-size: 0.94rem; color: #555;">
-                        {% get_bilingual faq 'detailed_answer' %}
-                    </p>
-                    {% if faq.citations %}
-                    <div style="margin-top: 12px; font-size: 0.8rem; color: var(--muted-grey); display: inline-flex; align-items: center; gap: 6px;">
-                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-                        <span><strong>{{ ui.citations }}:</strong> {{ faq.citations }}</span>
-                    </div>
-                    {% endif %}
-                </div>
+            <div class="table-responsive">
+                <table class="portal-table" style="font-size: 0.86rem;">
+                    <thead>
+                        <tr>
+                            <th>{% if is_gujarati %}દસ્તાવેજ શીર્ષક{% else %}Document Title{% endif %}</th>
+                            <th>{% if is_gujarati %}પ્રકાર{% else %}Document Type{% endif %}</th>
+                            <th>{% if is_gujarati %}ગેઝેટ / વિધેયક સંદર્ભ{% else %}Gazette / Act Reference{% endif %}</th>
+                            <th>{% if is_gujarati %}તારીખ{% else %}Date{% endif %}</th>
+                            <th>{% if is_gujarati %}સત્તાવાર ડાઉનલોડ{% else %}Official Access{% endif %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for doc in official_documents %}
+                        <tr>
+                            <td>
+                                <div style="font-weight: 700; color: var(--ink-charcoal);">
+                                    {% if is_gujarati %}{{ doc.title_gu }}{% else %}{{ doc.title_en }}{% endif %}
+                                </div>
+                            </td>
+                            <td><span class="role-pill role-editor">{{ doc.get_document_type_display }}</span></td>
+                            <td><code>{{ doc.act_or_gazette_number|default:"Act 17 of 2026" }}</code></td>
+                            <td style="color: var(--muted-grey);">{{ doc.publication_date|date:"d M Y" }}</td>
+                            <td>
+                                <a href="{% if doc.official_source_url %}{{ doc.official_source_url }}{% else %}{% url 'document_detail' doc.slug %}{% endif %}" target="_blank" rel="noopener noreferrer" style="color: #B45309; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                                    <span>{% if is_gujarati %}સત્તાવાર ગેઝેટ PDF{% else %}Official PDF{% endif %}</span>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
-            {% endfor %}
+        </div>
+    </section>
+
+    <!-- =========================================================================
+         6. INDEPENDENT PLATFORM TRANSPARENCY & CITIZEN FEEDBACK
+         ========================================================================= -->
+    <section class="section-py" style="padding-top: 10px; margin-bottom: 20px;">
+        <div class="transparency-banner">
+            <div class="transparency-icon-box">
+                <svg class="icon-svg icon-xl" viewBox="0 0 24 24" style="color: #B45309;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+            </div>
+            <div class="transparency-text">
+                <h4 style="font-size: 1.05rem; font-weight: 800; color: var(--ink-charcoal); margin-bottom: 4px;">
+                    {% if is_gujarati %}સ્વતંત્ર કાનૂની સંશોધન મંચ • સંપાદકીય પારદર્શિતા{% else %}Independent Legal Editorial Initiative • Editorial Transparency{% endif %}
+                </h4>
+                <p style="font-size: 0.84rem; color: #475569; line-height: 1.6; margin-bottom: 0;">
+                    {% if is_gujarati %}
+                    આ પ્લેટફોર્મ કોઈપણ રાજકીય કે સરકારી પક્ષપાત વિના માત્ર સત્તાવાર ગેઝેટ, વિધેયકની કલમો અને હાઇકોર્ટના વકીલોની ચકાસણી પર આધારિત છે. જો આપને કોઈ કલમ અથવા તથ્યમાં વિસંગતતા જણાય, તો આપ સત્તાવાર સરકારી ગેઝેટ પુરાવા સાથે સુધારો નોંધાવી શકો છો.
+                    {% else %}
+                    This platform publishes strictly verified statutory information derived from official gazettes and advocate reviews. No speculative commentary is published as law.
+                    {% endif %}
+                </p>
+            </div>
+            <div style="flex-shrink: 0;">
+                <a href="{% url 'corrections_page' %}" class="btn-portal-primary" style="white-space: nowrap;">
+                    {% if is_gujarati %}ભૂલ સુધારો નોંધાવો{% else %}Submit Correction{% endif %}
+                </a>
+            </div>
         </div>
     </section>
 

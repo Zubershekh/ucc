@@ -1,0 +1,268 @@
+{% extends 'portal_admin/base_admin.html' %}
+{% load core_tags %}
+
+{% block admin_heading %}મુખ્ય નિયંત્રણ કેન્દ્ર (Executive Dashboard){% endblock %}
+
+{% block admin_content %}
+
+<!-- 1. KPI Counter Grid -->
+<div class="kpi-grid">
+    <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #FEF3C7; color: #B45309;">
+            <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div>
+            <div class="kpi-num">{{ kpis.total_explainers }}</div>
+            <div class="kpi-label">કુલ માર્ગદર્શિકાઓ (Explainers)</div>
+        </div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #E0E7FF; color: #4338CA;">
+            <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+            <div class="kpi-num" style="color: #4338CA;">{{ kpis.pending_legal_review }}</div>
+            <div class="kpi-label">કાનૂની સમીક્ષા બાકી (Pending QA)</div>
+        </div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #DCFCE7; color: #15803D;">
+            <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div>
+            <div class="kpi-num">{{ kpis.total_topics }}</div>
+            <div class="kpi-label">મુખ્ય કાનૂની વિષયો (Topics)</div>
+        </div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #FEE2E2; color: #B91C1C;">
+            <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+            <div class="kpi-num" style="color: #B91C1C;">{{ kpis.pending_corrections }}</div>
+            <div class="kpi-label">નાગરિક ભૂલ સુધારા (Corrections)</div>
+        </div>
+    </div>
+
+    <div class="kpi-card">
+        <div class="kpi-icon-box" style="background: #F1F5F9; color: #334155;">
+            <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <div>
+            <div class="kpi-num">{{ kpis.total_documents }}</div>
+            <div class="kpi-label">સત્તાવાર ગેઝેટ અને દસ્તાવેજો</div>
+        </div>
+    </div>
+</div>
+
+<!-- 2. Dual Panel: Live Legal Status Quick Control & Legal QA Pipeline -->
+<div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 24px; margin-bottom: 24px;">
+    <!-- Legal Status Quick Control Form -->
+    <div class="card-panel">
+        <div class="card-header-flex">
+            <div>
+                <h3>સત્તાવાર કાનૂની સ્થિતિ નિયંત્રણ (Live Legal Status)</h3>
+                <p style="font-size: 0.8rem; color: var(--muted-grey); margin-top: 2px;">
+                    આ સેટિંગ સમગ્ર પ્લેટફોર્મ પર રાષ્ટ્રપતિ મંજૂરી, ગેઝેટ પ્રકાશન અને અમલવારી સ્થિતિ નક્કી કરે છે.
+                </p>
+            </div>
+            <span class="status-badge {{ current_status_badge_class }}">
+                {{ current_status_label }}
+            </span>
+        </div>
+
+        <form method="post" action="{% url 'portal_admin_home' %}">
+            {% csrf_token %}
+            <input type="hidden" name="update_legal_status" value="1">
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.86rem; font-weight: 700; margin-bottom: 6px;">
+                    વર્તમાન વૈધાનિક સ્થિતિ (Current Stage)
+                </label>
+                <select name="current_status" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+                    {% for val, label in status_choices %}
+                    <option value="{{ val }}" {% if site_settings.current_status == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.86rem; font-weight: 700; margin-bottom: 6px;">
+                    સ્થિતિ સમજૂતી (ગુજરાતી)
+                </label>
+                <textarea name="status_summary_gu" rows="2" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ site_settings.status_summary_gu }}</textarea>
+            </div>
+
+            <div style="margin-bottom: 16px;">
+                <label style="display: block; font-size: 0.86rem; font-weight: 700; margin-bottom: 6px;">
+                    Status Summary (English)
+                </label>
+                <textarea name="status_summary_en" rows="2" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">{{ site_settings.status_summary_en }}</textarea>
+            </div>
+
+            <div style="display: flex; gap: 16px; align-items: flex-end;">
+                <div style="flex: 1;">
+                    <label style="display: block; font-size: 0.86rem; font-weight: 700; margin-bottom: 6px;">
+                        છેલ્લી ચકાસણી તારીખ (Last Verified Date)
+                    </label>
+                    <input type="date" name="last_verified_date" value="{{ site_settings.last_verified_date|date:'Y-m-d' }}" style="width: 100%; padding: 9px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">
+                </div>
+                <button type="submit" class="btn-portal-primary" style="padding: 10px 20px;">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    સ્થિતિ અપડેટ કરો
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Review Queue Snapshot -->
+    <div class="card-panel">
+        <div class="card-header-flex">
+            <div>
+                <h3>સંપાદકીય અને વકીલ સમીક્ષા કતાર</h3>
+                <p style="font-size: 0.8rem; color: var(--muted-grey); margin-top: 2px;">
+                    કાનૂની સમીક્ષક વકીલ દ્વારા ચકાસણી હેઠળ રહેલી તાજી માર્ગદર્શિકાઓ
+                </p>
+            </div>
+            <a href="{% url 'portal_admin_review_queue' %}" class="btn-portal-outline" style="font-size: 0.8rem; padding: 5px 10px;">
+                બધું જુઓ →
+            </a>
+        </div>
+
+        {% if review_queue %}
+        <div class="table-responsive">
+            <table class="portal-table">
+                <thead>
+                    <tr>
+                        <th>શીર્ષક (Title)</th>
+                        <th>વિષય</th>
+                        <th>સ્થિતિ</th>
+                        <th>ક્રિયા</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in review_queue %}
+                    <tr>
+                        <td>
+                            <div style="font-weight: 700; color: var(--ink-charcoal);">{{ item.title_gu }}</div>
+                            <div style="font-size: 0.78rem; color: var(--muted-grey);">{{ item.title_en }}</div>
+                        </td>
+                        <td><span style="font-size: 0.82rem; font-weight: 600;">{{ item.topic.title_gu }}</span></td>
+                        <td>
+                            <span class="role-pill {% if item.editorial_status == 'LEGAL_REVIEW' %}role-legal{% elif item.editorial_status == 'APPROVED' %}role-admin{% else %}role-editor{% endif %}">
+                                {{ item.get_editorial_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'portal_admin_explainer_edit' item.id %}" style="font-size: 0.82rem; font-weight: 700; color: #B45309; text-decoration: none;">
+                                સમીક્ષા કરો
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div style="padding: 30px; text-align: center; color: var(--muted-grey); font-size: 0.9rem;">
+            ✓ કોઈ માર્ગદર્શિકા હાલ સમીક્ષા માટે બાકી નથી.
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 3. Bottom Grid: Pending Citizen Corrections & Audit Trail -->
+<div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 24px;">
+    <!-- Citizen Corrections Queue -->
+    <div class="card-panel">
+        <div class="card-header-flex">
+            <div>
+                <h3>નાગરિક ભૂલ સુધારા અહેવાલો</h3>
+                <p style="font-size: 0.8rem; color: var(--muted-grey); margin-top: 2px;">
+                    જાહેર વાચકો દ્વારા નોંધાયેલ તથ્ય ચકાસણી સૂચનો
+                </p>
+            </div>
+            <a href="{% url 'corrections_page' %}" target="_blank" class="btn-portal-outline" style="font-size: 0.8rem; padding: 5px 10px;">
+                જાહેર પેજ જુઓ
+            </a>
+        </div>
+
+        {% if pending_corrections_list %}
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for corr in pending_corrections_list %}
+            <div style="border: 1px solid var(--border-subtle); border-radius: 6px; padding: 12px 14px; background: #FFFDFB;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                    <span style="font-size: 0.84rem; font-weight: 700; color: #B45309;">{{ corr.reference_page_or_topic }}</span>
+                    <span style="font-size: 0.74rem; color: var(--muted-grey);">{{ corr.created_at|date:"d M H:i" }}</span>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--ink-charcoal); margin-bottom: 6px;">{{ corr.specific_error_description|truncatewords:15 }}</p>
+                <div style="font-size: 0.76rem; color: #15803D;"><strong>સ્ત્રોત આધાર:</strong> {{ corr.official_source_proof|truncatewords:8 }}</div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div style="padding: 24px; text-align: center; color: var(--muted-grey); font-size: 0.9rem;">
+            ✓ કોઈ પેન્ડિંગ ભૂલ સુધારો અહેવાલ નથી.
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Security & Editorial Audit Trail -->
+    <div class="card-panel">
+        <div class="card-header-flex">
+            <div>
+                <h3>તાજેતરના ઓડિટ લોગ્સ (Audit Trail)</h3>
+                <p style="font-size: 0.8rem; color: var(--muted-grey); margin-top: 2px;">
+                    સંચાલકો અને વકીલો દ્વારા કરવામાં આવેલી તમામ ક્રિયાઓની ડિજિટલ નોંધણી
+                </p>
+            </div>
+            <a href="{% url 'portal_admin_audit_logs' %}" class="btn-portal-outline" style="font-size: 0.8rem; padding: 5px 10px;">
+                તમામ લોગ્સ જુઓ →
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="portal-table">
+                <thead>
+                    <tr>
+                        <th>સમય</th>
+                        <th>વપરાશકર્તા</th>
+                        <th>ક્રિયા (Action)</th>
+                        <th>વિગત</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for audit in recent_audits %}
+                    <tr>
+                        <td style="font-size: 0.78rem; color: var(--muted-grey); white-space: nowrap;">
+                            {{ audit.timestamp|date:"d M H:i" }}
+                        </td>
+                        <td style="font-weight: 700; font-size: 0.82rem;">
+                            {{ audit.user.username|default:"System" }}
+                        </td>
+                        <td>
+                            <span style="font-size: 0.74rem; font-family: monospace; background: #F1F5F9; padding: 2px 6px; border-radius: 4px; font-weight: 700;">
+                                {{ audit.action }}
+                            </span>
+                        </td>
+                        <td style="font-size: 0.82rem; color: #475569;">
+                            {{ audit.object_repr|default:audit.notes|truncatechars:35 }}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: var(--muted-grey); padding: 20px;">
+                            કોઈ તાજા ઓડિટ લોગ્સ ઉપલબ્ધ નથી.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

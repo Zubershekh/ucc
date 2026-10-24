@@ -1,0 +1,74 @@
+{% extends 'portal_admin/base_admin.html' %}
+{% load core_tags %}
+
+{% block admin_heading %}સુરક્ષા અને સંપાદકીય ઓડિટ લોગ્સ (Digital Provenance Audit Trail){% endblock %}
+
+{% block admin_content %}
+
+<div class="card-panel">
+    <div class="card-header-flex">
+        <div>
+            <h3>સંપૂર્ણ ઓડિટ ટ્રેઇલ (Compliance & Legal Verification Logs)</h3>
+            <p style="font-size: 0.84rem; color: var(--muted-grey); margin-top: 2px;">
+                Section 10 અને Section 11 અનુસાર તમામ કાનૂની ફેરફારો, સ્ટેટસ અપડેટ્સ અને વકીલ મંજૂરીઓની સુરક્ષિત ડિજિટલ નોંધ.
+            </p>
+        </div>
+
+        <form method="get" action="" style="display: flex; gap: 8px;">
+            <select name="action" style="padding: 8px 12px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.84rem;">
+                <option value="">તમામ ક્રિયાઓ (All Actions)</option>
+                {% for act in distinct_actions %}
+                <option value="{{ act }}" {% if action_filter == act %}selected{% endif %}>{{ act }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="q" value="{{ search_q }}" placeholder="શોધો (Search Logs)..." style="padding: 8px 12px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.84rem;">
+            <button type="submit" class="btn-portal-outline" style="padding: 8px 14px;">ફિલ્ટર કરો</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="portal-table">
+            <thead>
+                <tr>
+                    <th>સમય (Timestamp)</th>
+                    <th>વપરાશકર્તા (User)</th>
+                    <th>ક્રિયા (Action)</th>
+                    <th>મોડેલ (Model)</th>
+                    <th>ઓબ્જેક્ટ ઓળખ</th>
+                    <th>IP સરનામું</th>
+                    <th>નોંધ (Audit Notes)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td style="font-size: 0.8rem; color: var(--muted-grey); white-space: nowrap;">
+                        {{ log.timestamp|date:"d M Y, H:i:s" }}
+                    </td>
+                    <td style="font-weight: 700; font-size: 0.86rem; color: var(--ink-charcoal);">
+                        {{ log.user.username|default:"System" }}
+                    </td>
+                    <td>
+                        <span style="font-size: 0.76rem; font-family: monospace; background: #FEF3C7; color: #92400E; padding: 2px 8px; border-radius: 4px; font-weight: 700;">
+                            {{ log.action }}
+                        </span>
+                    </td>
+                    <td style="font-size: 0.82rem; color: #475569;">{{ log.model_name }}</td>
+                    <td style="font-weight: 600; font-size: 0.82rem; color: #1E293B;">{{ log.object_repr|default:log.object_id|truncatechars:35 }}</td>
+                    <td><code style="font-size: 0.76rem;">{{ log.ip_address|default:"127.0.0.1" }}</code></td>
+                    <td style="font-size: 0.82rem; color: #334155;">{{ log.notes|default:"-" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center; color: var(--muted-grey); padding: 30px;">
+                        કોઈ મેળ ખાતા ઓડિટ લોગ્સ મળ્યા નથી.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,382 @@
+{% load static core_tags %}
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block admin_title %}સંપાદકીય અને કાનૂની સંચાલન મંચ{% endblock %} | Gujarat UCC CMS</title>
+    
+    <!-- Google Fonts: Noto Sans Gujarati & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <style>
+        :root {
+            --admin-sidebar-bg: #0F172A;
+            --admin-sidebar-text: #94A3B8;
+            --admin-sidebar-hover: #1E293B;
+            --admin-sidebar-active: #B45309;
+            --admin-main-bg: #F8FAFC;
+        }
+        body.theme-dark {
+            --admin-main-bg: #0B0F19;
+            --paper-white: #111827;
+            --border-subtle: #1F2937;
+            --ink-charcoal: #F9FAFB;
+        }
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+            background: var(--admin-main-bg);
+            font-family: var(--font-sans-gu);
+        }
+        .admin-sidebar {
+            width: 270px;
+            background: var(--admin-sidebar-bg);
+            color: var(--admin-sidebar-text);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            border-right: 1px solid #1E293B;
+        }
+        .admin-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid #1E293B;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .admin-brand h2 {
+            font-size: 1.05rem;
+            color: #FFFFFF;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .admin-brand-badge {
+            font-size: 0.65rem;
+            background: #B45309;
+            color: #FFFFFF;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .admin-nav {
+            padding: 16px 12px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .admin-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            color: var(--admin-sidebar-text);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            transition: all 0.15s ease;
+        }
+        .admin-nav-item:hover {
+            background: var(--admin-sidebar-hover);
+            color: #FFFFFF;
+        }
+        .admin-nav-item.active {
+            background: #B45309;
+            color: #FFFFFF;
+        }
+        .admin-nav-category {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #64748B;
+            padding: 14px 14px 6px;
+            font-weight: 700;
+        }
+        .admin-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        .admin-topbar {
+            height: 64px;
+            background: var(--paper-white);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 0 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .admin-content-area {
+            padding: 28px;
+            flex: 1;
+        }
+        .role-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        .role-admin { background: #FEF3C7; color: #92400E; }
+        .role-legal { background: #E0E7FF; color: #3730A3; }
+        .role-editor { background: #E2E8F0; color: #334155; }
+        .btn-portal-primary {
+            background: #B45309;
+            color: #FFFFFF;
+            padding: 9px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.15s;
+        }
+        .btn-portal-primary:hover { background: #92400E; }
+        .btn-portal-outline {
+            background: transparent;
+            color: var(--ink-charcoal);
+            border: 1px solid var(--border-subtle);
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-portal-outline:hover { background: #F1F5F9; }
+        .card-panel {
+            background: var(--paper-white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+        }
+        .card-header-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-bottom: 12px;
+        }
+        .card-header-flex h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--ink-charcoal);
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 18px;
+            margin-bottom: 26px;
+        }
+        .kpi-card {
+            background: var(--paper-white);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+        .kpi-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .kpi-num {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--ink-charcoal);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .kpi-label {
+            font-size: 0.82rem;
+            color: var(--muted-grey);
+            font-weight: 600;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        .portal-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .portal-table th {
+            background: #F1F5F9;
+            padding: 12px 14px;
+            text-align: left;
+            font-weight: 700;
+            color: #334155;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+        .portal-table td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-subtle);
+            color: var(--ink-charcoal);
+            vertical-align: middle;
+        }
+        .portal-table tr:hover td {
+            background: #F8FAFC;
+        }
+    </style>
+    {% block extra_admin_css %}{% endblock %}
+</head>
+<body class="lang-gu theme-{{ current_theme }}">
+
+<div class="admin-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+        <div class="admin-brand">
+            <svg class="icon-svg icon-lg" style="color: #F59E0B;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+            <div>
+                <h2>ગુજરાત UCC</h2>
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
+                    <span class="admin-brand-badge">CMS Portal</span>
+                    <span style="font-size: 0.68rem; color: #94A3B8;">v1.0 (2026)</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <span class="admin-nav-category">મુખ્ય સંચાલન</span>
+            <a href="{% url 'portal_admin_home' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_home' %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>ડેશબોર્ડ (Overview)</span>
+            </a>
+            
+            <a href="{% url 'portal_admin_review_queue' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_review_queue' %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                <span>કાનૂની સમીક્ષા કતાર</span>
+            </a>
+
+            <a href="{% url 'portal_admin_content' %}" class="admin-nav-item {% if 'content' in request.resolver_match.url_name or 'explainer' in request.resolver_match.url_name %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                <span>સામગ્રી સંચાલન (Content)</span>
+            </a>
+
+            <span class="admin-nav-category">સિસ્ટમ નિયંત્રણ</span>
+            <a href="{% url 'portal_admin_settings' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_settings' %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>થીમ અને ભાષા નિયંત્રણ</span>
+            </a>
+
+            {% if user_profile.is_portal_admin or request.user.is_superuser %}
+            <a href="{% url 'portal_admin_roles' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_roles' %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>વપરાશકર્તા ભૂમિકાઓ (Roles)</span>
+            </a>
+            {% endif %}
+
+            <a href="{% url 'portal_admin_audit_logs' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_audit_logs' %}active{% endif %}">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                <span>ઓડિટ લોગ્સ (Audit Trail)</span>
+            </a>
+
+            <span class="admin-nav-category">ઝડપી લિંક્સ</span>
+            <a href="{% url 'home' %}" target="_blank" class="admin-nav-item">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                <span>જાહેર વેબસાઇટ જુઓ</span>
+            </a>
+
+            <a href="{% url 'admin:index' %}" target="_blank" class="admin-nav-item">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Django Backend Admin</span>
+            </a>
+        </nav>
+
+        <div style="padding: 16px; border-top: 1px solid #1E293B;">
+            <a href="{% url 'portal_admin_logout' %}" style="display: flex; align-items: center; gap: 8px; color: #EF4444; text-decoration: none; font-size: 0.88rem; font-weight: 700;">
+                <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>સાઇન આઉટ (Sign Out)</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content Panel -->
+    <div class="admin-main">
+        <!-- Topbar -->
+        <header class="admin-topbar">
+            <div>
+                <h1 style="font-size: 1.25rem; font-weight: 800; color: var(--ink-charcoal);">
+                    {% block admin_heading %}સંપાદકીય અને કાનૂની સંચાલન ડેશબોર્ડ{% endblock %}
+                </h1>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <!-- Role Badge -->
+                {% if user_profile.role == 'ADMIN' or request.user.is_superuser %}
+                <span class="role-pill role-admin">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    મુખ્ય સંચાલક (Admin)
+                </span>
+                {% elif user_profile.role == 'LEGAL_REVIEWER' %}
+                <span class="role-pill role-legal">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/></svg>
+                    કાનૂની સમીક્ષક વકીલ (Advocate QA)
+                </span>
+                {% else %}
+                <span class="role-pill role-editor">સામગ્રી સંપાદક (Editor)</span>
+                {% endif %}
+
+                <span style="font-size: 0.88rem; font-weight: 700; color: var(--ink-charcoal);">
+                    {{ request.user.first_name|default:request.user.username }}
+                </span>
+            </div>
+        </header>
+
+        <!-- Flash Messages -->
+        {% if messages %}
+        <div style="padding: 16px 28px 0;">
+            {% for message in messages %}
+            <div style="padding: 12px 16px; border-radius: 6px; margin-bottom: 12px; font-size: 0.9rem; font-weight: 600; display: flex; align-items: center; gap: 10px; {% if message.tags == 'error' %}background: #FEE2E2; color: #991B1B; border: 1px solid #FCA5A5;{% else %}background: #DCFCE7; color: #166534; border: 1px solid #86EFAC;{% endif %}">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                <span>{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Content Area -->
+        <main class="admin-content-area">
+            {% block admin_content %}{% endblock %}
+        </main>
+    </div>
+</div>
+
+{% block extra_admin_js %}{% endblock %}
+</body>
+</html>
