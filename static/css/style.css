@@ -2928,4 +2928,365 @@ body.theme-contrast .home-card-container {
   flex-shrink: 0;
 }
 
+/* ==========================================================================
+   Comprehensive Responsive Grid System & Layout Polish
+   Guarantees all pages adapt gracefully and fit perfectly across all devices
+   ========================================================================== */
+
+/* Universal Responsive 2-Column Grid (Used across news, explainers, FAQs, etc.) */
+.responsive-2col-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 768px) {
+  .responsive-2col-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Homepage Dual Grid (Timeline + Explainers) */
+.home-dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (max-width: 900px) {
+  .home-dual-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Topics Grid & Topic Cards */
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 960px) {
+  .topics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+@media (max-width: 600px) {
+  .topics-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+.topic-card {
+  background: var(--paper-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+@media (max-width: 480px) {
+  .topic-card {
+    padding: 16px;
+  }
+}
+.topic-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--coral-red);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+}
+.topic-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+.topic-card-title a {
+  color: var(--ink-charcoal);
+  text-decoration: none;
+}
+.topic-card-title a:hover {
+  color: var(--coral-red);
+}
+.topic-card-summary {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.55;
+  margin-bottom: 20px;
+}
+
+/* Editorial Article Layout Grid & Sticky Sidebar (Image 3 Design) */
+.article-layout-grid {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 36px;
+  align-items: start;
+}
+.toc-sidebar {
+  position: sticky;
+  top: 76px;
+  background: var(--paper-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+.toc-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--ink-charcoal);
+  margin-bottom: 14px;
+  border-bottom: 2px solid var(--border-subtle);
+  padding-bottom: 8px;
+}
+.toc-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.toc-list a {
+  font-size: 0.85rem;
+  color: #475569;
+  text-decoration: none;
+  line-height: 1.4;
+  display: block;
+  transition: color 0.15s ease;
+}
+.toc-list a:hover {
+  color: var(--coral-red);
+}
+@media (max-width: 860px) {
+  .article-layout-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .toc-sidebar {
+    position: static;
+    margin-bottom: 24px;
+    padding: 16px;
+  }
+}
+
+/* Legal Document Detail Layout Grid */
+.doc-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 36px;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .doc-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* FAQ Accordion Component */
+.faq-item {
+  background: var(--paper-white, #FFFFFF);
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.faq-item:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+.faq-question-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink-charcoal, #232122);
+  text-align: left;
+  line-height: 1.35;
+  gap: 12px;
+  transition: color 0.15s ease;
+}
+.faq-question-btn:hover {
+  color: var(--coral-red, #B45309);
+}
+.faq-indicator {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--coral-red, #B45309);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #FEF3C7;
+  transition: all 0.2s ease;
+}
+.faq-answer-pane {
+  padding: 0 20px 20px;
+  border-top: 1px solid #F1ECE8;
+  margin-top: 4px;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #334155;
+}
+@media (max-width: 600px) {
+  .faq-question-btn {
+    padding: 13px 15px;
+    font-size: 0.96rem;
+  }
+  .faq-answer-pane {
+    padding: 0 15px 15px;
+  }
+}
+
+/* ==========================================================================
+   Mobile Bottom Navigation Dock (<= 768px)
+   Thumb-reachable, app-like navigation bar for smartphones
+   ========================================================================== */
+.mobile-bottom-dock {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #FFFFFF;
+  border-top: 1px solid var(--border-subtle, #E2DBD4);
+  z-index: 998;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-dock {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  body {
+    padding-bottom: 68px !important;
+  }
+}
+
+.bottom-dock-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  height: 100%;
+  text-decoration: none;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bottom-dock-item:hover,
+.bottom-dock-item:active {
+  color: var(--coral-red, #B45309);
+}
+
+.bottom-dock-item.active {
+  color: var(--coral-red, #B45309);
+  font-weight: 700;
+}
+
+.bottom-dock-item.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 24%;
+  right: 24%;
+  height: 3px;
+  background: var(--coral-red, #B45309);
+  border-radius: 0 0 3px 3px;
+}
+
+.dock-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+}
+
+.dock-label {
+  font-size: 0.70rem;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Viewport Fit & Mobile Ergonomics Baseline
+   Prevents horizontal overflow and iOS automatic zoom
+   ========================================================================== */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg, video, canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Input zoom prevention for mobile Safari */
+@media (max-width: 768px) {
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  input[type="password"],
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+  .container {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-py {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+  .btn-primary,
+  .btn-secondary {
+    min-height: 40px;
+  }
+}
+
+
 

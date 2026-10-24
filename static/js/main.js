@@ -75,8 +75,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  const openDrawerFromBottomBtn = document.getElementById('openMobileDrawerFromBottom');
+
   if (openDrawerBtn) {
     openDrawerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openDrawer();
+    });
+  }
+
+  if (openDrawerFromBottomBtn) {
+    openDrawerFromBottomBtn.addEventListener('click', function (e) {
       e.stopPropagation();
       openDrawer();
     });
