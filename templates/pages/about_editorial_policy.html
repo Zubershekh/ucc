@@ -5,86 +5,574 @@
 
 {% block content %}
 <div class="container section-py">
-    <div class="reading-column">
-        <!-- Header -->
-        <header class="article-header">
-            <span class="category-tag">{% if is_gujarati %}પારદર્શિતા અને નીતિઓ{% else %}Transparency & Editorial Governance{% endif %}</span>
-            <h1 class="article-headline">
-                {% if is_gujarati %}
-                અમારા વિશે, સંપાદકીય નીતિ અને કાનૂની ચકાસણી ધોરણો
-                {% else %}
-                About Us, Editorial Standards & Legal Verification Policy
-                {% endif %}
-            </h1>
-        </header>
+    <!-- Header -->
+    <header class="article-header" style="text-align: center; max-width: 860px; margin: 0 auto 36px;">
+        <span class="category-tag">{% if is_gujarati %}પારદર્શિતા, નીતિઓ અને સ્પેસિફિકેશન{% else %}Transparency, Editorial Governance & Specifications{% endif %}</span>
+        <h1 class="article-headline" style="margin-top: 10px;">
+            {% if is_gujarati %}
+            અમારા વિશે, સંપાદકીય નીતિ અને પ્રોજેક્ટ સ્પેસિફિકેશન
+            {% else %}
+            About Us, Editorial Standards & Project Specifications
+            {% endif %}
+        </h1>
+        <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 8px;">
+            {% if is_gujarati %}
+            ગુજરાત સમાન નાગરિક સંહિતા (UCC ૨૦૨૬) ડિજિટલ જાહેર માહિતી મંચ • પ્રોજેક્ટ બ્રીફ v1.0
+            {% else %}
+            Gujarat Uniform Civil Code (UCC 2026) Digital Public Information Platform • Project Brief v1.0
+            {% endif %}
+        </p>
+    </header>
 
-        <div class="reading-body">
-            
-            <!-- Independence Statement -->
-            <div style="background: #FAF7F4; border: 1px solid var(--border-subtle); border-left: 4px solid var(--coral-red); padding: 22px 26px; border-radius: var(--radius-sm); margin-bottom: 30px;">
-                <h3 style="font-size: 1.1rem; color: var(--ink-charcoal); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
-                    <svg class="icon-svg icon-md" viewBox="0 0 24 24" style="color: var(--coral-red);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    <span>{% if is_gujarati %}સ્વતંત્ર જાહેર માહિતી મંચની સ્પષ્ટતા{% else %}Independent Non-Affiliation Declaration{% endif %}</span>
-                </h3>
-                <p style="font-size: 0.95rem; color: #4A4644; margin-bottom: 0;">
-                    {% if is_gujarati %}
-                    આ મંચ એક સ્વતંત્ર જાહેર કાનૂની માહિતી અને શૈક્ષણિક પહેલ છે. તે કોઈ સરકારી સંસ્થા, કાયદા મંત્રાલય કે ન્યાયતંત્ર સાથે સંલગ્ન નથી. અમારી પ્રાથમિકતા કાયદાના જટિલ વૈધાનિક દસ્તાવેજોને સામાન્ય નાગરિકો માટે તટસ્થ, પક્ષપાતરહિત અને ચકાસાયેલ સ્વરૂપે રજૂ કરવાની છે.
-                    {% else %}
-                    This platform operates as an independent public legal education and documentation archive. It is not affiliated with, authorized by, or an agency of any government ministry or judicial body. Its primary mission is to translate enacted statutory instruments into scannable, rigorously cited plain-language explainers for citizens, researchers, and legal practitioners.
-                    {% endif %}
+    <!-- Independence Statement Banner -->
+    <div style="background: #FAF7F4; border: 1px solid var(--border-subtle); border-left: 4px solid var(--coral-red); padding: 22px 24px; border-radius: var(--radius-sm); margin-bottom: 36px; max-width: 980px; margin-left: auto; margin-right: auto;">
+        <h3 style="font-size: 1.1rem; color: var(--ink-charcoal); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+            <svg class="icon-svg icon-md" viewBox="0 0 24 24" style="color: var(--coral-red);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span>{% if is_gujarati %}સ્વતંત્ર જાહેર માહિતી મંચની સ્પષ્ટતા{% else %}Independent Non-Affiliation Declaration{% endif %}</span>
+        </h3>
+        <p style="font-size: 0.92rem; color: #4A4644; margin-bottom: 0; line-height: 1.6;">
+            {% if is_gujarati %}
+            આ મંચ એક સ્વતંત્ર જાહેર કાનૂની માહિતી અને શૈક્ષણિક પહેલ છે. તે કોઈ સરકારી સંસ્થા, કાયદા મંત્રાલય કે ન્યાયતંત્ર સાથે સંલગ્ન નથી. અમારી પ્રાથમિકતા કાયદાના જટિલ વૈધાનિક દસ્તાવેજોને સામાન્ય નાગરિકો માટે તટસ્થ, પક્ષપાતરહિત અને ચકાસાયેલ સ્વરૂપે રજૂ કરવાની છે.
+            {% else %}
+            This platform operates as an independent public legal education and documentation archive. It is not affiliated with, authorized by, or an agency of any government ministry or judicial body. Its primary mission is to translate enacted statutory instruments into scannable, rigorously cited plain-language explainers for citizens, researchers, and legal practitioners.
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Editorial Principles & Workflow Section -->
+    <div style="max-width: 980px; margin: 0 auto 48px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px;">
+            <div style="background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 1rem; color: var(--ink-charcoal); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #FEF3C7; color: #92400E; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;">1</span>
+                    <span>{% if is_gujarati %}સત્તાવાર સ્ત્રોત શ્રેણી (Hierarchy){% else %}Primary Source Hierarchy{% endif %}</span>
+                </h4>
+                <p style="font-size: 0.86rem; color: #57534E; line-height: 1.5; margin: 0;">
+                    <strong>Tier 1:</strong> ગેઝેટ અધિનિયમ અને અમલવારી જાહેરનામા<br>
+                    <strong>Tier 2:</strong> વૈધાનિક નિયમો અને નિયત અરજી ફોર્મ<br>
+                    <strong>Tier 3:</strong> ગુજરાત UCC કમિટી અહેવાલો અને વિધાનસભા દસ્તાવેજો<br>
+                    <strong>Tier 4:</strong> મુખ્ય પ્રવાહના સમર્થિત કાનૂની અહેવાલો (માત્ર ઘટનાક્રમ ચકાસણી)
                 </p>
             </div>
 
-            <!-- Source Hierarchy -->
-            <h2>{% if is_gujarati %}૧. સત્તાવાર સ્ત્રોત શ્રેણી (Source Hierarchy){% else %}1. Primary Source Hierarchy{% endif %}</h2>
-            <p>
-                {% if is_gujarati %}
-                અમારી સંપાદકીય ટીમ કોઈપણ કાનૂની દાવો પ્રકાશિત કરતા પહેલા નીચેના સ્ત્રોત ક્રમને અનુસરે છે:
-                {% else %}
-                Every substantive legal assertion on this platform adheres to a strict four-tier evidence hierarchy:
-                {% endif %}
-            </p>
-            <ol style="margin-left: 20px; margin-bottom: 24px;">
-                <li style="margin-bottom: 8px;"><strong>Tier 1 — Primary Statutory Instruments:</strong> Official Assented Act, Extraordinary Gazette issues, and Gazette commencement notifications.</li>
-                <li style="margin-bottom: 8px;"><strong>Tier 2 — Subordinate Legislation:</strong> Rules, statutory forms, and official administrative circulars issued under statutory authority.</li>
-                <li style="margin-bottom: 8px;"><strong>Tier 3 — Committee Material:</strong> Official Gujarat UCC Committee reports, working papers, and assembly tablings.</li>
-                <li style="margin-bottom: 8px;"><strong>Tier 4 — Secondary Legal Reporting:</strong> Cross-checked mainstream news reporting used only for timeline corroboration, never as a substitute for statutory text.</li>
-            </ol>
-
-            <!-- Legal Review Workflow -->
-            <h2>{% if is_gujarati %}૨. કાનૂની સમીક્ષા કાર્યપદ્ધતિ (Review Workflow){% else %}2. Editorial & Legal Review Workflow{% endif %}</h2>
-            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 22px; border-radius: var(--radius-sm); margin: 20px 0; font-family: monospace; font-size: 0.92rem; text-align: center; color: var(--coral-red);">
-                Draft &rarr; Source Verification &rarr; Legal Advocate Review &rarr; Approval &rarr; Published &rarr; Periodic Review
+            <div style="background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 1rem; color: var(--ink-charcoal); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #DCFCE7; color: #166534; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;">2</span>
+                    <span>{% if is_gujarati %}કાનૂની સમીક્ષા કાર્યપદ્ધતિ{% else %}Legal Review Workflow{% endif %}</span>
+                </h4>
+                <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; padding: 10px; border-radius: 6px; font-size: 0.8rem; color: var(--coral-red); font-weight: 700; text-align: center; margin-bottom: 8px;">
+                    Draft &rarr; Source Check &rarr; Legal Review &rarr; Approval &rarr; Publish
+                </div>
+                <p style="font-size: 0.84rem; color: #57534E; line-height: 1.45; margin: 0;">
+                    લેખકો સીધા કાનૂની દાવા પ્રકાશિત કરી શકતા નથી. દરેક માર્ગદર્શિકા લાયક કાનૂની સમીક્ષક દ્વારા ચકાસાય છે.
+                </p>
             </div>
-            <p>
-                {% if is_gujarati %}
-                લેખકો દ્વારા તૈયાર કરાયેલ પ્રત્યેક કાનૂની માર્ગદર્શિકાને હાઈકોર્ટના લાયક વકીલ દ્વારા તપાસવામાં આવે છે. કાયદાકીય સમીક્ષકની મંજૂરી વિના કોઈપણ માર્ગદર્શિકા જાહેર પ્લેટફોર્મ પર પ્રકાશિત કરી શકાતી નથી.
-                {% else %}
-                Writers cannot publish substantive legal explainers directly. Every guide undergoes formal verification by an admitted High Court advocate to ensure no statutory section is mischaracterized or taken out of context.
-                {% endif %}
-            </p>
 
-            <!-- Mandatory Non-Advice Disclaimer -->
-            <h2>{% if is_gujarati %}૩. કાનૂની સલાહ નથી (No Legal Advice){% else %}3. Explicit No Legal Advice Disclaimer{% endif %}</h2>
-            <p>
-                {% if is_gujarati %}
-                આ વેબસાઇટ પર પ્રદર્શિત તમામ સામગ્રી માત્ર સામાન્ય જાહેર માહિતી અને શૈક્ષણિક હેતુ માટે છે. તે કાનૂની સલાહ (Legal Advice) અથવા વકીલ-અસીલ સંબંધ (Attorney-Client Relationship) સ્થાપિત કરતી નથી. કોઈપણ વ્યક્તિગત કાનૂની કેસ, વિવાદ અથવા પ્રક્રિયા માટે સ્થાનિક સક્ષમ વકીલની સલાહ લેવી અનિવાર્ય છે.
-                {% else %}
-                Content on this portal is strictly provided for general informational, educational, and reference purposes. It does not constitute legal counsel, representation, or legal opinion. Users facing individual family, inheritance, or marital situations must consult a licensed advocate qualified in the relevant jurisdiction.
-                {% endif %}
-            </p>
-
-            <!-- Corrections SLA -->
-            <h2>{% if is_gujarati %}૪. ભૂલ સુધારણા નીતિ (Corrections SLA){% else %}4. Transparent Corrections SLA{% endif %}</h2>
-            <p>
-                {% if is_gujarati %}
-                જો કોઈ નાગરિક, સંશોધક કે વકીલ કોઈ તારીખ, કલમ કે અર્થઘટનમાં ક્ષતિ ધ્યાને લાવે, તો અમારી સંપાદકીય ટીમ ૪૮ કલાકની અંદર સત્તાવાર ગેઝેટ સાથે તેની પુષ્ટિ કરી સુધારો નોંધશે અને પૃષ્ઠ પર સાર્વજનિક પારદર્શિતા નોંધ (Correction Log) પ્રકાશિત કરશે.
-                {% else %}
-                We maintain an open public correction queue. Submissions backed by verifiable primary legal sources are audited within 48 hours. When an inaccuracy is confirmed, the explainer is updated with a transparent correction errata note.
-                {% endif %}
-            </p>
-
+            <div style="background: #FFFFFF; border: 1px solid var(--border-subtle); border-radius: 8px; padding: 20px;">
+                <h4 style="font-size: 1rem; color: var(--ink-charcoal); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+                    <span style="background: #FEE2E2; color: #991B1B; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700;">3</span>
+                    <span>{% if is_gujarati %}કાનૂની સલાહ નથી & ભૂલ સુધારણા{% else %}No Advice & Corrections SLA{% endif %}</span>
+                </h4>
+                <p style="font-size: 0.84rem; color: #57534E; line-height: 1.5; margin: 0;">
+                    વેબસાઇટની સામગ્રી સામાન્ય શૈક્ષણિક માહિતી માટે છે. વ્યક્તિગત બાબતો માટે સ્થાનિક વકીલનો સંપર્ક કરવો. ભૂલ ધ્યાને આવ્યે <strong>૪૮ કલાકની અંદર</strong> ચકાસી સુધારણા નોંધ મૂકાય છે.
+                </p>
+            </div>
         </div>
+    </div>
+
+    <!-- SPECIFICATION TABLES FROM PROJECT BRIEF V1.0 -->
+    <div style="max-width: 1140px; margin: 0 auto;">
+        
+        <div style="border-bottom: 2px solid var(--border-subtle); padding-bottom: 12px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px;">
+            <div>
+                <span class="category-tag">સત્તાવાર પ્રોજેક્ટ બ્રીફ ડેટા</span>
+                <h2 style="font-size: 1.5rem; color: var(--ink-charcoal); margin-top: 6px;">
+                    {% if is_gujarati %}પ્રોજેક્ટ વિશિષ્ટતા કોષ્ટકો (Project Brief Specifications){% else %}Architectural & Governance Specification Tables{% endif %}
+                </h2>
+            </div>
+            <span style="font-size: 0.8rem; font-weight: 600; color: var(--muted-grey);">
+                દસ્તાવેજ આવૃત્તિ: v1.0 • ૨૪ ઓક્ટોબર ૨૦૨૬
+            </span>
+        </div>
+
+        <!-- TABLE 1: Project Snapshot & Proposed Direction -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૧</span>
+                <span>{% if is_gujarati %}પ્રોજેક્ટ પરિમાણ અને સૂચિત દિશા (Project Snapshot & Proposed Direction){% else %}Project Snapshot & Proposed Direction{% endif %}</span>
+            </h3>
+            
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">{% if is_gujarati %}પ્રોજેક્ટ ઘટક / પરિમાણ{% else %}Project Snapshot{% endif %}</th>
+                            <th>{% if is_gujarati %}સૂચિત દિશા અને સ્પષ્ટીકરણ{% else %}Proposed Direction & Specification{% endif %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">Product type</td>
+                            <td>Responsive public website + protected admin panel / CMS (સંપૂર્ણ રિસ્પોન્સિવ સાર્વજનિક પોર્ટલ + સુરક્ષિત સ્ટાફ એડમિન CMS)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Primary audience</td>
+                            <td>Gujarat residents, families, students, journalists, researchers, lawyers and civil-society readers (ગુજરાતના નાગરિકો, પરિવારો, વિદ્યાર્થીઓ, પત્રકારો, સંશોધકો અને વકીલો)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Core value</td>
+                            <td>Plain-language explainers linked to primary legal sources, official updates and clear status labels (સત્તાવાર સ્ત્રોતો સાથે જોડાયેલી સરળ ભાષાની સમજૂતી અને ચકાસાયેલ સ્થિતિ લેબલ્સ)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Languages</td>
+                            <td>Gujarati, Hindi and English (Launch priority: Gujarati default; architecture supports all three) (પ્રાથમિકતા: ગુજરાતી મુખ્ય ભાષા)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Design reference</td>
+                            <td>News portal layout (image 2), editorial article reading page (image 3), image 4 as the primary visual/theme reference</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Recommended architecture</td>
+                            <td>Django + server-rendered templates + static assets; relational database (PostgreSQL); secure CMS with role-based governance</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Document version</td>
+                            <td>v1.0 • 24 October 2026 (સત્તાવાર વિશિષ્ટતા દસ્તાવેજ)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLE 2: Audience & User Needs Matrix -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૨</span>
+                <span>{% if is_gujarati %}૩. વપરાશકર્તા જૂથ અને જરૂરિયાતો (Audience & User Needs Matrix){% else %}3. Audience & User Needs Matrix{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">User Group (જૂથ)</th>
+                            <th style="width: 35%;">Main Needs (મુખ્ય જરૂરિયાત)</th>
+                            <th>Key Journey (પ્રક્રિયા પ્રવાહ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">General public / families</td>
+                            <td>Understand practical impact and what is confirmed (દૈનિક જીવન પર અસર અને કઈ બાબતો કાયદેસર અમલી છે તેની સ્પષ્ટતા)</td>
+                            <td>Home &rarr; Topic guide &rarr; Plain-language explainer &rarr; Official source</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Students / researchers</td>
+                            <td>Primary sources, chronology, citations and definitions (પ્રાથમિક દસ્તાવેજો, ઘટનાક્રમ, ચોક્કસ કલમો અને કાનૂની વ્યાખ્યાઓ)</td>
+                            <td>Documents &rarr; Timeline &rarr; Article &rarr; Downloadable source</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Lawyers / legal professionals</td>
+                            <td>Exact statutory text, sections, notifications and updates (અધિનિયમનું મૂળ વૈધાનિક લખાણ, સરકારી ગેઝેટ અને જાહેરનામા)</td>
+                            <td>Legal library &rarr; Filter/search &rarr; Document detail</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Journalists</td>
+                            <td>Verified dates, links, fact checks and change history (ચકાસાયેલ તારીખો, સત્તાવાર સ્ત્રોત લિંક્સ, ફેક્ટ-ચેક અને ફેરફાર ઇતિહાસ)</td>
+                            <td>Latest updates &rarr; Timeline &rarr; Source record</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Gujarati-first readers</td>
+                            <td>Clear Gujarati explanations and accessible navigation (સરળ ગુજરાતી માતૃભાષામાં વિસ્તૃત સમજૂતી અને સુગમ નેવિગેશન)</td>
+                            <td>Language selector &rarr; Topic hub &rarr; FAQ</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Editors / legal reviewers</td>
+                            <td>Safe publishing, versioning, approvals and correction logs (સુરક્ષિત પ્રકાશન, વર્ઝન કંટ્રોલ, મંજૂરી પ્રક્રિયા અને સુધારણા લોગ)</td>
+                            <td>Admin dashboard &rarr; Review queue &rarr; Approve/publish</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLE 3: Public Website Information Architecture -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૩</span>
+                <span>{% if is_gujarati %}૪. સાર્વજનિક વેબસાઇટ માહિતી માળખું (Public Information Architecture){% else %}4. Public Website Information Architecture{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Page / Module (પૃષ્ઠ / મોડ્યુલ)</th>
+                            <th>Requirements (આવશ્યકતાઓ અને સામગ્રી નિર્દેશ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">Home (મુખ્ય પૃષ્ઠ)</td>
+                            <td>Headline/status banner; latest verified update; key topics; latest news; explainers; official documents; timeline; language switcher; source transparency.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Understand UCC (UCC સમજો)</td>
+                            <td>Introductory overview, what UCC means, scope, what the Gujarat Act covers, exclusions and frequently misunderstood points.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Topics (વિષય કેન્દ્ર)</td>
+                            <td>Marriage &amp; registration; divorce; succession/inheritance; wills; live-in relationships; children, maintenance and related matters. Publish only after legal review.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Explainers / Guides</td>
+                            <td>Plain-language summaries, “what the text says”, who/what is covered, exceptions, steps (only when rules are verified), source references and last-reviewed date.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Legal Library (કાનૂની લાયબ્રેરી)</td>
+                            <td>Act, Gazette, rules, notifications, forms, official circulars, committee material and related judgments where relevant. Search, filter, download and cite.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Timeline (કાનૂની ઘટનાક્રમ)</td>
+                            <td>Dated events with source links and a status taxonomy. Separate bill history from commencement and implementation.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">News &amp; Updates</td>
+                            <td>Article feed, categories, search, tags, article detail, related coverage, author/reviewer, source list and correction history.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">FAQs (સામાન્ય પ્રશ્નો)</td>
+                            <td>Searchable question-and-answer entries linked to detailed guides and primary legal sources.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Glossary (કાનૂની પરિભાષા)</td>
+                            <td>Plain-language definitions of statutory terms with source references and language equivalents.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">About / Editorial Policy</td>
+                            <td>Purpose, independence/non-affiliation statement, editorial standards, source hierarchy, review process, corrections and contact.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Contact / Corrections</td>
+                            <td>General feedback and correction submission; warn users not to send confidential case documents or sensitive personal data.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Legal pages</td>
+                            <td>Disclaimer, privacy policy, cookie/analytics notice if relevant, terms of use, accessibility statement and copyright/takedown policy.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLE 4: Admin Panel & Permissions -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૪</span>
+                <span>{% if is_gujarati %}૬. એડમિન પોર્ટલ અને પરવાનગીઓ (Admin Panel & Permissions Matrix){% else %}6. Admin Panel & Permissions Matrix{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Module (મોડ્યુલ)</th>
+                            <th>Admin Capabilities (વ્યવસ્થાપન ક્ષમતા અને નિયંત્રણ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">Dashboard</td>
+                            <td>Content totals, pending reviews, documents needing re-verification, broken source links, recent admin activity and publishing queue.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Content CMS</td>
+                            <td>Create/edit/preview/publish/schedule/archive articles, explainers, FAQs, glossary entries and timeline events.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Legal library</td>
+                            <td>Upload/version official documents, manage citations, mark superseded files and preserve history.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Review workflow</td>
+                            <td>Assign reviewer, add internal comments, request changes, approve/reject, compare versions and retain decision log.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Media library</td>
+                            <td>Validated image/file uploads, alt text, captions, file metadata, reuse and deletion safeguards.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Languages</td>
+                            <td>Manage translation status, fallback language and separate language versions linked as equivalents.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">SEO &amp; navigation</td>
+                            <td>Titles, descriptions, canonical URLs, sitemap controls, redirects, menus and social previews.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Feedback / corrections</td>
+                            <td>Triage public corrections, assign owner, track resolution and publish correction notes.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Users &amp; roles</td>
+                            <td>Create staff accounts, disable accounts, least-privilege role permissions and session management.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Settings &amp; themes</td>
+                            <td>Site name, logo, footer, announcement/status banner, typography/palette tokens and approved theme selection.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Audit &amp; security</td>
+                            <td>Admin action logs, login/session history, permission changes, export logs and security event review.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Operations</td>
+                            <td>Backup status, health indicators, error logs, email configuration status and environment information without exposing secrets.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Suggested Roles Subsection -->
+            <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 18px 22px; margin-top: 14px;">
+                <h4 style="font-size: 0.96rem; color: #0F172A; margin-bottom: 10px; font-weight: 700;">
+                    સુચવેલ ભૂમિકાઓ અને વિશેષાધિકારો (Defined Governance Roles):
+                </h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; font-size: 0.86rem; color: #334155;">
+                    <div><strong>&bull; Super Admin:</strong> એકાઉન્ટ, સિસ્ટમ ગોઠવણી અને ભૂમિકા નિયંત્રણ.</div>
+                    <div><strong>&bull; Managing Editor:</strong> કન્ટેન્ટ સોંપણી, સામાન્ય લેખોની મંજૂરી અને પ્રકાશન.</div>
+                    <div><strong>&bull; Legal Reviewer:</strong> કાનૂની સમજૂતીઓ, કલમો અને ઉચ્ચ જોખમ અપડેટ્સની કાયદાકીય તપાસ.</div>
+                    <div><strong>&bull; Writer:</strong> સામગ્રી ડ્રાફ્ટ કરી સમીક્ષા માટે સબમિટ કરે છે; સીધું પ્રકાશન અશક્ય.</div>
+                    <div><strong>&bull; Translator:</strong> સોંપાયેલ ભાષાંતરોનું ચોક્કસ સંપાદન.</div>
+                    <div><strong>&bull; Analyst / Read-only:</strong> કન્ટેન્ટમાં ફેરફાર કર્યા વિના મેટ્રિક્સ અને ઓડિટ લોગનું નિરીક્ષણ.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLE 5: Design Tokens & Palette -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૫</span>
+                <span>{% if is_gujarati %}૭. ડિઝાઇન ટોકન્સ અને કલર પેલેટ (Design Tokens & Color Palette){% else %}7. Design Tokens & Color Palette{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 22%;">Token (ટોકન નામ)</th>
+                            <th style="width: 18%;">Hex Code</th>
+                            <th style="width: 14%;">Visual Preview</th>
+                            <th>Use (ભૂમિકા અને ઉપયોગ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">Ink / charcoal</td>
+                            <td><code>#232122</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #232122;"></span></div></td>
+                            <td>Primary text, footer and navigation (મુખ્ય વાંચન લખાણ, ફૂટર અને ટોચનું નેવિગેશન)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Warm off-white</td>
+                            <td><code>#F3EEEA</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #F3EEEA;"></span></div></td>
+                            <td>Editorial background (સંપાદકીય પૃષ્ઠભૂમિ - આંખોને થાક ન આપે તેવી સૌમ્યતા)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Paper white</td>
+                            <td><code>#FFFFFF</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #FFFFFF;"></span></div></td>
+                            <td>Article surfaces and reading cards (લેખો અને કાર્ડ્સની મુખ્ય સપાટી)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Coral / red</td>
+                            <td><code>#D1382A</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #D1382A;"></span></div></td>
+                            <td>Links and primary accent (મુખ્ય લિંક્સ, એક્સેન્ટ અને પ્રાથમિક બટનો)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Muted yellow</td>
+                            <td><code>#F0C346</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #F0C346;"></span></div></td>
+                            <td>Small highlights and status banners (નાના હાઇલાઇટ્સ અને સ્થિતિ બેનર)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Muted grey</td>
+                            <td><code>#898989</code></td>
+                            <td><div class="color-swatch-box"><span class="color-swatch" style="background: #898989;"></span></div></td>
+                            <td>Metadata and secondary text (તારીખ, કલમ સંદર્ભ અને ગૌણ વિગતો)</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Status colours</td>
+                            <td>Accessible variants</td>
+                            <td>
+                                <div class="color-swatch-box" style="gap: 4px;">
+                                    <span class="color-swatch" style="background: #1B5E20; width: 14px; height: 14px;" title="Verified"></span>
+                                    <span class="color-swatch" style="background: #B76E00; width: 14px; height: 14px;" title="Pending"></span>
+                                    <span class="color-swatch" style="background: #0D47A1; width: 14px; height: 14px;" title="Reported"></span>
+                                </div>
+                            </td>
+                            <td>Verified / pending / warning, always paired with explicit text labels (માત્ર કલર નહિ, સાથે ટેક્સ્ટ લેબલ અનિવાર્ય)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLE 6: Development Roadmap & Milestones -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૬</span>
+                <span>{% if is_gujarati %}૧૩. વિકાસ યોજના અને સીમાચિહ્નો (Development Plan & Milestones){% else %}13. Development Plan & Milestones{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 22%;">Phase (તબક્કો)</th>
+                            <th style="width: 44%;">Work (કાર્ય વિગત)</th>
+                            <th>Exit Criteria (સફળતા માપદંડ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">0 — Discovery</td>
+                            <td>Confirm project ownership, domain identity, audience, language launch order, legal reviewer and source policy.</td>
+                            <td>Signed-off scope, sitemap, roles and editorial policy.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">1 — Audit &amp; requirements</td>
+                            <td>Review supplied assets, content needs, source hierarchy, threat model and functional requirements.</td>
+                            <td>Prioritised backlog and acceptance criteria.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">2 — UX &amp; design system</td>
+                            <td>Wireframes for home, topic hub, article, document library, FAQ, timeline and admin; define tokens and responsive states.</td>
+                            <td>Approved prototypes based on references; no copied layouts.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">3 — Architecture &amp; data model</td>
+                            <td>Django structure, content models, citations, translations, workflow, permissions and migration plan.</td>
+                            <td>Reviewed schema and access-control matrix.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">4 — Public site</td>
+                            <td>Build responsive pages, topic navigation, article templates, search, filters, document downloads and language framework.</td>
+                            <td>Core journeys work on mobile and desktop.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">5 — Admin CMS</td>
+                            <td>Dashboard, content CRUD, preview, workflow, media, documents, SEO, roles and audit logs.</td>
+                            <td>Editors can publish without code edits; role tests pass.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">6 — Content &amp; legal QA</td>
+                            <td>Seed reviewed explainers, FAQs, timeline and source documents; verify dates and status labels.</td>
+                            <td>Every legal claim has a citation and reviewer state.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">7 — Hardening &amp; testing</td>
+                            <td>Security checks, accessibility, performance, backup/restore, regression and cross-browser tests.</td>
+                            <td>No critical/high unresolved defects; release checklist approved.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">8 — Launch</td>
+                            <td>Production environment, domain/HTTPS, monitoring, backups, analytics and launch smoke tests.</td>
+                            <td>Verified production release with rollback plan.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">9 — Maintenance</td>
+                            <td>Review content freshness, broken links, dependencies, security logs and backups.</td>
+                            <td>Named owner and recurring review schedule.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TABLE 7: Risks & Mitigations -->
+        <div style="margin-bottom: 40px;">
+            <h3 style="font-size: 1.15rem; color: var(--ink-charcoal); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;">
+                <span style="background: #0F172A; color: #FFFFFF; font-size: 0.76rem; padding: 2px 8px; border-radius: 4px; font-weight: 700;">ટેબલ ૭</span>
+                <span>{% if is_gujarati %}૧૬. કાનૂની, સુરક્ષા અને સંચાલન જોખમો (Risks & Mitigations){% else %}16. Risks & Mitigations{% endif %}</span>
+            </h3>
+
+            <div class="table-responsive">
+                <div class="table-scroll-hint">
+                    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    <span>{% if is_gujarati %}મોબાઇલ સ્ક્રીન પર આખું કોષ્ટક જોવા માટે આડું સ્ક્રોલ કરો &rarr;{% else %}Swipe horizontally to view full table &rarr;{% endif %}</span>
+                </div>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">Risk Factor (સંભવિત જોખમ)</th>
+                            <th>Mitigation Strategy (સુરક્ષા અને નિયંત્રણ પગલાં)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="cell-key">Outdated implementation status</td>
+                            <td>Monitor official Gazette and government sources; assign a status owner; show “last verified” date on every legal explainer.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Legal misinformation / ambiguity</td>
+                            <td>Qualified reviewer, source-level citations, review workflow, corrections log and clear uncertainty labels. Never infer status.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Political or communal perception</td>
+                            <td>Neutral tone, balanced source policy, no inflammatory headlines and transparent separation of reporting from opinion.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Translation changes legal meaning</td>
+                            <td>Human review by competent language/legal reviewers; preserve original statutory wording and official source link.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">False government affiliation</td>
+                            <td>Clear independent-site disclaimer, original branding and no unauthorised emblem/seal on any page.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Sensitive data exposure</td>
+                            <td>Collect minimal data; avoid legal case intake; restrict staff access; define retention/deletion and incident response.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Admin compromise</td>
+                            <td>MFA where available, least privilege, rate limits, audit logs, secure deployment and recovery tests.</td>
+                        </tr>
+                        <tr>
+                            <td class="cell-key">Content volume grows quickly</td>
+                            <td>Reusable content types, structured taxonomy, translation workflow and recurring review reminders.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 </div>
 {% endblock %}

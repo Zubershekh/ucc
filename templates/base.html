@@ -30,8 +30,190 @@
 </head>
 <body class="lang-{{ current_lang|default:'gu' }} theme-light">
 
-    <!-- Mandatory Legal Non-Affiliation Bar -->
-    <div class="top-disclaimer-bar">
+    <!-- Mobile Off-Canvas Drawer Backdrop -->
+    <div class="mobile-drawer-backdrop" id="mobileDrawerBackdrop" aria-hidden="true"></div>
+
+    <!-- Mobile Off-Canvas Side Navigation Drawer -->
+    <aside class="mobile-side-drawer" id="mobileSideDrawer" aria-label="Mobile Navigation Drawer" aria-hidden="true">
+        <div class="drawer-header">
+            <div class="drawer-brand">
+                <span class="drawer-brand-badge">{% if is_gujarati %}સ્વતંત્ર કાનૂની મંચ{% else %}Independent Platform{% endif %}</span>
+                <h2 class="drawer-brand-title">{% if is_gujarati %}ગુજરાત UCC ૨૦૨૬{% else %}Gujarat UCC 2026{% endif %}</h2>
+                <p class="drawer-brand-subtitle">{% if is_gujarati %}સત્તાવાર દસ્તાવેજો અને કાનૂની સમજૂતી{% else %}Public Legal & Explainer Portal{% endif %}</p>
+            </div>
+            <button type="button" class="drawer-close-btn" id="closeMobileDrawerBtn" aria-label="મેનુ બંધ કરો / Close Menu">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+        </div>
+
+        <!-- Drawer Quick Language Switcher -->
+        <div class="drawer-lang-bar">
+            <span class="drawer-lang-label">{% if is_gujarati %}ભાષા પસંદ કરો:{% else %}Language:{% endif %}</span>
+            <div class="drawer-lang-options">
+                <a href="?lang=gu" class="drawer-lang-btn {% if is_gujarati %}active{% endif %}">ગુજરાતી</a>
+                <a href="?lang=en" class="drawer-lang-btn {% if not is_gujarati %}active{% endif %}">English</a>
+            </div>
+        </div>
+
+        <!-- Drawer Search Box -->
+        <div class="drawer-search-box">
+            <form action="{% url 'search_page' %}" method="get">
+                <svg class="drawer-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" name="q" class="drawer-search-input" placeholder="{% if is_gujarati %}વિષય, કલમ કે દસ્તાવેજ શોધો...{% else %}Search topics, sections, acts...{% endif %}" value="{{ request.GET.q|default:'' }}">
+            </form>
+        </div>
+
+        <!-- Drawer Navigation Links -->
+        <nav class="drawer-nav">
+            <ul class="drawer-nav-list">
+                <li>
+                    <a href="{% url 'home' %}" class="drawer-nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                        <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+                        <span>{{ ui.home }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'understand_ucc' %}" class="drawer-nav-link {% if request.resolver_match.url_name == 'understand_ucc' %}active{% endif %}">
+                        <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                        <span>{{ ui.understand_ucc }}</span>
+                    </a>
+                </li>
+
+                <!-- Topics Accordion -->
+                <li class="drawer-accordion-group" id="drawerTopicsGroup">
+                    <button type="button" class="drawer-accordion-btn" aria-expanded="false">
+                        <span class="drawer-accordion-title">
+                            <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+                            <span>{{ ui.topics }}</span>
+                        </span>
+                        <svg class="drawer-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="drawer-subnav">
+                        <a href="{% url 'topics_list' %}" class="drawer-subnav-link all-link">
+                            <strong>{{ ui.all_topics|default:'તમામ ૬ વિષયો જુઓ' }} &rarr;</strong>
+                        </a>
+                        {% for topic in nav_topics %}
+                        <a href="{% url 'topic_detail' slug=topic.slug %}" class="drawer-subnav-link {% if request.resolver_match.kwargs.slug == topic.slug %}active{% endif %}">
+                            {% if is_gujarati %}{{ topic.name_gu }}{% else %}{{ topic.name_en }}{% endif %}
+                        </a>
+                        {% empty %}
+                        <a href="{% url 'topics_list' %}" class="drawer-subnav-link">{{ ui.topics }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+
+                <li>
+                    <a href="{% url 'explainers_list' %}" class="drawer-nav-link {% if 'explainer' in request.resolver_match.url_name %}active{% endif %}">
+                        <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+                        <span>{{ ui.explainers }}</span>
+                    </a>
+                </li>
+
+                <!-- Legal Resources Accordion -->
+                <li class="drawer-accordion-group" id="drawerResourcesGroup">
+                    <button type="button" class="drawer-accordion-btn" aria-expanded="false">
+                        <span class="drawer-accordion-title">
+                            <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                            <span>{{ ui.resources|default:'કાનૂની સંસાધનો' }}</span>
+                        </span>
+                        <svg class="drawer-chevron" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                    <div class="drawer-subnav">
+                        <a href="{% url 'library_list' %}" class="drawer-subnav-link {% if 'library' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name %}active{% endif %}">
+                            <strong>{{ ui.library }}</strong>
+                            <small>{% if is_gujarati %}ગેઝેટ, કાયદા અને સરકારી અધિનિયમ{% else %}Gazettes, Acts &amp; Notifications{% endif %}</small>
+                        </a>
+                        <a href="{% url 'timeline_page' %}" class="drawer-subnav-link {% if request.resolver_match.url_name == 'timeline_page' %}active{% endif %}">
+                            <strong>{{ ui.timeline }}</strong>
+                            <small>{% if is_gujarati %}વિધાનસભાથી ગેઝેટનો ઘટનાક્રમ{% else %}Legislative Tracker{% endif %}</small>
+                        </a>
+                        <a href="{% url 'faq_glossary' %}" class="drawer-subnav-link {% if request.resolver_match.url_name == 'faq_glossary' %}active{% endif %}">
+                            <strong>{{ ui.faq }} &amp; {{ ui.glossary }}</strong>
+                            <small>{% if is_gujarati %}સામાન્ય પ્રશ્નો અને પરિભાષા{% else %}Questions &amp; Definitions{% endif %}</small>
+                        </a>
+                        <a href="{% url 'news_list' %}" class="drawer-subnav-link {% if 'news' in request.resolver_match.url_name %}active{% endif %}">
+                            <strong>{{ ui.news }}</strong>
+                            <small>{% if is_gujarati %}તાજા અપડેટ્સ{% else %}Latest Updates{% endif %}</small>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="drawer-divider"></li>
+
+                <li>
+                    <a href="{% url 'editorial_policy' %}" class="drawer-nav-link {% if request.resolver_match.url_name == 'editorial_policy' %}active{% endif %}">
+                        <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+                        <span>{{ ui.editorial_policy }} / {% if is_gujarati %}પ્રોજેક્ટ વિગતો{% else %}Project Brief{% endif %}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'corrections_page' %}" class="drawer-nav-link {% if request.resolver_match.url_name == 'corrections_page' %}active{% endif %}">
+                        <span class="drawer-nav-icon"><svg viewBox="0 0 24 24" class="icon-svg"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span>
+                        <span>{{ ui.corrections }}</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Drawer Bottom -->
+        <div class="drawer-footer">
+            <a href="{% url 'portal_admin_home' %}" class="drawer-cms-btn">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>{% if is_gujarati %}એડમિન પોર્ટલ (CMS Login){% else %}Staff Admin CMS Portal{% endif %}</span>
+            </a>
+            <div class="drawer-disclaimer-note">
+                {% if is_gujarati %}
+                સ્વતંત્ર જાહેર માહિતી મંચ &bull; કોઈ ઔપચારિક કાનૂની સલાહ નથી.
+                {% else %}
+                Independent legal information platform &bull; Not legal advice.
+                {% endif %}
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Compact Header (Shown on Screens &le; 860px) -->
+    <header class="mobile-header-wrapper" aria-label="Mobile Navigation Bar">
+        <div class="mobile-appbar">
+            <!-- 3 Lines Hamburger Menu Button -->
+            <button type="button" class="mobile-hamburger-btn" id="openMobileDrawerBtn" aria-label="મેનુ / Open Navigation Drawer" aria-controls="mobileSideDrawer">
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+                <span class="hamburger-line"></span>
+            </button>
+
+            <!-- Compact Brand Title -->
+            <a href="{% url 'home' %}" class="mobile-appbar-brand">
+                <span class="mobile-brand-title">{% if is_gujarati %}ગુજરાત UCC ૨૦૨૬{% else %}Gujarat UCC 2026{% endif %}</span>
+                <span class="mobile-brand-badge">{% if is_gujarati %}સ્વતંત્ર{% else %}Public{% endif %}</span>
+            </a>
+
+            <!-- Right Controls: Language Switcher & CMS link -->
+            <div class="mobile-appbar-right">
+                <a href="?lang={% if is_gujarati %}en{% else %}gu{% endif %}" class="mobile-lang-pill" title="{% if is_gujarati %}Switch to English{% else %}ગુજરાતીમાં જુઓ{% endif %}">
+                    {% if is_gujarati %}EN{% else %}ગુજરાતી{% endif %}
+                </a>
+                <a href="{% url 'portal_admin_home' %}" class="mobile-cms-pill" title="Staff CMS Portal">
+                    CMS
+                </a>
+            </div>
+        </div>
+
+        <!-- 1-Line Compact Mobile Status Ticker -->
+        <div class="mobile-status-ticker">
+            <span class="status-badge {{ current_status_badge_class }}" style="padding: 2px 7px; font-size: 0.70rem; font-weight: 700; white-space: nowrap;">
+                {{ current_status_label }}
+            </span>
+            <span class="mobile-ticker-text">
+                {% if is_gujarati %}ગેઝેટ પ્રસિદ્ધ (૧ ઓક્ટોબર ૨૦૨૬){% else %}Gazette (1 Oct 2026){% endif %}
+            </span>
+            <a href="{{ site_settings.verified_official_source_url }}" target="_blank" rel="noopener noreferrer" class="mobile-ticker-link">
+                {% if is_gujarati %}ગેઝેટ &rarr;{% else %}Gazette &rarr;{% endif %}
+            </a>
+        </div>
+    </header>
+
+    <!-- Desktop Header Only: Mandatory Legal Non-Affiliation Bar -->
+    <div class="top-disclaimer-bar desktop-only-header">
         <div class="container">
             <div class="top-disclaimer-content">
                 <span class="disclaimer-badge">
@@ -66,7 +248,7 @@
     </div>
 
     <!-- Main Site Masthead -->
-    <header class="site-masthead">
+    <header class="site-masthead desktop-only-header">
         <div class="container">
             <div class="masthead-inner">
                 <div class="brand-block">
@@ -109,7 +291,7 @@
     </header>
 
     <!-- Main Navigation Bar -->
-    <nav class="main-nav-bar" aria-label="Main Navigation">
+    <nav class="main-nav-bar desktop-only-header" aria-label="Main Navigation">
         <div class="container nav-inner">
             <!-- Mobile Menu Toggle Button -->
             <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="મેનુ / Menu Toggle" aria-expanded="false">
@@ -185,7 +367,7 @@
     </nav>
 
     <!-- Global Verified Status Bar -->
-    <div class="live-status-banner">
+    <div class="live-status-banner desktop-only-header">
         <div class="container">
             <div class="live-status-grid">
                 <div class="live-status-desc">

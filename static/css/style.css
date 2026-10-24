@@ -2336,3 +2336,596 @@ body.theme-contrast .home-card-container {
   }
 }
 
+/* ==========================================================================
+   Mobile Compact Header & Off-Canvas Side Drawer (<= 860px)
+   Replaces bulky stacked masthead & nav with modern 3-line hamburger drawer
+   ========================================================================== */
+
+.mobile-header-wrapper {
+  display: none;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  background: var(--paper-white, #FFFFFF);
+  border-bottom: 1px solid var(--border-subtle, #E2DBD4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.mobile-appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  height: 56px;
+  gap: 10px;
+}
+
+/* 3-Lines Hamburger Button */
+.mobile-hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 40px;
+  height: 40px;
+  padding: 9px 8px;
+  background: #FAF7F5;
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.mobile-hamburger-btn:hover,
+.mobile-hamburger-btn:active {
+  background: #EFEBE5;
+  border-color: #CBD5E1;
+}
+.hamburger-line {
+  display: block;
+  width: 100%;
+  height: 2.2px;
+  background-color: var(--ink-charcoal, #232122);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Compact Brand Title in Appbar */
+.mobile-appbar-brand {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  flex: 1;
+  min-width: 0;
+  margin-left: 4px;
+}
+.mobile-brand-title {
+  font-family: var(--font-serif-gu, 'Noto Serif Gujarati', serif);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--ink-charcoal, #232122);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.mobile-brand-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #B45309;
+}
+
+/* Right Controls in Appbar */
+.mobile-appbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mobile-lang-pill {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--ink-charcoal, #232122);
+  background: var(--warm-off-white, #F3EEEA);
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  padding: 5px 9px;
+  border-radius: 14px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.mobile-cms-pill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #92400E;
+  background: #FEF3C7;
+  border: 1px solid #FDE68A;
+  padding: 5px 8px;
+  border-radius: 14px;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+/* 1-Line Status Ticker */
+.mobile-status-ticker {
+  background: #FFFBEB;
+  border-top: 1px solid #FEF3C7;
+  border-bottom: 1px solid #FDE68A;
+  padding: 5px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.74rem;
+  color: #92400E;
+}
+.mobile-ticker-text {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+.mobile-ticker-link {
+  font-weight: 700;
+  color: #B45309;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Off-Canvas Side Drawer & Backdrop
+   ========================================================================== */
+.mobile-drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.55);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 99998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s ease;
+}
+.mobile-drawer-backdrop.drawer-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-side-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 320px;
+  max-width: 86vw;
+  background: #FFFFFF;
+  z-index: 99999;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+.mobile-side-drawer.drawer-open {
+  transform: translateX(0);
+}
+
+/* Drawer Header */
+.drawer-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid var(--border-subtle, #E2DBD4);
+  background: #FAF7F5;
+}
+.drawer-brand-badge {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #B45309;
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+.drawer-brand-title {
+  font-family: var(--font-serif-gu, 'Noto Serif Gujarati', serif);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--ink-charcoal, #232122);
+  line-height: 1.25;
+  margin: 0;
+}
+.drawer-brand-subtitle {
+  font-size: 0.74rem;
+  color: var(--muted-grey, #898989);
+  margin-top: 3px;
+  margin-bottom: 0;
+}
+.drawer-close-btn {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ink-charcoal, #232122);
+  flex-shrink: 0;
+  margin-left: 8px;
+  transition: all 0.15s ease;
+}
+.drawer-close-btn:hover {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #FECACA;
+}
+
+/* Drawer Language Bar */
+.drawer-lang-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  background: #FAF7F5;
+  border-bottom: 1px solid var(--border-subtle, #E2DBD4);
+  font-size: 0.8rem;
+}
+.drawer-lang-label {
+  font-weight: 600;
+  color: #57534E;
+}
+.drawer-lang-options {
+  display: flex;
+  gap: 6px;
+}
+.drawer-lang-btn {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 14px;
+  text-decoration: none;
+  color: var(--ink-charcoal, #232122);
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  background: #FFFFFF;
+}
+.drawer-lang-btn.active {
+  background: var(--coral-red, #D1382A);
+  color: #FFFFFF;
+  border-color: var(--coral-red, #D1382A);
+}
+
+/* Drawer Search Box */
+.drawer-search-box {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--border-subtle, #E2DBD4);
+}
+.drawer-search-box form {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.drawer-search-icon {
+  position: absolute;
+  left: 10px;
+  width: 16px;
+  height: 16px;
+  fill: #898989;
+  pointer-events: none;
+}
+.drawer-search-input {
+  width: 100%;
+  padding: 8px 12px 8px 34px;
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  border-radius: 20px;
+  font-size: 0.84rem;
+  font-family: inherit;
+  color: var(--ink-charcoal, #232122);
+}
+.drawer-search-input:focus {
+  outline: none;
+  background: #FFFFFF;
+  border-color: var(--coral-red, #D1382A);
+}
+
+/* Drawer Navigation List */
+.drawer-nav {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 0;
+}
+.drawer-nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.drawer-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-charcoal, #232122);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+.drawer-nav-link:hover,
+.drawer-nav-link.active {
+  background: #FAF7F5;
+  color: var(--coral-red, #D1382A);
+  border-left-color: var(--coral-red, #D1382A);
+}
+.drawer-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  color: #78716C;
+}
+.drawer-nav-link:hover .drawer-nav-icon,
+.drawer-nav-link.active .drawer-nav-icon {
+  color: var(--coral-red, #D1382A);
+}
+
+/* Accordion Groups in Drawer */
+.drawer-accordion-group {
+  border-bottom: 1px solid #F1ECE8;
+}
+.drawer-accordion-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--ink-charcoal, #232122);
+  text-align: left;
+  border-left: 3px solid transparent;
+  transition: all 0.15s ease;
+}
+.drawer-accordion-btn:hover,
+.drawer-accordion-group.is-open > .drawer-accordion-btn {
+  background: #FAF7F5;
+  color: var(--coral-red, #D1382A);
+  border-left-color: var(--coral-red, #D1382A);
+}
+.drawer-accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.drawer-chevron {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  fill: none;
+  transition: transform 0.22s ease;
+}
+.drawer-accordion-group.is-open .drawer-chevron {
+  transform: rotate(180deg);
+}
+.drawer-subnav {
+  display: none;
+  background: #FAF7F5;
+  padding: 4px 0 8px 38px;
+}
+.drawer-accordion-group.is-open .drawer-subnav {
+  display: block;
+}
+.drawer-subnav-link {
+  display: block;
+  padding: 8px 18px;
+  font-size: 0.86rem;
+  color: #44403C;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.drawer-subnav-link:hover,
+.drawer-subnav-link.active {
+  color: var(--coral-red, #D1382A);
+}
+.drawer-subnav-link small {
+  display: block;
+  font-size: 0.72rem;
+  color: #78716C;
+  margin-top: 1px;
+}
+.drawer-subnav-link.all-link {
+  color: #B45309;
+  font-size: 0.82rem;
+  border-bottom: 1px dashed #E2DBD4;
+  margin-bottom: 4px;
+  padding-bottom: 6px;
+}
+.drawer-divider {
+  height: 1px;
+  background: #E5E7EB;
+  margin: 6px 0;
+}
+
+/* Drawer Footer */
+.drawer-footer {
+  padding: 14px 18px;
+  border-top: 1px solid var(--border-subtle, #E2DBD4);
+  background: #FAF7F5;
+}
+.drawer-cms-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0F172A;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+.drawer-cms-btn:hover {
+  background: #0F172A;
+  color: #FFFFFF;
+}
+.drawer-disclaimer-note {
+  font-size: 0.70rem;
+  color: #78716C;
+  text-align: center;
+  margin-top: 8px;
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   Breakpoints for Mobile Navbar & Desktop Headers
+   ========================================================================== */
+@media (max-width: 860px) {
+  .desktop-only-header {
+    display: none !important;
+  }
+  .mobile-header-wrapper {
+    display: block !important;
+  }
+}
+
+@media (min-width: 861px) {
+  .mobile-header-wrapper,
+  .mobile-side-drawer,
+  .mobile-drawer-backdrop {
+    display: none !important;
+  }
+}
+
+/* ==========================================================================
+   Comprehensive Table Design & Alignment System
+   Ensures all tables (Public, Specification, Admin, Library) align perfectly
+   ========================================================================== */
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-subtle, #E2DBD4);
+  border-radius: 8px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.table-scroll-hint {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 6px 14px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  border-bottom: 1px solid #E2E8F0;
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .table-scroll-hint {
+    display: flex;
+  }
+}
+
+/* Unified Table Presentation */
+.spec-table,
+.legal-library-table,
+.portal-table {
+  width: 100%;
+  min-width: 640px; /* guarantees columns don't crush on mobile */
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-align: left;
+  background: #FFFFFF;
+}
+
+.spec-table th,
+.legal-library-table th,
+.portal-table th {
+  background-color: #0F172A;
+  color: #F8FAFC;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  border-bottom: 2px solid #020617;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.spec-table td,
+.legal-library-table td,
+.portal-table td {
+  padding: 13px 16px;
+  vertical-align: top;
+  border-bottom: 1px solid #E2E8F0;
+  border-right: 1px solid #F1F5F9;
+  color: var(--ink-charcoal, #232122);
+}
+
+.spec-table td:last-child,
+.legal-library-table td:last-child,
+.portal-table td:last-child {
+  border-right: none;
+}
+
+.spec-table tbody tr:nth-child(even) td,
+.legal-library-table tbody tr:nth-child(even) td,
+.portal-table tbody tr:nth-child(even) td {
+  background-color: #F8FAFC;
+}
+
+.spec-table tbody tr:hover td,
+.legal-library-table tbody tr:hover td,
+.portal-table tbody tr:hover td {
+  background-color: #F1F5F9;
+}
+
+/* Distinct Table Elements */
+.cell-key {
+  font-weight: 700;
+  color: #0F172A;
+  background-color: #FAF7F5;
+  width: 25%;
+  min-width: 160px;
+}
+
+.color-swatch-box {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  border: 1px solid rgba(0,0,0,0.15);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  flex-shrink: 0;
+}
+
+

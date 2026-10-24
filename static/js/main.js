@@ -49,7 +49,73 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
-  // 4. Navigation Dropdown & Mobile Menu Handler
+  // 4. Mobile Off-Canvas Side Drawer Handler
+  const openDrawerBtn = document.getElementById('openMobileDrawerBtn');
+  const closeDrawerBtn = document.getElementById('closeMobileDrawerBtn');
+  const mobileDrawer = document.getElementById('mobileSideDrawer');
+  const drawerBackdrop = document.getElementById('mobileDrawerBackdrop');
+
+  function openDrawer() {
+    if (mobileDrawer && drawerBackdrop) {
+      mobileDrawer.classList.add('drawer-open');
+      drawerBackdrop.classList.add('drawer-open');
+      mobileDrawer.setAttribute('aria-hidden', 'false');
+      if (openDrawerBtn) openDrawerBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  function closeDrawer() {
+    if (mobileDrawer && drawerBackdrop) {
+      mobileDrawer.classList.remove('drawer-open');
+      drawerBackdrop.classList.remove('drawer-open');
+      mobileDrawer.setAttribute('aria-hidden', 'true');
+      if (openDrawerBtn) openDrawerBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (openDrawerBtn) {
+    openDrawerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      openDrawer();
+    });
+  }
+
+  if (closeDrawerBtn) {
+    closeDrawerBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      closeDrawer();
+    });
+  }
+
+  if (drawerBackdrop) {
+    drawerBackdrop.addEventListener('click', closeDrawer);
+  }
+
+  // Drawer Accordions (Topics and Resources)
+  const drawerAccordionBtns = document.querySelectorAll('.drawer-accordion-btn');
+  drawerAccordionBtns.forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      const group = this.closest('.drawer-accordion-group');
+      if (group) {
+        const isOpen = group.classList.toggle('is-open');
+        this.setAttribute('aria-expanded', isOpen);
+      }
+    });
+  });
+
+  // Close drawer if user clicks a direct nav link inside drawer
+  const drawerDirectLinks = document.querySelectorAll('.drawer-nav-link, .drawer-subnav-link');
+  drawerDirectLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      // Small timeout allows navigation to start smoothly
+      setTimeout(closeDrawer, 150);
+    });
+  });
+
+  // 5. Desktop Dropdown & Legacy Fallback Handlers
   const mobileToggle = document.getElementById('mobileMenuToggle');
   const mainNavLinks = document.getElementById('mainNavLinks');
 
@@ -66,12 +132,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Handle dropdown triggers on click/touch
+  // Handle desktop dropdown triggers on click/touch
   const dropdownTriggers = document.querySelectorAll('.nav-dropdown > .dropdown-trigger');
   dropdownTriggers.forEach(trigger => {
     trigger.addEventListener('click', function (e) {
       const parent = this.parentElement;
-      // On mobile or on clicking arrow or button, toggle dropdown
       if (window.innerWidth <= 860 || e.target.closest('.dropdown-arrow')) {
         e.preventDefault();
         const wasOpen = parent.classList.contains('is-open');
@@ -92,9 +157,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 
-  // Close on Escape key
+  // Close everything on Escape key
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
+      closeDrawer();
       document.querySelectorAll('.nav-dropdown.is-open').forEach(d => {
         d.classList.remove('is-open');
       });
