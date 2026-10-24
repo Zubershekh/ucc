@@ -52,7 +52,8 @@
     </div>
 
     <!-- Documents Table -->
-    <table class="legal-library-table">
+    <div class="table-responsive">
+        <table class="legal-library-table">
         <thead>
             <tr>
                 <th>{% if is_gujarati %}દસ્તાવેજ અને ક્રમાંક{% else %}Document Title & Number{% endif %}</th>
@@ -116,5 +117,6 @@
             {% endfor %}
         </tbody>
     </table>
+    </div>
 </div>
 {% endblock %}

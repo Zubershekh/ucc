@@ -511,6 +511,129 @@
             color: #64748B;
             margin-top: 3px;
         }
+
+        /* Mobile Drawer & Responsive Layout */
+        .admin-mobile-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--admin-border);
+            border-radius: 6px;
+            padding: 6px 9px;
+            cursor: pointer;
+            color: var(--admin-text-main);
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .admin-mobile-toggle:hover {
+            background: #F1F5F9;
+        }
+        .admin-sidebar-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(2px);
+            z-index: 990;
+        }
+        .admin-sidebar-backdrop.active {
+            display: block;
+        }
+
+        /* Admin Responsive Grid Utilities */
+        .admin-grid-2col {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+        .admin-grid-equal-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .admin-grid-3col {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .admin-grid-2col {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 860px) {
+            .admin-mobile-toggle {
+                display: inline-flex;
+            }
+            .admin-sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                width: 270px;
+                transform: translateX(-100%);
+                transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1000;
+                box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+            }
+            .admin-sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            .admin-topbar {
+                padding: 0 16px;
+                height: 56px;
+            }
+            .admin-heading-title {
+                font-size: 1rem;
+            }
+            .admin-content-area {
+                padding: 16px;
+            }
+            .card-panel {
+                padding: 16px;
+                margin-bottom: 16px;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+            }
+            .admin-grid-equal-2col,
+            .admin-grid-3col {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-topbar {
+                padding: 0 12px;
+            }
+            .admin-heading-title {
+                font-size: 0.9rem;
+            }
+            .kpi-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .kpi-card {
+                padding: 14px;
+                gap: 12px;
+            }
+            .kpi-num {
+                font-size: 1.45rem;
+            }
+            .role-pill {
+                font-size: 0.68rem;
+                padding: 2px 6px;
+            }
+        }
     </style>
     {% block extra_admin_css %}{% endblock %}
 </head>
@@ -612,17 +735,23 @@
         </div>
     </aside>
 
+    <!-- Mobile Drawer Backdrop -->
+    <div class="admin-sidebar-backdrop" id="adminSidebarBackdrop"></div>
+
     <!-- Main Workspace Panel -->
     <div class="admin-main">
         <!-- Topbar -->
         <header class="admin-topbar">
-            <div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button type="button" class="admin-mobile-toggle" id="adminSidebarToggle" aria-label="Toggle Navigation">
+                    <svg class="icon-svg icon-md" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
                 <h1 class="admin-heading-title">
                     {% block admin_heading %}Command Center & Dashboard Overview{% endblock %}
                 </h1>
             </div>
 
-            <div style="display: flex; align-items: center; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
                 <!-- Status Badge -->
                 <span class="status-badge {{ current_status_badge_class }}" style="font-size: 0.76rem; padding: 4px 10px;">
                     {{ current_status_label }}
@@ -663,6 +792,48 @@
         </main>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('adminSidebarToggle');
+    var sidebar = document.querySelector('.admin-sidebar');
+    var backdrop = document.getElementById('adminSidebarBackdrop');
+    
+    function openSidebar() {
+        if (sidebar && backdrop) {
+            sidebar.classList.add('mobile-open');
+            backdrop.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    function closeSidebar() {
+        if (sidebar && backdrop) {
+            sidebar.classList.remove('mobile-open');
+            backdrop.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            if (sidebar && sidebar.classList.contains('mobile-open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    }
+    if (backdrop) {
+        backdrop.addEventListener('click', closeSidebar);
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sidebar && sidebar.classList.contains('mobile-open')) {
+            closeSidebar();
+        }
+    });
+});
+</script>
 
 {% block extra_admin_js %}{% endblock %}
 </body>

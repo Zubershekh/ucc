@@ -39,7 +39,7 @@
         <h2 class="section-title">{% if is_gujarati %}આ વિષય પર વિગતવાર કાનૂની માર્ગદર્શિકા{% else %}Plain-Language Explainers for this Topic{% endif %}</h2>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 50px;">
+    <div class="responsive-2col-grid" style="margin-bottom: 50px;">
         {% for exp in explainers %}
         <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 26px; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
