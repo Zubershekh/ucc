@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.corrections }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <div class="reading-column">
+        <!-- Header -->
+        <div class="section-head">
+            <div>
+                <h1 class="section-title">{{ ui.corrections }}</h1>
+                <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                    {% if is_gujarati %}
+                    સચોટતા અને કાનૂની શુદ્ધતા જાળવવા માટે જાહેર ભૂલ સુધારણા અને પ્રતિસાદ પ્રક્રિયા
+                    {% else %}
+                    Public correction triage workflow to maintain absolute statutory accuracy and verified provenance
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+
+        <!-- Strict Privacy Warning Banner (Section 11 Requirement) -->
+        <div style="background: #FFF8E1; border: 1px solid #FFE082; border-left: 5px solid #F57F17; padding: 20px 24px; border-radius: var(--radius-sm); margin-bottom: 30px;">
+            <div style="font-weight: 700; color: #B76E00; font-size: 0.92rem; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <span>{% if is_gujarati %}મહત્વપૂર્ણ ગોપનીયતા સુરક્ષા સૂચના (Privacy Safeguard){% else %}Important Privacy Safeguard{% endif %}</span>
+            </div>
+            <div style="font-size: 0.88rem; color: #4A3B18; line-height: 1.6;">
+                {% if is_gujarati %}
+                આ એક સ્વતંત્ર કાનૂની માહિતી મંચ છે. કૃપા કરીને આ ફોર્મમાં તમારા <strong>વ્યક્તિગત કેસના દસ્તાવેજો, આધાર કાર્ડ, લગ્ન પ્રમાણપત્ર અથવા ખાનગી વિગતો મોકલશો નહીં</strong>. આ ફોર્મ માત્ર વેબસાઇટ પર પ્રદર્શિત તથ્યો, કલમો અથવા તારીખોની ભૂલ સુધારવા માટે છે.
+                {% else %}
+                This platform is strictly an independent legal information repository. <strong>Do NOT upload or submit personal case histories, marriage certificates, Aadhaar details, court pleadings, or confidential family data</strong>. This queue is exclusively dedicated to auditing public statutory facts, dates, and citations.
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Feedback Messages -->
+        {% if messages %}
+        <div style="margin-bottom: 24px;">
+            {% for message in messages %}
+            <div style="padding: 16px 20px; border-radius: var(--radius-sm); font-size: 0.92rem; margin-bottom: 10px; {% if message.tags == 'success' %}background: #E8F5E9; border: 1px solid #C8E6C9; color: #1B5E20;{% else %}background: #FFEBEE; border: 1px solid #FFCDD2; color: #C62828;{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Correction Submission Form -->
+        <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 32px; box-shadow: var(--shadow-subtle); margin-bottom: 40px;">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label class="form-label" for="reference_page_or_topic">
+                        {% if is_gujarati %}સંદર્ભ પૃષ્ઠ / માર્ગદર્શિકા / દસ્તાવેજ શીર્ષક *{% else %}Page Reference / Explainer Title / Document Number *{% endif %}
+                    </label>
+                    <input type="text" name="reference_page_or_topic" id="reference_page_or_topic" class="form-control" required placeholder="e.g. Marriage Registration Explainer or Extraordinary Gazette No. 17" value="{{ initial_ref }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="correction_type">
+                        {% if is_gujarati %}ભૂલનો પ્રકાર (Correction Category) *{% else %}Type of Correction *{% endif %}
+                    </label>
+                    <select name="correction_type" id="correction_type" class="form-control" required>
+                        {% for code, label in correction_types %}
+                        <option value="{{ code }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="specific_error_description">
+                        {% if is_gujarati %}તમે કઈ ક્ષતિ અથવા ભૂલ નોંધી છે? *{% else %}Specific Error or Discrepancy Identified *{% endif %}
+                    </label>
+                    <textarea name="specific_error_description" id="specific_error_description" rows="4" class="form-control" required placeholder="Explain clearly which sentence, date, or section is inaccurate."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="suggested_correction">
+                        {% if is_gujarati %}સાચો સુધારો શું હોવો જોઈએ?{% else %}Proposed Correction Text{% endif %}
+                    </label>
+                    <textarea name="suggested_correction" id="suggested_correction" rows="3" class="form-control" placeholder="Provide what the verified text or interpretation should state."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="official_source_proof">
+                        {% if is_gujarati %}સત્તાવાર ગેઝેટ / સરકારી સ્ત્રોતનો પુરાવો અથવા લિંક *{% else %}Official Source Link or Gazette Citation Proving This *{% endif %}
+                    </label>
+                    <input type="text" name="official_source_proof" id="official_source_proof" class="form-control" required placeholder="e.g. Gujarat Gazette Notification dated 1 Oct 2026, Section 9(2) or URL">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label class="form-label" for="submitter_name">
+                            {% if is_gujarati %}તમારું નામ (વૈકલ્પિક){% else %}Your Name (Optional){% endif %}
+                        </label>
+                        <input type="text" name="submitter_name" id="submitter_name" class="form-control" placeholder="Adv. / Researcher / Citizen">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="submitter_email">
+                            {% if is_gujarati %}ઈમેલ સરનામું (વૈકલ્પિક - અપડેટ્સ માટે){% else %}Email Address (Optional){% endif %}
+                        </label>
+                        <input type="email" name="submitter_email" id="submitter_email" class="form-control" placeholder="name@domain.com">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 10px; width: 100%; justify-content: center; padding: 12px; display: inline-flex; align-items: center; gap: 8px;">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <span>{% if is_gujarati %}ચકાસણી માટે મોકલો (Submit for Verification){% else %}Submit Correction to Editorial Review Queue{% endif %}</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Public Resolved Corrections Transparency Log -->
+        {% if resolved_corrections %}
+        <div class="section-head" style="margin-top: 40px;">
+            <h2 class="section-title" style="font-size: 1.4rem;">
+                {% if is_gujarati %}તાજેતરના સ્વીકૃત અને સુધારેલા સુધારાઓ (Transparency Log){% else %}Recent Corrections & Errata Log{% endif %}
+            </h2>
+        </div>
+
+        <div>
+            {% for item in resolved_corrections %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-left: 4px solid var(--coral-red); padding: 18px 22px; border-radius: var(--radius-sm); margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted-grey); margin-bottom: 6px;">
+                    <span><strong>{{ item.reference_page_or_topic }}</strong></span>
+                    <span>Resolved: {{ item.resolved_at|date:"d M Y" }}</span>
+                </div>
+                <div style="font-size: 0.92rem; color: #333; line-height: 1.5;">
+                    {{ item.public_resolution_note }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

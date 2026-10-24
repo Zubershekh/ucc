@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.library }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">{{ ui.library }}</h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                ગુજરાત સમાન નાગરિક સંહિતા સંબંધિત તમામ સત્તાવાર સરકારી ગેઝેટ, અધિનિયમ, નિયમો અને જાહેરનામા
+                {% else %}
+                Primary legal archive: Assented Acts, Extraordinary Gazettes, statutory forms, and official circulars
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: 26px; display: flex; gap: 20px; align-items: center; flex-wrap: wrap;">
+        <span style="font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--muted-grey);">
+            {% if is_gujarati %}ફિલ્ટર કરો:{% else %}Filter Documents:{% endif %}
+        </span>
+        
+        <form method="get" style="display: flex; gap: 14px; flex-wrap: wrap; flex: 1;">
+            <select name="type" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.84rem;">
+                <option value="">-- {% if is_gujarati %}દસ્તાવેજ પ્રકાર (બધા){% else %}All Document Types{% endif %} --</option>
+                {% for code, label in doc_types %}
+                <option value="{{ code }}" {% if selected_type == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="status" class="form-control" style="width: auto; padding: 6px 12px; font-size: 0.84rem;">
+                <option value="">-- {% if is_gujarati %}કાનૂની સ્થિતિ (બધા){% else %}All Legal Statuses{% endif %} --</option>
+                {% for code, label in status_choices %}
+                <option value="{{ code }}" {% if selected_status == code %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn-primary" style="padding: 6px 14px; font-size: 0.84rem;">
+                {% if is_gujarati %}લાગુ કરો{% else %}Apply Filter{% endif %}
+            </button>
+            {% if selected_type or selected_status %}
+            <a href="{% url 'library_list' %}" class="btn-secondary" style="padding: 6px 12px; font-size: 0.84rem;">
+                {% if is_gujarati %}રીસેટ{% else %}Reset{% endif %}
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Documents Table -->
+    <table class="legal-library-table">
+        <thead>
+            <tr>
+                <th>{% if is_gujarati %}દસ્તાવેજ અને ક્રમાંક{% else %}Document Title & Number{% endif %}</th>
+                <th>{% if is_gujarati %}પ્રકાર{% else %}Type{% endif %}</th>
+                <th>{% if is_gujarati %}ગેઝેટ તારીખ{% else %}Gazette Date{% endif %}</th>
+                <th>{% if is_gujarati %}કાનૂની સ્થિતિ{% else %}Strict Status{% endif %}</th>
+                <th>{% if is_gujarati %}વિગતો અને ડાઉનલોડ{% else %}Details & Download{% endif %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for doc in documents %}
+            <tr>
+                <td class="doc-title-cell" style="max-width: 440px;">
+                    <strong>
+                        <a href="{% url 'document_detail' doc.slug %}">
+                            {% get_bilingual doc 'title' %}
+                        </a>
+                    </strong>
+                    <div class="doc-meta-sub" style="margin-top: 4px;">
+                        <span><strong>No:</strong> {{ doc.document_number }}</span> • 
+                        <span>{% get_bilingual doc 'issuing_authority' %}</span>
+                    </div>
+                    {% if doc.relevant_sections %}
+                    <div style="font-size: 0.78rem; color: #666; margin-top: 4px;">
+                        <strong>{{ ui.citations }}:</strong> {{ doc.relevant_sections }}
+                    </div>
+                    {% endif %}
+                </td>
+                <td>
+                    <span style="font-size: 0.78rem; font-weight: 600; background: #EFEBE5; padding: 3px 8px; border-radius: 3px; display: inline-block;">
+                        {{ doc.get_document_type_display }}
+                    </span>
+                </td>
+                <td style="font-size: 0.86rem; color: var(--muted-grey); white-space: nowrap;">
+                    {{ doc.publication_date|date:"d M Y" }}
+                </td>
+                <td>
+                    <span class="status-badge {% status_badge_class doc.status %}">
+                        {% get_status_label doc.status %}
+                    </span>
+                </td>
+                <td>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <a href="{% url 'document_detail' doc.slug %}" class="btn-secondary" style="padding: 5px 10px; font-size: 0.78rem;">
+                            {% if is_gujarati %}વિગત{% else %}Metadata{% endif %}
+                        </a>
+                        <a href="{{ doc.official_source_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="padding: 5px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 4px;">
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>PDF</span>
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 40px; color: var(--muted-grey);">
+                    {% if is_gujarati %}પસંદ કરેલ ફિલ્ટર મુજબ કોઈ સત્તાવાર દસ્તાવેજ મળ્યો નથી.{% else %}No legal documents found matching the filter criteria.{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

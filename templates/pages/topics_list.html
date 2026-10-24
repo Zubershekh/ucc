@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.topics }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">{{ ui.topics }}</h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                ગુજરાત સમાન નાગરિક સંહિતા હેઠળ નિયંત્રિત તમામ ૬ મુખ્ય પારિવારિક અને સંપત્તિ વિષયો
+                {% else %}
+                Explore the 6 core civil law pillars governed under the Gujarat Uniform Civil Code, 2026
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Topics Grid -->
+    <div class="topics-grid" style="margin-top: 30px;">
+        {% for topic in topics %}
+        <div class="topic-card">
+            <div>
+                <div class="icon-circle">
+                    {% if topic.slug == 'marriage-registration' %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>
+                    {% elif topic.slug == 'divorce-dissolution' %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                    {% elif topic.slug == 'succession-inheritance' %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M5 8h14"/><rect x="2" y="8" width="6" height="4" rx="1"/><rect x="16" y="8" width="6" height="4" rx="1"/><path d="M5 12v6"/><path d="M19 12v6"/><rect x="2" y="18" width="6" height="4" rx="1"/><rect x="9" y="18" width="6" height="4" rx="1"/><rect x="16" y="18" width="6" height="4" rx="1"/><path d="M12 8v10"/></svg>
+                    {% elif topic.slug == 'wills-estates' %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                    {% elif topic.slug == 'live-in-relationships' %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                    {% else %}
+                    <svg class="icon-svg icon-lg" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="11" r="3"/></svg>
+                    {% endif %}
+                </div>
+                <h2 class="topic-card-title">
+                    <a href="{% url 'topic_detail' topic.slug %}">
+                        {% get_bilingual topic 'name' %}
+                    </a>
+                </h2>
+                <p class="topic-card-summary">
+                    {% get_bilingual topic 'summary' %}
+                </p>
+            </div>
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 14px; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.82rem; color: var(--muted-grey);">
+                    {{ topic.explainers.count }} {% if is_gujarati %}માર્ગદર્શિકા ઉપલબ્ધ{% else %}Guides Available{% endif %}
+                </span>
+                <a href="{% url 'topic_detail' topic.slug %}" class="btn-primary" style="padding: 6px 14px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 4px;">
+                    <span>{% if is_gujarati %}વિષય સમજો{% else %}Explore Topic{% endif %}</span>
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,217 @@
+{% load static core_tags %}
+<!DOCTYPE html>
+<html lang="{{ current_lang }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ ui.brand_title }}{% endblock %} | Gujarat UCC 2026</title>
+    <meta name="description" content="{% block meta_description %}Independent public legal information and verified explainer platform for the Gujarat Uniform Civil Code, 2026.{% endblock %}">
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content="{% block og_title %}{{ ui.brand_title }}{% endblock %}">
+    <meta property="og:description" content="Verified legal explainers, gazette citations, and legislative tracking for the Gujarat Uniform Civil Code, 2026.">
+    <meta property="og:type" content="website">
+
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="lang-{{ current_lang }}">
+
+    <!-- Mandatory Legal Non-Affiliation Bar -->
+    <div class="top-disclaimer-bar">
+        <div class="container">
+            <div class="top-disclaimer-content">
+                <span class="disclaimer-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L1 21h22L12 2zm0 3.99L19.53 19H4.47L12 5.99zM11 10h2v4h-2zm0 5h2v2h-2z"/></svg>
+                    {% if is_gujarati %}સ્વતંત્ર કાનૂની મંચ{% else %}Independent Public Platform{% endif %}
+                </span>
+                <span class="disclaimer-text">
+                    {% if is_gujarati %}
+                    આ એક બિન-સરકારી કાનૂની માહિતી મંચ છે. સામાન્ય માહિતી માત્ર; કોઈ કાનૂની સલાહ નથી.
+                    {% else %}
+                    Independent legal information initiative. General informational content only; not formal legal advice.
+                    {% endif %}
+                </span>
+                <div class="top-bar-links">
+                    <a href="{% url 'editorial_policy' %}">{{ ui.editorial_policy }}</a>
+                    <a href="{% url 'corrections_page' %}">{{ ui.corrections }}</a>
+                    
+                    <!-- Language Switcher Pill -->
+                    <div class="lang-selector-group" title="Switch Language / ભાષા બદલો">
+                        <a href="?lang=en" data-lang="en" class="lang-btn {% if not is_gujarati %}active{% endif %}">EN</a>
+                        <a href="?lang=gu" data-lang="gu" class="lang-btn {% if is_gujarati %}active{% endif %}">ગુજરાતી</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Site Masthead -->
+    <header class="site-masthead">
+        <div class="container">
+            <div class="masthead-inner">
+                <div class="brand-block">
+                    <h1>
+                        <a href="{% url 'home' %}">
+                            {% if is_gujarati %}
+                            ગુજરાત સમાન નાગરિક સંહિતા (UCC)
+                            {% else %}
+                            Gujarat Uniform Civil Code
+                            {% endif %}
+                        </a>
+                    </h1>
+                    <div class="brand-sub">
+                        {% if is_gujarati %}
+                        સત્તાવાર દસ્તાવેજો, કલમવાર સમજૂતી અને ચકાસાયેલ કાનૂની અપડેટ્સ (૨૦૨૬)
+                        {% else %}
+                        Public Legal Repository, Section Explainers & Legislative Tracker (2026)
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Verified Live Status Quick-Card -->
+                <div class="masthead-status-box">
+                    <div class="masthead-status-meta">
+                        <span>{{ ui.status_tracker }}</span>
+                        <span>{{ ui.last_verified }}: {{ site_settings.last_verified_date|date:"d M Y" }}</span>
+                    </div>
+                    <div class="masthead-status-text">
+                        <span class="status-badge {{ current_status_badge_class }}">
+                            {{ current_status_label }}
+                        </span>
+                        <div style="margin-top: 6px; font-size: 0.82rem; font-weight: normal; color: #494543;">
+                            {% if is_gujarati %}{{ site_settings.status_summary_gu }}{% else %}{{ site_settings.status_summary_en }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Navigation Bar -->
+    <nav class="main-nav-bar" aria-label="Main Navigation">
+        <div class="container nav-inner">
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{{ ui.home }}</a></li>
+                <li><a href="{% url 'understand_ucc' %}" class="{% if request.resolver_match.url_name == 'understand_ucc' %}active{% endif %}">{{ ui.understand_ucc }}</a></li>
+                <li><a href="{% url 'topics_list' %}" class="{% if 'topic' in request.resolver_match.url_name %}active{% endif %}">{{ ui.topics }}</a></li>
+                <li><a href="{% url 'explainers_list' %}" class="{% if 'explainer' in request.resolver_match.url_name %}active{% endif %}">{{ ui.explainers }}</a></li>
+                <li><a href="{% url 'library_list' %}" class="{% if 'library' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name %}active{% endif %}">{{ ui.library }}</a></li>
+                <li><a href="{% url 'timeline_page' %}" class="{% if request.resolver_match.url_name == 'timeline_page' %}active{% endif %}">{{ ui.timeline }}</a></li>
+                <li><a href="{% url 'news_list' %}" class="{% if 'news' in request.resolver_match.url_name %}active{% endif %}">{{ ui.news }}</a></li>
+                <li><a href="{% url 'faq_glossary' %}" class="{% if request.resolver_match.url_name == 'faq_glossary' %}active{% endif %}">{{ ui.faq }} & {{ ui.glossary }}</a></li>
+            </ul>
+
+            <div class="nav-search-box">
+                <form action="{% url 'search_page' %}" method="get">
+                    <svg class="nav-search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" name="q" class="nav-search-input" placeholder="{{ ui.search }}" value="{{ request.GET.q|default:'' }}">
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Verified Status Bar -->
+    <div class="live-status-banner">
+        <div class="container">
+            <div class="live-status-grid">
+                <div class="live-status-desc">
+                    <span class="status-badge {{ current_status_badge_class }}">
+                        {{ current_status_label }}
+                    </span>
+                    <span>
+                        {% if is_gujarati %}
+                        <strong>કાનૂની સ્થિતિ:</strong> રાષ્ટ્રપતિ મંજૂરી (૧૭ સપ્ટેમ્બર ૨૦૨૬) અને ગેઝેટ પ્રકાશન (૧ ઓક્ટોબર ૨૦૨૬). રાજ્ય સરકારના અમલવારી જાહેરનામાની રાહ જોવાઈ રહી છે.
+                        {% else %}
+                        <strong>Legal Operational Notice:</strong> Presidential Assent (17 Sept 2026) and Extraordinary Gazette (1 Oct 2026). State Government appointed commencement notification awaited.
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="live-status-sources">
+                    <a href="{{ site_settings.verified_official_source_url }}" target="_blank" rel="noopener noreferrer" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <span>{% if is_gujarati %}સત્તાવાર ગેઝેટ જુઓ (NeVA){% else %}View Official Gazette (NeVA){% endif %}</span>
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3>{% if is_gujarati %}ગુજરાત સમાન નાગરિક સંહિતા માહિતી મંચ{% else %}Gujarat Uniform Civil Code Information Platform{% endif %}</h3>
+                    <p>
+                        {% if is_gujarati %}
+                        આ વેબસાઇટ ગુજરાત યુનિફોર્મ સિવિલ કોડ (UCC) ૨૦૨૬ સંબંધિત સત્તાવાર દસ્તાવેજો, કલમવાર સમજૂતી અને ચકાસાયેલ માહિતી નાગરિકો, સંશોધકો અને પરિવારો માટે સરળ અને તટસ્થ ભાષામાં પ્રદાન કરે છે.
+                        {% else %}
+                        An independent editorial project dedicated to explaining, documenting, and tracking the Gujarat Uniform Civil Code, 2026 responsibly through primary legal sources and verified citations.
+                        {% endif %}
+                    </p>
+                    <div style="font-size: 0.8rem; color: #E0D9D3; line-height: 1.6; border-left: 2px solid var(--coral-red); padding-left: 10px;">
+                        <strong>{{ ui.disclaimer }}:</strong> {{ site_settings.mandatory_disclaimer_gu|default:site_settings.mandatory_disclaimer_en }}
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>{{ ui.topics }}</h4>
+                    <ul class="footer-links">
+                        <li><a href="/topics/marriage-registration/">{% if is_gujarati %}લગ્ન અને નોંધણી{% else %}Marriage & Registration{% endif %}</a></li>
+                        <li><a href="/topics/divorce-dissolution/">{% if is_gujarati %}છૂટાછેડા અને વિસર્જન{% else %}Divorce & Dissolution{% endif %}</a></li>
+                        <li><a href="/topics/succession-inheritance/">{% if is_gujarati %}વારસાઈ અને ઉત્તરાધિકાર{% else %}Succession & Inheritance{% endif %}</a></li>
+                        <li><a href="/topics/wills-estates/">{% if is_gujarati %}વિલ અને વસિયતનામું{% else %}Wills & Estates{% endif %}</a></li>
+                        <li><a href="/topics/live-in-relationships/">{% if is_gujarati %}લિવ-ઇન સંબંધો{% else %}Live-in Relationships{% endif %}</a></li>
+                        <li><a href="/topics/maintenance-guardianship/">{% if is_gujarati %}ભરણપોષણ અને વાલીપણું{% else %}Maintenance & Guardianship{% endif %}</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>{{ ui.library }} & {{ ui.timeline }}</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'library_list' %}">{{ ui.library }}</a></li>
+                        <li><a href="{% url 'timeline_page' %}">{{ ui.timeline }}</a></li>
+                        <li><a href="{% url 'news_list' %}">{{ ui.news }}</a></li>
+                        <li><a href="{% url 'faq_glossary' %}">{{ ui.faq }}</a></li>
+                        <li><a href="{% url 'faq_glossary' %}#glossary">{{ ui.glossary }}</a></li>
+                        <li><a href="{{ site_settings.official_committee_url }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 5px;"><span>Gujarat UCC Committee</span> <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>{% if is_gujarati %}પારદર્શિતા અને નીતિઓ{% else %}Policy & Trust{% endif %}</h4>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'about_page' %}">{{ ui.about }}</a></li>
+                        <li><a href="{% url 'editorial_policy' %}">{{ ui.editorial_policy }}</a></li>
+                        <li><a href="{% url 'corrections_page' %}">{{ ui.corrections }}</a></li>
+                        <li><a href="{% url 'privacy_policy' %}">{{ ui.privacy }}</a></li>
+                        <li><a href="{% url 'terms_page' %}">{{ ui.terms }}</a></li>
+                        <li><a href="{% url 'admin:index' %}" style="color: #F0C346; display: inline-flex; align-items: center; gap: 5px;"><svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> <span>Staff Editorial CMS</span></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>
+                    &copy; 2026 {{ ui.brand_title }}. {{ ui.all_rights_reserved }}
+                </div>
+                <div>
+                    {{ ui.last_verified }}: <strong>{{ site_settings.last_verified_date|date:"d F Y" }}</strong>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

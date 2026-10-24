@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.timeline }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">{{ ui.timeline }}</h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                ગુજરાત સમાન નાગરિક સંહિતાની વિધાનસભાથી ગેઝેટ પ્રકાશન અને અમલવારી સુધીનો અધિકૃત ઘટનાક્રમ
+                {% else %}
+                Official chronological record separating assembly passage, presidential assent, extraordinary gazette, and state rules notifications
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div style="margin-bottom: 30px; display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="{% url 'timeline_page' %}" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; {% if not selected_category %}background: var(--ink-charcoal); color: #FFF; border-color: var(--ink-charcoal);{% endif %}">
+            {% if is_gujarati %}સમગ્ર ઘટનાક્રમ{% else %}All Milestones{% endif %}
+        </a>
+        {% for code, label in categories %}
+        <a href="{% url 'timeline_page' %}?category={{ code }}" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; {% if selected_category == code %}background: var(--coral-red); color: #FFF; border-color: var(--coral-red);{% endif %}">
+            {{ label }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Timeline Stream -->
+    <div class="reading-column" style="margin-top: 20px;">
+        <div class="timeline-stream">
+            {% for event in events %}
+            <div class="timeline-event-card">
+                <div class="timeline-date-label" style="display: inline-flex; align-items: center; gap: 5px;">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span>{{ event.event_date|date:"d F Y" }}</span>
+                </div>
+                <div style="margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <span class="status-badge {% status_badge_class event.status_label %}">
+                        {% get_status_label event.status_label %}
+                    </span>
+                    <span style="font-size: 0.76rem; color: var(--muted-grey); text-transform: uppercase; font-weight: 600;">
+                        {{ event.get_category_display }}
+                    </span>
+                </div>
+                <h2 class="timeline-event-title">
+                    {% get_bilingual event 'title' %}
+                </h2>
+                <div style="font-size: 0.98rem; color: #4A4644; line-height: 1.65; margin-bottom: 14px; white-space: pre-line;">
+                    {% get_bilingual event 'description' %}
+                </div>
+
+                <div style="border-top: 1px solid var(--border-subtle); padding-top: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; color: var(--muted-grey);">
+                    <div>
+                        {{ ui.source_provenance }}: 
+                        <a href="{{ event.official_source_url }}" target="_blank" rel="noopener noreferrer" style="font-weight: 600; display: inline-flex; align-items: center; gap: 4px;">
+                            <span>{{ event.official_source_title }}</span>
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                        </a>
+                    </div>
+                    {% if event.related_document %}
+                    <a href="{% url 'document_detail' event.related_document.slug %}" class="btn-secondary" style="padding: 4px 10px; font-size: 0.76rem; display: inline-flex; align-items: center; gap: 4px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <span>View Archived Document</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div style="padding: 40px; background: #FFF; border: 1px solid var(--border-subtle); text-align: center; color: var(--muted-grey);">
+                {% if is_gujarati %}આ શ્રેણી માટે કોઈ ઘટનાક્રમ નોંધાયેલ નથી.{% else %}No events recorded in this category.{% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

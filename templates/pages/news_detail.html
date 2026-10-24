@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{% get_bilingual article 'headline' %} | {{ ui.news }}{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Breadcrumb -->
+    <div style="font-size: 0.84rem; color: var(--muted-grey); margin-bottom: 20px;">
+        <a href="{% url 'home' %}">{{ ui.home }}</a> &rarr;
+        <a href="{% url 'news_list' %}">{{ ui.news }}</a> &rarr;
+        <span style="color: var(--ink-charcoal);">{% get_bilingual article 'headline' %}</span>
+    </div>
+
+    <article class="reading-column">
+        <header class="article-header">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                <span class="category-tag">{{ article.get_category_display }}</span>
+                <span class="status-badge status-badge-info" style="font-size: 0.72rem;">
+                    {{ article.get_fact_check_status_display }}
+                </span>
+            </div>
+
+            <h1 class="article-headline">
+                {% get_bilingual article 'headline' %}
+            </h1>
+
+            <p class="article-summary-deck">
+                {% get_bilingual article 'excerpt' %}
+            </p>
+
+            <div class="article-meta-box">
+                <div>
+                    <div style="font-weight: 700; color: var(--ink-charcoal);">
+                        {{ article.author_name }}
+                    </div>
+                    <div style="font-size: 0.76rem; color: var(--muted-grey);">
+                        {% if is_gujarati %}સંપાદકીય કાનૂની ડેસ્ક{% else %}Editorial Legal Desk{% endif %}
+                    </div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--muted-grey); text-align: right;">
+                    <div>{{ article.published_date|date:"d F Y, H:i" }} IST</div>
+                    {% if article.reviewer_name %}
+                    <div style="margin-top: 2px;">Reviewed by: {{ article.reviewer_name }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <div class="reading-body">
+            <div style="white-space: pre-line;">
+                {% get_bilingual article 'body' %}
+            </div>
+
+            <!-- Verified Sources Box -->
+            <div style="background: #F8F5F2; border: 1px solid var(--border-subtle); padding: 22px; border-radius: var(--radius-sm); margin-top: 36px;">
+                <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--muted-grey); margin-bottom: 8px;">
+                    {{ ui.source_provenance }}
+                </h4>
+                <div style="font-size: 0.92rem; color: #333; white-space: pre-line;">
+                    {{ article.sources_list }}
+                </div>
+            </div>
+
+            <!-- Related Timeline Event Link -->
+            {% if article.related_timeline_event %}
+            <div style="margin-top: 20px; padding: 14px 18px; background: #FFF; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center; font-size: 0.86rem;">
+                <span style="display: inline-flex; align-items: center; gap: 6px;">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    <span>Related Timeline Milestone: <strong>{% get_bilingual article.related_timeline_event 'title' %}</strong></span>
+                </span>
+                <a href="{% url 'timeline_page' %}" style="font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                    <span>View in Timeline</span>
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Visible Disclaimer -->
+            <div style="margin-top: 36px; padding: 20px; background: #FAF7F5; border: 1px solid var(--border-subtle); font-size: 0.82rem; color: #555;">
+                <strong>{{ ui.disclaimer }}:</strong> {{ site_settings.mandatory_disclaimer_gu|default:site_settings.mandatory_disclaimer_en }}
+            </div>
+        </div>
+    </article>
+</div>
+{% endblock %}

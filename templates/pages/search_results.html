@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.search_btn }}: "{{ query }}" | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Search Query Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">
+                {% if is_gujarati %}શોધ પરિણામો{% else %}Search Results{% endif %}
+            </h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                "{{ query }}" માટે {{ total_results }} મેળ મળ્યા
+                {% else %}
+                Found {{ total_results }} matches for query "{{ query }}"
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Search Input Re-query -->
+    <div style="margin-bottom: 36px; max-width: 600px;">
+        <form action="{% url 'search_page' %}" method="get" style="display: flex; gap: 10px;">
+            <input type="text" name="q" class="form-control" value="{{ query }}" placeholder="{{ ui.search }}">
+            <button type="submit" class="btn-primary" style="white-space: nowrap;">
+                {{ ui.search_btn }}
+            </button>
+        </form>
+    </div>
+
+    {% if total_results == 0 %}
+    <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 50px; text-align: center; border-radius: var(--radius-sm);">
+        <h3 style="color: var(--muted-grey); font-size: 1.2rem; margin-bottom: 10px;">
+            {% if is_gujarati %}કોઈ પરિણામ મળ્યું નથી.{% else %}No matching records found.{% endif %}
+        </h3>
+        <p style="color: var(--muted-grey); font-size: 0.92rem;">
+            {% if is_gujarati %}કૃપા કરીને અન્ય કીવર્ડ, કલમ ક્રમાંક અથવા વિષયનું નામ લખીને ફરી પ્રયાસ કરો.{% else %}Try searching with broader terms, section numbers, or subject keywords.{% endif %}
+        </p>
+    </div>
+    {% endif %}
+
+    <!-- Explainers Results -->
+    {% if explainer_results %}
+    <section style="margin-bottom: 40px;">
+        <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.35rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            {{ ui.explainers }} ({{ explainer_results|length }})
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+            {% for exp in explainer_results %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 20px 24px; border-radius: var(--radius-sm);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span class="category-tag">{% get_bilingual exp.topic 'name' %}</span>
+                    <span class="status-badge {% status_badge_class exp.legal_status_badge %}" style="font-size: 0.72rem;">
+                        {% get_status_label exp.legal_status_badge %}
+                    </span>
+                </div>
+                <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.22rem; font-weight: 700; margin-bottom: 8px;">
+                    <a href="{% url 'explainer_detail' exp.slug %}" style="color: var(--ink-charcoal);">
+                        {% get_bilingual exp 'title' %}
+                    </a>
+                </h3>
+                <p style="font-size: 0.92rem; color: #555;">
+                    {% get_bilingual exp 'summary_deck' 28 %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Documents Results -->
+    {% if doc_results %}
+    <section style="margin-bottom: 40px;">
+        <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.35rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            {{ ui.library }} ({{ doc_results|length }})
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for doc in doc_results %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 18px 22px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span class="category-tag">{{ doc.get_document_type_display }} • {{ doc.document_number }}</span>
+                    <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.15rem; font-weight: 700; margin: 4px 0;">
+                        <a href="{% url 'document_detail' doc.slug %}" style="color: var(--ink-charcoal);">
+                            {% get_bilingual doc 'title' %}
+                        </a>
+                    </h3>
+                </div>
+                <a href="{% url 'document_detail' doc.slug %}" class="btn-secondary" style="padding: 6px 12px; font-size: 0.8rem;">
+                    View Record &rarr;
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- FAQs & Glossary Results -->
+    {% if faq_results or glossary_results %}
+    <section style="margin-bottom: 40px;">
+        <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.35rem; font-weight: 700; margin-bottom: 16px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 6px;">
+            {{ ui.faq }} & {{ ui.glossary }} ({{ faq_results|length|add:glossary_results|length }})
+        </h2>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+            {% for faq in faq_results %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 18px 22px; border-radius: var(--radius-sm);">
+                <span class="category-tag">FAQ</span>
+                <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.15rem; font-weight: 700; margin: 4px 0 8px;">
+                    {% get_bilingual faq 'question' %}
+                </h3>
+                <p style="font-size: 0.92rem; color: #555;">
+                    {% get_bilingual faq 'short_answer' %}
+                </p>
+            </div>
+            {% endfor %}
+
+            {% for term in glossary_results %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 18px 22px; border-radius: var(--radius-sm);">
+                <span class="category-tag">Glossary</span>
+                <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.15rem; font-weight: 700; margin: 4px 0 8px;">
+                    {{ term.term_en }} / {{ term.term_gu }}
+                </h3>
+                <p style="font-size: 0.92rem; color: #555;">
+                    {% get_bilingual term 'plain_language_definition' %}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+
+</div>
+{% endblock %}

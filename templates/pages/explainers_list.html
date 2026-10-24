@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.explainers }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">{{ ui.explainers }}</h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                સામાન્ય નાગરિકો માટે સરળ ભાષામાં કલમવાર સમજૂતી, અપવાદો અને કાનૂની જોગવાઈઓનું વિશ્લેષણ
+                {% else %}
+                Accessible plain-language analysis of Gujarat UCC statutory sections, who is covered, and exceptions
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Topic Filter Bar -->
+    <div style="margin-bottom: 30px; display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="{% url 'explainers_list' %}" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; {% if not selected_topic_slug %}background: var(--ink-charcoal); color: #FFF; border-color: var(--ink-charcoal);{% endif %}">
+            {% if is_gujarati %}તમામ વિષયો{% else %}All Topics{% endif %}
+        </a>
+        {% for top in topics %}
+        <a href="{% url 'explainers_list' %}?topic={{ top.slug }}" class="btn-secondary" style="font-size: 0.82rem; padding: 6px 14px; {% if selected_topic_slug == top.slug %}background: var(--coral-red); color: #FFF; border-color: var(--coral-red);{% endif %}">
+            {% get_bilingual top 'name' %}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- Explainers Grid -->
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;">
+        {% for exp in explainers %}
+        <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 26px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-subtle);">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span class="category-tag">{% get_bilingual exp.topic 'name' %}</span>
+                    <span class="status-badge {% status_badge_class exp.legal_status_badge %}" style="font-size: 0.72rem;">
+                        {% get_status_label exp.legal_status_badge %}
+                    </span>
+                </div>
+                <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.38rem; font-weight: 700; line-height: 1.3; margin-bottom: 12px;">
+                    <a href="{% url 'explainer_detail' exp.slug %}" style="color: var(--ink-charcoal);">
+                        {% get_bilingual exp 'title' %}
+                    </a>
+                </h2>
+                <p style="font-size: 0.94rem; color: #555; line-height: 1.65; margin-bottom: 18px;">
+                    {% get_bilingual exp 'summary_deck' %}
+                </p>
+                <div style="background: var(--warm-off-white); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--muted-grey); margin-bottom: 16px;">
+                    <strong>{{ ui.citations }}:</strong> {{ exp.source_citations }}
+                </div>
+            </div>
+            <div style="border-top: 1px solid var(--border-subtle); padding-top: 14px; display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; color: var(--muted-grey);">
+                <span style="display: inline-flex; align-items: center; gap: 5px;">
+                    <svg class="icon-svg icon-sm" style="color: #1B5E20;" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                    <span>{{ exp.legal_reviewer_name }}</span>
+                </span>
+                <a href="{% url 'explainer_detail' exp.slug %}" class="btn-primary" style="padding: 6px 14px; font-size: 0.82rem; display: inline-flex; align-items: center; gap: 4px;">
+                    <span>{{ ui.read_more }}</span>
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1 / -1; padding: 40px; background: #FFF; border: 1px solid var(--border-subtle); text-align: center; color: var(--muted-grey);">
+            {% if is_gujarati %}આ પસંદગી માટે કોઈ માર્ગદર્શિકા ઉપલબ્ધ નથી.{% else %}No explainers found for this selection.{% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

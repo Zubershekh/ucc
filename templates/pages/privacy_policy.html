@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.privacy }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <div class="reading-column">
+        <header class="article-header">
+            <h1 class="article-headline">{{ ui.privacy }}</h1>
+            <p class="article-summary-deck">
+                {% if is_gujarati %}
+                અમારી ગોપનીયતા નીતિ: શૂન્ય વ્યક્તિગત કેસ ડેટા સંગ્રહ અને કડક ડેટા સંરક્ષણ
+                {% else %}
+                Privacy & Data Governance: Zero personal legal case intake and strict user data minimization
+                {% endif %}
+            </p>
+        </header>
+
+        <div class="reading-body">
+            <p>
+                {% if is_gujarati %}
+                આ મંચ વપરાશકર્તાઓની ગોપનીયતાનું સન્માન કરે છે. આ પ્લેટફોર્મ પર કોઈપણ જાહેર વપરાશકર્તા એકાઉન્ટ (User Account) બનાવવાની જરૂર નથી. અમે આધાર કાર્ડ, લગ્ન પ્રમાણપત્ર અથવા અંગત પારિવારિક કેસની વિગતો ક્યારેય સ્વીકારતા કે સંગ્રહિત કરતા નથી.
+                {% else %}
+                This platform is strictly an open public legal information resource. We do not operate public user accounts, forum registrations, or member logins. We categorically do not solicit or store intimate relationship records, marriage certificates, Aadhaar numbers, or individual case files.
+                {% endif %}
+            </p>
+
+            <h2>{% if is_gujarati %}માહિતી સંગ્રહ અને ઉપયોગ{% else %}Data Collection & Processing{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                અમે માત્ર વેબ સર્વરના પ્રાથમિક એક્સેસ લોગ્સ (IP સરનામું, બ્રાઉઝર પ્રકાર) અને ભૂલ સુધારણા ફોર્મમાં વપરાશકર્તા દ્વારા સ્વેચ્છાએ આપવામાં આવેલ ઈમેલ (જો આપવામાં આવે તો) માત્ર સંપર્ક હેતુ માટે રાખીયે છીએ.
+                {% else %}
+                The only data collected is aggregate anonymous telemetry (page hits, language preferences) and voluntary contact information provided through the public corrections submission form, solely used for errata verification.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

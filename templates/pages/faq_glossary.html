@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.faq }} & {{ ui.glossary }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Header -->
+    <div class="section-head">
+        <div>
+            <h1 class="section-title">{{ ui.faq }} & {{ ui.glossary }}</h1>
+            <p style="color: var(--muted-grey); font-size: 0.95rem; margin-top: 6px;">
+                {% if is_gujarati %}
+                વારંવાર પૂછાતા કાનૂની પ્રશ્નો અને ગુજરાત સમાન નાગરિક સંહિતાના વૈધાનિક શબ્દોનો સરળ અર્થકોશ
+                {% else %}
+                Searchable question-and-answer library and plain-language legal definitions of statutory terms
+                {% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Quick Jump Tabs -->
+    <div style="margin-bottom: 30px; display: flex; gap: 12px;">
+        <a href="#faqs" class="btn-primary" style="padding: 8px 18px; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <span>{{ ui.faq }}</span>
+        </a>
+        <a href="#glossary" class="btn-secondary" style="padding: 8px 18px; display: inline-flex; align-items: center; gap: 6px;">
+            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <span>{{ ui.glossary }}</span>
+        </a>
+    </div>
+
+    <!-- FAQs Section -->
+    <section id="faqs" style="margin-bottom: 60px;">
+        <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.6rem; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--ink-charcoal); padding-bottom: 8px;">
+            {{ ui.faq }}
+        </h2>
+
+        <div>
+            {% for faq in faqs %}
+            <div class="faq-item">
+                <button type="button" class="faq-question-btn">
+                    <span>{% get_bilingual faq 'question' %}</span>
+                    <span class="faq-indicator" style="font-size: 1.4rem; color: var(--coral-red);">+</span>
+                </button>
+                <div class="faq-answer-pane" style="display: none;">
+                    <p style="font-weight: 600; color: var(--ink-charcoal); margin-bottom: 10px; font-size: 1.05rem;">
+                        {% get_bilingual faq 'short_answer' %}
+                    </p>
+                    <div style="font-size: 0.95rem; color: #444; line-height: 1.7; white-space: pre-line;">
+                        {% get_bilingual faq 'detailed_answer' %}
+                    </div>
+                    {% if faq.citations %}
+                    <div style="margin-top: 14px; padding: 10px 14px; background: var(--warm-off-white); border-radius: var(--radius-sm); font-size: 0.8rem; color: var(--muted-grey);">
+                        <strong>{{ ui.citations }}:</strong> {{ faq.citations }}
+                        {% if faq.legal_reviewer %} • Reviewed by: {{ faq.legal_reviewer }}{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div style="padding: 30px; background: #FFF; border: 1px solid var(--border-subtle); text-align: center; color: var(--muted-grey);">
+                No FAQs available.
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Glossary Section -->
+    <section id="glossary">
+        <h2 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.6rem; font-weight: 700; margin-bottom: 20px; border-bottom: 2px solid var(--ink-charcoal); padding-bottom: 8px;">
+            {{ ui.glossary }}
+        </h2>
+
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+            {% for item in glossary_terms %}
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 22px; box-shadow: var(--shadow-subtle);">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+                    <h3 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.25rem; font-weight: 700; color: var(--ink-charcoal);">
+                        {% if is_gujarati %}{{ item.term_gu }} ({{ item.term_en }}){% else %}{{ item.term_en }} ({{ item.term_gu }}){% endif %}
+                    </h3>
+                    {% if item.statutory_source %}
+                    <span style="font-size: 0.76rem; color: var(--coral-red); font-weight: 600;">
+                        {{ item.statutory_source }}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <p style="font-size: 0.94rem; color: #444; line-height: 1.6; margin-bottom: 12px;">
+                    {% get_bilingual item 'plain_language_definition' %}
+                </p>
+
+                {% if item.statutory_definition_en or item.statutory_definition_gu %}
+                <div style="background: var(--warm-off-white); padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.82rem; color: #555; border-left: 3px solid var(--ink-charcoal);">
+                    <strong>{% if is_gujarati %}વૈધાનિક વ્યાખ્યા:{% else %}Statutory Text Definition:{% endif %}</strong>
+                    <div style="font-style: italic; margin-top: 2px;">
+                        {% get_bilingual item 'statutory_definition' %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div style="grid-column: 1 / -1; padding: 30px; background: #FFF; border: 1px solid var(--border-subtle); text-align: center; color: var(--muted-grey);">
+                No glossary terms available.
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+</div>
+{% endblock %}

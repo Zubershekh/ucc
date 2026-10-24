@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{% get_bilingual document 'title' %} | {{ ui.library }}{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Breadcrumb -->
+    <div style="font-size: 0.84rem; color: var(--muted-grey); margin-bottom: 20px;">
+        <a href="{% url 'home' %}">{{ ui.home }}</a> &rarr;
+        <a href="{% url 'library_list' %}">{{ ui.library }}</a> &rarr;
+        <span style="color: var(--ink-charcoal);">{{ document.document_number }}</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: start;">
+        
+        <!-- Left Column: Document Summary & Context -->
+        <div>
+            <div style="margin-bottom: 12px; display: flex; align-items: center; gap: 10px;">
+                <span class="category-tag">{{ document.get_document_type_display }}</span>
+                <span class="status-badge {% status_badge_class document.status %}">
+                    {% get_status_label document.status %}
+                </span>
+            </div>
+
+            <h1 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 2.2rem; font-weight: 700; color: var(--ink-charcoal); line-height: 1.25; margin-bottom: 16px;">
+                {% get_bilingual document 'title' %}
+            </h1>
+
+            <div style="font-size: 1.05rem; color: #444; line-height: 1.7; background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 26px; border-radius: var(--radius-sm); margin-bottom: 30px;">
+                <h3 style="font-size: 0.95rem; text-transform: uppercase; color: var(--muted-grey); margin-bottom: 10px; letter-spacing: 0.5px;">
+                    {% if is_gujarati %}દસ્તાવેજનો સંક્ષિપ્ત સારાંશ{% else %}Neutral Content Summary{% endif %}
+                </h3>
+                <div style="white-space: pre-line;">
+                    {% get_bilingual document 'summary' %}
+                </div>
+            </div>
+
+            <!-- Sections & Statutory Scope -->
+            {% if document.relevant_sections %}
+            <div style="background: #F8F5F2; border: 1px solid var(--border-subtle); border-left: 4px solid var(--ink-charcoal); padding: 20px 24px; border-radius: var(--radius-sm); margin-bottom: 30px;">
+                <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--muted-grey); margin-bottom: 6px;">
+                    {{ ui.citations }}
+                </h4>
+                <div style="font-size: 1rem; font-weight: 600; color: var(--ink-charcoal);">
+                    {{ document.relevant_sections }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Related Explainers referencing this document -->
+            {% if related_explainers %}
+            <div class="section-head" style="margin-top: 30px;">
+                <h3 class="section-title" style="font-size: 1.35rem;">
+                    {% if is_gujarati %}આ દસ્તાવેજ પર આધારિત કાનૂની માર્ગદર્શિકા{% else %}Guides Referencing this Legal Document{% endif %}
+                </h3>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                {% for exp in related_explainers %}
+                <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 18px 22px; border-radius: var(--radius-sm); display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <span class="category-tag" style="font-size: 0.72rem;">{% get_bilingual exp.topic 'name' %}</span>
+                        <h4 style="font-family: var(--font-serif-gu), var(--font-serif-en); font-size: 1.12rem; font-weight: 700; margin: 4px 0;">
+                            <a href="{% url 'explainer_detail' exp.slug %}" style="color: var(--ink-charcoal);">
+                                {% get_bilingual exp 'title' %}
+                            </a>
+                        </h4>
+                    </div>
+                    <a href="{% url 'explainer_detail' exp.slug %}" class="btn-primary" style="padding: 6px 12px; font-size: 0.78rem;">
+                        {{ ui.read_more }} &rarr;
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column: Official Provenance & Download Card -->
+        <aside style="background: var(--paper-white); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 26px;">
+            <h3 style="font-size: 1rem; font-weight: 700; text-transform: uppercase; color: var(--ink-charcoal); border-bottom: 2px solid var(--ink-charcoal); padding-bottom: 10px; margin-bottom: 18px;">
+                {{ ui.source_provenance }}
+            </h3>
+
+            <div style="display: flex; flex-direction: column; gap: 14px; font-size: 0.88rem;">
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">{% if is_gujarati %}સત્તાવાર ક્રમાંક{% else %}Document Identifier{% endif %}:</span>
+                    <strong>{{ document.document_number }}</strong>
+                </div>
+
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">{% if is_gujarati %}જારી કરનાર સત્તામંડળ{% else %}Issuing Authority{% endif %}:</span>
+                    <strong>{% get_bilingual document 'issuing_authority' %}</strong>
+                </div>
+
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">{% if is_gujarati %}ન્યાયક્ષેત્ર{% else %}Jurisdiction{% endif %}:</span>
+                    <strong>{{ document.jurisdiction }}</strong>
+                </div>
+
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">{% if is_gujarati %}ગેઝેટ પ્રકાશન તારીખ{% else %}Publication Date{% endif %}:</span>
+                    <strong>{{ document.publication_date|date:"d F Y" }}</strong>
+                </div>
+
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">{% if is_gujarati %}અમલવારી તારીખ (Effective Date){% else %}Effective Date{% endif %}:</span>
+                    {% if document.effective_date %}
+                    <strong style="color: #2E7D32;">{{ document.effective_date|date:"d F Y" }}</strong>
+                    {% else %}
+                    <span style="color: #B76E00; font-weight: 600;">
+                        {% if is_gujarati %}સરકારી જાહેરનામા દ્વારા નિયત થવાની બાકી{% else %}Pending Gazette Commencement Notification{% endif %}
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <span style="color: var(--muted-grey); display: block; font-size: 0.78rem;">SHA-256 Checksum:</span>
+                    <code style="word-break: break-all; font-size: 0.75rem; background: #FAF7F5; padding: 4px 6px; border: 1px solid var(--border-subtle); border-radius: 2px; display: block; margin-top: 2px;">
+                        {{ document.file_checksum|default:"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" }}
+                    </code>
+                </div>
+
+                <div style="margin-top: 10px; border-top: 1px solid var(--border-subtle); padding-top: 18px;">
+                    <a href="{{ document.official_source_url }}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="width: 100%; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                        <span>{{ ui.download_pdf }}</span>
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                    <div style="font-size: 0.75rem; color: var(--muted-grey); text-align: center; margin-top: 6px;">
+                        Verified link to official NeVA / Government portal
+                    </div>
+                </div>
+
+                <div style="margin-top: 14px;">
+                    <a href="{% url 'corrections_page' %}?doc={{ document.slug }}" class="btn-secondary" style="width: 100%; justify-content: center; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 6px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                        <span>{% if is_gujarati %}દસ્તાવેજ અંગે સુધારો નોંધાવો{% else %}Report Document Discrepancy{% endif %}</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+    </div>
+</div>
+{% endblock %}

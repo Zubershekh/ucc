@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.terms }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <div class="reading-column">
+        <header class="article-header">
+            <h1 class="article-headline">{{ ui.terms }}</h1>
+            <p class="article-summary-deck">
+                {% if is_gujarati %}
+                મંચના ઉપયોગની શરતો અને બૌદ્ધિક સંપદા અધિકારો
+                {% else %}
+                Terms of Use, Content License, and Legal Reference Rights
+                {% endif %}
+            </p>
+        </header>
+
+        <div class="reading-body">
+            <p>
+                {% if is_gujarati %}
+                આ વેબસાઇટનો ઉપયોગ કરતા પહેલા કૃપા કરીને આ શરતો ધ્યાનપૂર્વક વાંચો. આ વેબસાઇટ પર પ્રદર્શિત સત્તાવાર કાયદાકીય ગેઝેટ અને જાહેર દસ્તાવેજો જાહેર ડોમેન (Public Domain) સામગ્રી છે. જ્યારે અમારા વિશ્લેષણાત્મક લેખો અને સરળ સમજૂતી શૈક્ષણિક હેતુ માટે ઉચિત સંદર્ભ (Attribution) સાથે પુનઃઉપયોગ માટે ઉપલબ્ધ છે.
+                {% else %}
+                Please review these Terms of Use before utilizing this reference platform. All official statutory gazette texts, parliamentary papers, and notifications belong to the public domain. Editorial explainers and plain-language summaries produced by this platform may be cited for academic, journalistic, and civic purposes with clear attribution.
+                {% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

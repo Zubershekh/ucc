@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.understand_ucc }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <div class="reading-column">
+        <!-- Header -->
+        <header class="article-header">
+            <span class="category-tag">{% if is_gujarati %}મૂળભૂત માર્ગદર્શિકા{% else %}Foundational Legal Guide{% endif %}</span>
+            <h1 class="article-headline">
+                {% if is_gujarati %}
+                ગુજરાત સમાન નાગરિક સંહિતા (UCC) ૨૦૨૬: વિભાવના, વ્યાપ અને અધિકૃત હકીકતો
+                {% else %}
+                Understanding the Gujarat Uniform Civil Code, 2026: Scope, Authority & Framework
+                {% endif %}
+            </h1>
+            <p class="article-summary-deck">
+                {% if is_gujarati %}
+                સમાન નાગરિક સંહિતા શું છે? તે કયા કાયદાઓને આવરી લે છે, કોને મુક્તિ આપવામાં આવી છે, અને ગુજરાતમાં કાયદાકીય સ્થિતિ અત્યારે કયા તબક્કે છે?
+                {% else %}
+                A comprehensive plain-language explainer outlining the statutory definition of the Uniform Civil Code, its constitutional underpinnings, covered civil relations, and statutory exclusions.
+                {% endif %}
+            </p>
+        </header>
+
+        <div class="reading-body">
+            
+            <!-- What is UCC -->
+            <h2>{% if is_gujarati %}૧. સમાન નાગરિક સંહિતા (UCC) એટલે શું?{% else %}1. What is the Uniform Civil Code?{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                ભારતના બંધારણના અનુચ્છેદ ૪૪ (Article 44 of the Directive Principles of State Policy) હેઠળ રાજ્ય સમગ્ર દેશમાં નાગરિકો માટે સમાન નાગરિક સંહિતા સુરક્ષિત કરવાનો પ્રયાસ કરશે તેવી જોગવાઈ છે. UCC નો અર્થ છે કે લગ્ન, છૂટાછેડા, વારસાઈ અને ઉત્તરાધિકાર જેવા નાગરિક અને અંગત બાબતોમાં ધર્મના આધારે અલગ-અલગ વ્યક્તિગત કાયદાઓ (Personal Laws) ના બદલે તમામ નાગરિકો માટે એકસમાન કાયદાકીય માળખું લાગુ કરવું.
+                {% else %}
+                Under Article 44 of the Directive Principles of State Policy in the Constitution of India, the State is directed to endeavor to secure for citizens a Uniform Civil Code across the country. In practice, a Uniform Civil Code replaces fragmented religious personal laws with a unified, codified civil statutory framework governing family, marital, and succession affairs.
+                {% endif %}
+            </p>
+
+            <!-- Gujarat UCC Specifics -->
+            <h2>{% if is_gujarati %}૨. ગુજરાત UCC અધિનિયમ ૨૦૨૬ હેઠળ શું આવરી લેવાયું છે?{% else %}2. What Does the Gujarat UCC Act Cover?{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                ગુજરાત સરકારે માર્ચ ૨૦૨૬માં વિધાનસભામાં પસાર કરેલ અને ૧ ઓક્ટોબર ૨૦૨૬ના રોજ અસાધારણ ગેઝેટમાં પ્રકાશિત થયેલ અધિનિયમ નીચેના ૪ સ્તંભો પર કેન્દ્રિત છે:
+                {% else %}
+                Passed by the Gujarat Legislative Assembly in March 2026 and published in the Extraordinary Gazette on 1 October 2026, the legislation codifies four cardinal pillars:
+                {% endif %}
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0;">
+                <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 20px; border-radius: var(--radius-sm);">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--coral-red); font-weight: 700; margin-bottom: 6px;">
+                        <svg class="icon-svg icon-md" viewBox="0 0 24 24"><circle cx="9" cy="12" r="6"/><circle cx="15" cy="12" r="6"/></svg>
+                        <span>{% if is_gujarati %}લગ્ન અને છૂટાછેડા{% else %}Marriage & Divorce{% endif %}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 6px; color: #555; line-height: 1.55;">
+                        {% if is_gujarati %}ફરજિયાત લગ્ન નોંધણી, લગ્નની ન્યૂનતમ વય (સ્ત્રીઓ ૨૧, પુરુષો ૨૧), અને એકપક્ષીય મૌખિક તલાક પર પ્રતિબંધ.{% else %}Compulsory registration of marriages, minimum marital age protections, and abolition of extra-judicial dissolution.{% endif %}
+                    </p>
+                </div>
+                <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 20px; border-radius: var(--radius-sm);">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--coral-red); font-weight: 700; margin-bottom: 6px;">
+                        <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M5 8h14"/><rect x="2" y="8" width="6" height="4" rx="1"/><rect x="16" y="8" width="6" height="4" rx="1"/><path d="M5 12v6"/><path d="M19 12v6"/><rect x="2" y="18" width="6" height="4" rx="1"/><rect x="9" y="18" width="6" height="4" rx="1"/><rect x="16" y="18" width="6" height="4" rx="1"/><path d="M12 8v10"/></svg>
+                        <span>{% if is_gujarati %}સંપત્તિ અને વારસાઈ{% else %}Succession & Inheritance{% endif %}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 6px; color: #555; line-height: 1.55;">
+                        {% if is_gujarati %}દીકરીઓ અને દીકરાઓને વારસામાં સમાન હક, પૂર્વજોની સંપત્તિમાં લિંગભેદ વિના સમાનતા.{% else %}Gender-equal intestate succession granting daughters and sons identical statutory inheritance shares.{% endif %}
+                    </p>
+                </div>
+                <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 20px; border-radius: var(--radius-sm);">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--coral-red); font-weight: 700; margin-bottom: 6px;">
+                        <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+                        <span>{% if is_gujarati %}લિવ-ઇન સંબંધો{% else %}Live-in Relationships{% endif %}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 6px; color: #555; line-height: 1.55;">
+                        {% if is_gujarati %}સહજીવનમાં રહેતા યુગલો માટે નિર્ધારિત સમયમર્યાદામાં નોંધણી અને મહિલાઓ તથા જન્મેલા બાળકો માટે ભરણપોષણ સુરક્ષા.{% else %}Statutory statement of live-in relationships to safeguard women and children born of such unions.{% endif %}
+                    </p>
+                </div>
+                <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 20px; border-radius: var(--radius-sm);">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--coral-red); font-weight: 700; margin-bottom: 6px;">
+                        <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+                        <span>{% if is_gujarati %}વિલ અને ભરણપોષણ{% else %}Wills & Maintenance{% endif %}</span>
+                    </div>
+                    <p style="font-size: 0.9rem; margin-top: 6px; color: #555; line-height: 1.55;">
+                        {% if is_gujarati %}વસિયતનામા દ્વારા સંપત્તિના વિતરણની મુક્ત છૂટ અને વડીલો-આશ્રિતો માટે ફરજિયાત ભરણપોષણ જોગવાઈ.{% else %}Testamentary freedom for estate distribution, paired with mandatory maintenance for dependents.{% endif %}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Statutory Exclusions & Tribal Protections -->
+            <h2>{% if is_gujarati %}૩. કોને મુક્તિ આપવામાં આવી છે? (Exclusions){% else %}3. Statutory Exclusions & Tribal Protections{% endif %}</h2>
+            <div style="background: #FAF7F4; border-left: 4px solid var(--coral-red); padding: 20px 24px; border-radius: var(--radius-sm); margin: 20px 0;">
+                <p style="font-weight: 600; color: var(--ink-charcoal); margin-bottom: 8px;">
+                    {% if is_gujarati %}અનુસૂચિત જનજાતિ (Scheduled Tribes) નું સંરક્ષણ:{% else %}Statutory Protection for Scheduled Tribes:{% endif %}
+                </p>
+                <p style="font-size: 0.94rem; color: #4A4644; margin-bottom: 0;">
+                    {% if is_gujarati %}
+                    ભારતના બંધારણના અનુચ્છેદ ૩૬૬(૨૫) હેઠળ વ્યાખ્યાયિત અનુસૂચિત જનજાતિઓના પરંપરાગત અધિકારો, રીત-રિવાજો અને રૂઢિગત પ્રથાઓને અધિનિયમની કલમ ૩ હેઠળ સંપૂર્ણ મુક્તિ આપવામાં આવી છે.
+                    {% else %}
+                    Under Section 3 of the Act, customary practices, tribal rites, and heritage protections of members of Scheduled Tribes (as defined under Article 366(25) of the Constitution) are explicitly exempt from the operational scope.
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Current Implementation Status Reality -->
+            <h2>{% if is_gujarati %}૪. અત્યારે કાયદો કઈ સ્થિતિમાં છે?{% else %}4. What is the Exact Operational Status Today?{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                <strong>મહત્વપૂર્ણ કાનૂની સ્પષ્ટતા:</strong> રાષ્ટ્રપતિ મંજૂરી મળી ગઈ છે અને કાયદો ગેઝેટમાં પ્રકાશિત થઈ ચૂક્યો છે. પરંતુ કાયદાની પ્રારંભિક કલમ મુજબ, રાજ્ય સરકાર દ્વારા અલગથી <strong>'અમલવારી જાહેરનામું' (Commencement Notification)</strong> બહાર પાડ્યા બાદ જ નિયત તારીખથી આ કાયદો રાજ્યમાં વિધિવત અમલમાં આવશે. અત્યારે સરકાર દ્વારા સંબંધિત નિયમો (Rules) અને પોર્ટલની તૈયારી ચાલી રહી છે.
+                {% else %}
+                <strong>Critical Legal Fact:</strong> While Presidential Assent has been granted and the Act appears in the Extraordinary Gazette, Section 1(2) explicitly provides that the Act comes into force only on an appointed date specified by State Government Gazette notification. As of October 2026, administrative rules and digital registries are being formulated prior to the appointed commencement date.
+                {% endif %}
+            </p>
+
+            <div style="margin-top: 36px; padding: 20px; background: #FAF7F5; border: 1px solid var(--border-subtle); font-size: 0.84rem; color: #555;">
+                <strong>{{ ui.disclaimer }}:</strong> {{ site_settings.mandatory_disclaimer_gu|default:site_settings.mandatory_disclaimer_en }}
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

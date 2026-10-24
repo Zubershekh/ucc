@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{% get_bilingual explainer 'title' %} | {{ ui.explainers }}{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <!-- Breadcrumb -->
+    <div style="font-size: 0.84rem; color: var(--muted-grey); margin-bottom: 20px;">
+        <a href="{% url 'home' %}">{{ ui.home }}</a> &rarr;
+        <a href="{% url 'topics_list' %}">{{ ui.topics }}</a> &rarr;
+        <a href="{% url 'topic_detail' explainer.topic.slug %}">{% get_bilingual explainer.topic 'name' %}</a> &rarr;
+        <span style="color: var(--ink-charcoal);">{% get_bilingual explainer 'title' %}</span>
+    </div>
+
+    <!-- Editorial Article Reading Column (Image 3 Design Reference) -->
+    <div style="display: grid; grid-template-columns: 260px 1fr; gap: 48px; align-items: start;">
+        
+        <!-- Table of Contents Sticky Sidebar -->
+        <aside class="toc-sidebar">
+            <h4 class="toc-title">{% if is_gujarati %}વિષયવસ્તુ સૂચિ{% else %}Table of Contents{% endif %}</h4>
+            <ul class="toc-list">
+                <li><a href="#section-summary">{% if is_gujarati %}૧. સંક્ષિપ્ત સારાંશ{% else %}1. Summary Overview{% endif %}</a></li>
+                <li><a href="#section-text">{% if is_gujarati %}૨. કાયદો શું કહે છે?{% else %}2. What the Law States{% endif %}</a></li>
+                <li><a href="#section-who">{% if is_gujarati %}૩. કોના પર લાગુ પડે છે?{% else %}3. Scope & Applicability{% endif %}</a></li>
+                <li><a href="#section-exceptions">{% if is_gujarati %}૪. અપવાદો અને મુક્તિ{% else %}4. Exceptions & Exemptions{% endif %}</a></li>
+                {% if explainer.procedural_steps_en or explainer.procedural_steps_gu %}
+                <li><a href="#section-steps">{% if is_gujarati %}૫. કાનૂની પ્રક્રિયાના તબક્કા{% else %}5. Procedural Steps{% endif %}</a></li>
+                {% endif %}
+                {% if explainer.misconceptions_en or explainer.misconceptions_gu %}
+                <li><a href="#section-misconceptions">{% if is_gujarati %}૬. ગેરમાન્યતાઓ અને સત્ય{% else %}6. Misconceptions Addressed{% endif %}</a></li>
+                {% endif %}
+                <li><a href="#section-citations">{% if is_gujarati %}૭. સત્તાવાર કાનૂની સંદર્ભો{% else %}7. Statutory Citations{% endif %}</a></li>
+            </ul>
+
+            <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border-subtle); font-size: 0.8rem; color: var(--muted-grey);">
+                <div style="margin-bottom: 8px;"><strong>{{ ui.last_verified }}:</strong><br>{{ explainer.last_verified_date|date:"d F Y" }}</div>
+                <div><strong>{% if is_gujarati %}કાનૂની સ્થિતિ:{% else %}Legal Status:{% endif %}</strong><br>
+                    <span class="status-badge {% status_badge_class explainer.legal_status_badge %}" style="font-size: 0.72rem; margin-top: 4px;">
+                        {% get_status_label explainer.legal_status_badge %}
+                    </span>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="{% url 'corrections_page' %}?ref={{ explainer.slug }}" class="btn-secondary" style="font-size: 0.78rem; width: 100%; justify-content: center; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                    <span>{% if is_gujarati %}ભૂલ ધ્યાને આવી? સુધારો મોકલો{% else %}Report Correction{% endif %}</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Reading Column -->
+        <article class="reading-column" style="margin: 0;">
+            <header class="article-header">
+                <span class="article-topic-pill">{% get_bilingual explainer.topic 'name' %}</span>
+                <h1 class="article-headline">{% get_bilingual explainer 'title' %}</h1>
+                <p class="article-summary-deck">
+                    {% get_bilingual explainer 'summary_deck' %}
+                </p>
+
+                <!-- Author & Legal Reviewer Credential Box -->
+                <div class="article-meta-box">
+                    <div class="reviewer-badge-info">
+                        <div class="reviewer-avatar-ph">
+                            <svg class="icon-svg icon-md" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.88rem; font-weight: 700; color: var(--ink-charcoal);">
+                                {{ explainer.legal_reviewer_name }}
+                            </div>
+                            <div style="font-size: 0.76rem; color: var(--muted-grey);">
+                                {% if is_gujarati %}ચકાસાયેલ કાનૂની સમીક્ષક • હાઈકોર્ટ એડવોકેટ{% else %}Verified Legal Reviewer • High Court Advocate{% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right; font-size: 0.78rem; color: var(--muted-grey);">
+                        <div>{{ ui.last_verified }}: <strong>{{ explainer.last_verified_date|date:"d M Y" }}</strong></div>
+                        <div style="margin-top: 2px;">{% if is_gujarati %}લેખક ડેસ્ક:{% else %}Author:{% endif %} {{ explainer.author_name }}</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Article Body Content -->
+            <div class="reading-body">
+                
+                <section id="section-summary">
+                    <p style="font-size: 1.15rem; font-weight: 500; color: #1E1C1D; line-height: 1.75;">
+                        {% get_bilingual explainer 'summary_deck' %}
+                    </p>
+                </section>
+
+                <!-- Statutory Provision Callout Box -->
+                <div class="statutory-callout">
+                    <h4>{{ ui.citations }}</h4>
+                    <blockquote>
+                        {{ explainer.source_citations }}
+                    </blockquote>
+                    {% if explainer.primary_document %}
+                    <div style="margin-top: 10px; font-size: 0.82rem;">
+                        <a href="{% url 'document_detail' explainer.primary_document.slug %}" style="font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            <span>{% if is_gujarati %}સત્તાવાર ગેઝેટ દસ્તાવેજ જુઓ:{% else %}View Source Document:{% endif %} {{ explainer.primary_document.title_en }}</span>
+                            <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Section: What the text says -->
+                <section id="section-text">
+                    <h2>{{ ui.what_the_law_says }}</h2>
+                    <div style="white-space: pre-line;">
+                        {% get_bilingual explainer 'what_the_text_says' %}
+                    </div>
+                </section>
+
+                <!-- Section: Who is covered -->
+                <section id="section-who">
+                    <h2>{{ ui.who_is_covered }}</h2>
+                    <div style="white-space: pre-line;">
+                        {% get_bilingual explainer 'who_is_covered' %}
+                    </div>
+                </section>
+
+                <!-- Section: Exceptions & Exemptions -->
+                <section id="section-exceptions">
+                    <h2>{{ ui.exceptions }}</h2>
+                    <div style="white-space: pre-line;">
+                        {% get_bilingual explainer 'exceptions' %}
+                    </div>
+                </section>
+
+                <!-- Section: Procedural steps -->
+                {% if explainer.procedural_steps_en or explainer.procedural_steps_gu %}
+                <section id="section-steps">
+                    <h2>{{ ui.procedural_steps }}</h2>
+                    <div style="white-space: pre-line;">
+                        {% get_bilingual explainer 'procedural_steps' %}
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Section: Common misconceptions -->
+                {% if explainer.misconceptions_en or explainer.misconceptions_gu %}
+                <section id="section-misconceptions">
+                    <h2>{{ ui.misconceptions }}</h2>
+                    <div style="background: #FFFDF9; border: 1px solid #EFE4D6; border-left: 4px solid var(--muted-yellow); padding: 20px 24px; border-radius: var(--radius-sm); margin: 24px 0;">
+                        <div style="white-space: pre-line;">
+                            {% get_bilingual explainer 'misconceptions' %}
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
+                <!-- Section: Statutory Citations -->
+                <section id="section-citations">
+                    <h2>{{ ui.citations }}</h2>
+                    <p>
+                        {% if is_gujarati %}
+                        આ કાનૂની માર્ગદર્શિકા ગુજરાત સમાન નાગરિક સંહિતા ૨૦૨૬ના નીચેના વૈધાનિક સ્ત્રોતો પર આધારિત છે:
+                        {% else %}
+                        This legal explainer is grounded in the following statutory authorities:
+                        {% endif %}
+                    </p>
+                    <div style="background: #F8F5F2; padding: 18px 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-family: monospace; font-size: 0.95rem;">
+                        {{ explainer.source_citations }}
+                    </div>
+                </section>
+
+                <!-- Mandatory Visible Editorial Disclaimer (Section 2 of Project Brief) -->
+                <div style="margin-top: 48px; padding: 24px; background: #FAF7F5; border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); font-size: 0.85rem; color: #555; line-height: 1.6;">
+                    <div style="font-weight: 700; color: var(--ink-charcoal); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24" style="color: var(--coral-red);"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                        <span>{{ ui.disclaimer }}</span>
+                    </div>
+                    <div>
+                        {% if is_gujarati %}
+                        {{ site_settings.mandatory_disclaimer_gu }}
+                        {% else %}
+                        {{ site_settings.mandatory_disclaimer_en }}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Correction / Report Action -->
+                <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-subtle); padding-top: 18px; font-size: 0.84rem;">
+                    <div>
+                        {% if is_gujarati %}શું આ વિશ્લેષણમાં કોઈ વિસંગતતા છે?{% else %}Notice a discrepancy in this legal summary?{% endif %}
+                    </div>
+                    <a href="{% url 'corrections_page' %}?ref={{ explainer.slug }}" style="font-weight: 700; color: var(--coral-red); display: inline-flex; align-items: center; gap: 4px;">
+                        <span>{% if is_gujarati %}સત્તાવાર સુધારો નોંધાવો{% else %}Submit Official Correction{% endif %}</span>
+                        <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </a>
+                </div>
+
+            </div>
+        </article>
+
+    </div>
+</div>
+{% endblock %}

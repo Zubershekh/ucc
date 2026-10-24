@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load core_tags %}
+
+{% block title %}{{ ui.about }} & {{ ui.editorial_policy }} | Gujarat UCC 2026{% endblock %}
+
+{% block content %}
+<div class="container section-py">
+    <div class="reading-column">
+        <!-- Header -->
+        <header class="article-header">
+            <span class="category-tag">{% if is_gujarati %}પારદર્શિતા અને નીતિઓ{% else %}Transparency & Editorial Governance{% endif %}</span>
+            <h1 class="article-headline">
+                {% if is_gujarati %}
+                અમારા વિશે, સંપાદકીય નીતિ અને કાનૂની ચકાસણી ધોરણો
+                {% else %}
+                About Us, Editorial Standards & Legal Verification Policy
+                {% endif %}
+            </h1>
+        </header>
+
+        <div class="reading-body">
+            
+            <!-- Independence Statement -->
+            <div style="background: #FAF7F4; border: 1px solid var(--border-subtle); border-left: 4px solid var(--coral-red); padding: 22px 26px; border-radius: var(--radius-sm); margin-bottom: 30px;">
+                <h3 style="font-size: 1.1rem; color: var(--ink-charcoal); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                    <svg class="icon-svg icon-md" viewBox="0 0 24 24" style="color: var(--coral-red);"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>{% if is_gujarati %}સ્વતંત્ર જાહેર માહિતી મંચની સ્પષ્ટતા{% else %}Independent Non-Affiliation Declaration{% endif %}</span>
+                </h3>
+                <p style="font-size: 0.95rem; color: #4A4644; margin-bottom: 0;">
+                    {% if is_gujarati %}
+                    આ મંચ એક સ્વતંત્ર જાહેર કાનૂની માહિતી અને શૈક્ષણિક પહેલ છે. તે કોઈ સરકારી સંસ્થા, કાયદા મંત્રાલય કે ન્યાયતંત્ર સાથે સંલગ્ન નથી. અમારી પ્રાથમિકતા કાયદાના જટિલ વૈધાનિક દસ્તાવેજોને સામાન્ય નાગરિકો માટે તટસ્થ, પક્ષપાતરહિત અને ચકાસાયેલ સ્વરૂપે રજૂ કરવાની છે.
+                    {% else %}
+                    This platform operates as an independent public legal education and documentation archive. It is not affiliated with, authorized by, or an agency of any government ministry or judicial body. Its primary mission is to translate enacted statutory instruments into scannable, rigorously cited plain-language explainers for citizens, researchers, and legal practitioners.
+                    {% endif %}
+                </p>
+            </div>
+
+            <!-- Source Hierarchy -->
+            <h2>{% if is_gujarati %}૧. સત્તાવાર સ્ત્રોત શ્રેણી (Source Hierarchy){% else %}1. Primary Source Hierarchy{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                અમારી સંપાદકીય ટીમ કોઈપણ કાનૂની દાવો પ્રકાશિત કરતા પહેલા નીચેના સ્ત્રોત ક્રમને અનુસરે છે:
+                {% else %}
+                Every substantive legal assertion on this platform adheres to a strict four-tier evidence hierarchy:
+                {% endif %}
+            </p>
+            <ol style="margin-left: 20px; margin-bottom: 24px;">
+                <li style="margin-bottom: 8px;"><strong>Tier 1 — Primary Statutory Instruments:</strong> Official Assented Act, Extraordinary Gazette issues, and Gazette commencement notifications.</li>
+                <li style="margin-bottom: 8px;"><strong>Tier 2 — Subordinate Legislation:</strong> Rules, statutory forms, and official administrative circulars issued under statutory authority.</li>
+                <li style="margin-bottom: 8px;"><strong>Tier 3 — Committee Material:</strong> Official Gujarat UCC Committee reports, working papers, and assembly tablings.</li>
+                <li style="margin-bottom: 8px;"><strong>Tier 4 — Secondary Legal Reporting:</strong> Cross-checked mainstream news reporting used only for timeline corroboration, never as a substitute for statutory text.</li>
+            </ol>
+
+            <!-- Legal Review Workflow -->
+            <h2>{% if is_gujarati %}૨. કાનૂની સમીક્ષા કાર્યપદ્ધતિ (Review Workflow){% else %}2. Editorial & Legal Review Workflow{% endif %}</h2>
+            <div style="background: var(--paper-white); border: 1px solid var(--border-subtle); padding: 22px; border-radius: var(--radius-sm); margin: 20px 0; font-family: monospace; font-size: 0.92rem; text-align: center; color: var(--coral-red);">
+                Draft &rarr; Source Verification &rarr; Legal Advocate Review &rarr; Approval &rarr; Published &rarr; Periodic Review
+            </div>
+            <p>
+                {% if is_gujarati %}
+                લેખકો દ્વારા તૈયાર કરાયેલ પ્રત્યેક કાનૂની માર્ગદર્શિકાને હાઈકોર્ટના લાયક વકીલ દ્વારા તપાસવામાં આવે છે. કાયદાકીય સમીક્ષકની મંજૂરી વિના કોઈપણ માર્ગદર્શિકા જાહેર પ્લેટફોર્મ પર પ્રકાશિત કરી શકાતી નથી.
+                {% else %}
+                Writers cannot publish substantive legal explainers directly. Every guide undergoes formal verification by an admitted High Court advocate to ensure no statutory section is mischaracterized or taken out of context.
+                {% endif %}
+            </p>
+
+            <!-- Mandatory Non-Advice Disclaimer -->
+            <h2>{% if is_gujarati %}૩. કાનૂની સલાહ નથી (No Legal Advice){% else %}3. Explicit No Legal Advice Disclaimer{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                આ વેબસાઇટ પર પ્રદર્શિત તમામ સામગ્રી માત્ર સામાન્ય જાહેર માહિતી અને શૈક્ષણિક હેતુ માટે છે. તે કાનૂની સલાહ (Legal Advice) અથવા વકીલ-અસીલ સંબંધ (Attorney-Client Relationship) સ્થાપિત કરતી નથી. કોઈપણ વ્યક્તિગત કાનૂની કેસ, વિવાદ અથવા પ્રક્રિયા માટે સ્થાનિક સક્ષમ વકીલની સલાહ લેવી અનિવાર્ય છે.
+                {% else %}
+                Content on this portal is strictly provided for general informational, educational, and reference purposes. It does not constitute legal counsel, representation, or legal opinion. Users facing individual family, inheritance, or marital situations must consult a licensed advocate qualified in the relevant jurisdiction.
+                {% endif %}
+            </p>
+
+            <!-- Corrections SLA -->
+            <h2>{% if is_gujarati %}૪. ભૂલ સુધારણા નીતિ (Corrections SLA){% else %}4. Transparent Corrections SLA{% endif %}</h2>
+            <p>
+                {% if is_gujarati %}
+                જો કોઈ નાગરિક, સંશોધક કે વકીલ કોઈ તારીખ, કલમ કે અર્થઘટનમાં ક્ષતિ ધ્યાને લાવે, તો અમારી સંપાદકીય ટીમ ૪૮ કલાકની અંદર સત્તાવાર ગેઝેટ સાથે તેની પુષ્ટિ કરી સુધારો નોંધશે અને પૃષ્ઠ પર સાર્વજનિક પારદર્શિતા નોંધ (Correction Log) પ્રકાશિત કરશે.
+                {% else %}
+                We maintain an open public correction queue. Submissions backed by verifiable primary legal sources are audited within 48 hours. When an inaccuracy is confirmed, the explainer is updated with a transparent correction errata note.
+                {% endif %}
+            </p>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
