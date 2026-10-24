@@ -82,12 +82,13 @@ class PublicPlatformTests(TestCase):
         self.assertContains(response, 'lang="en"')
         self.assertContains(response, "Gujarat Uniform Civil Code, 2026")
 
-    def test_theme_switch_session(self):
-        """Verify ?theme=dark persists in session and applies dark theme class."""
+    def test_strict_light_mode_enforced(self):
+        """Verify light mode is strictly enforced and dark theme is ignored."""
         response = self.client.get(reverse('home') + '?theme=dark')
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'theme-dark')
-        self.assertEqual(self.client.session.get('site_theme'), 'dark')
+        self.assertContains(response, 'theme-light')
+        self.assertNotContains(response, 'theme-dark')
+        self.assertEqual(self.client.session.get('site_theme'), 'light')
 
     def test_topic_detail_page(self):
         """Verify dedicated topic page loads with full context."""
@@ -267,11 +268,11 @@ class PortalAdminDashboardTests(TestCase):
         self.draft_explainer.refresh_from_db()
         self.assertEqual(self.draft_explainer.editorial_status, EditorialStatus.LEGAL_REVIEW)
 
-    def test_theme_and_language_settings_persistence(self):
-        """Verify theme and language preferences save to SiteSettings."""
+    def test_appearance_and_language_settings_persistence(self):
+        """Verify platform settings enforce light theme and save preferences."""
         self.client.login(username='admin_boss', password='password123')
         post_data = {
-            'default_theme': 'dark',
+            'default_theme': 'light',
             'primary_accent_color': '#059669',
             'default_language': 'gu',
             'announcement_banner_gu': 'નવું જાહેરનામું ટૂંક સમયમાં અપેક્ષિત છે.',
@@ -282,7 +283,7 @@ class PortalAdminDashboardTests(TestCase):
         self.assertEqual(res.status_code, 302)
 
         self.settings.refresh_from_db()
-        self.assertEqual(self.settings.default_theme, 'dark')
+        self.assertEqual(self.settings.default_theme, 'light')
         self.assertEqual(self.settings.primary_accent_color, '#059669')
         self.assertEqual(self.settings.announcement_banner_gu, 'નવું જાહેરનામું ટૂંક સમયમાં અપેક્ષિત છે.')
 

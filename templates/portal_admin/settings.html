@@ -1,16 +1,16 @@
 {% extends 'portal_admin/base_admin.html' %}
 {% load core_tags %}
 
-{% block admin_heading %}થીમ અને ભાષા નિયંત્રણ (Theme, Appearance & Language Controls){% endblock %}
+{% block admin_heading %}પ્લેટફોર્મ સેટિંગ્સ અને ભાષા નિયંત્રણ (Platform Settings & Language Controls){% endblock %}
 
 {% block admin_content %}
 
 <div class="card-panel" style="max-width: 880px;">
     <div class="card-header-flex">
         <div>
-            <h3>પ્લેટફોર્મ ડિસ્પ્લે અને વિઝ્યુઅલ થીમ નિયંત્રણ</h3>
+            <h3>પ્લેટફોર્મ ડિસ્પ્લે અને રંગ નિયંત્રણ</h3>
             <p style="font-size: 0.84rem; color: var(--muted-grey); margin-top: 2px;">
-                ગુજરાતી ફોન્ટ્સ, ડાર્ક મોડ અને એક્સેસિબિલિટી (High Contrast) પ્રાથમિકતાઓ કસ્ટમાઇઝ કરો.
+                પ્લેટફોર્મની દ્રશ્ય પ્રાથમિકતાઓ, મુખ્ય રંગ અને મૂળભૂત ભાષા કસ્ટમાઇઝ કરો.
             </p>
         </div>
     </div>
@@ -18,35 +18,20 @@
     <form method="post" action="{% url 'portal_admin_settings' %}">
         {% csrf_token %}
 
-        <!-- 1. Theme Mode -->
+        <!-- 1. Visual Mode (Permanent Light Mode) -->
         <div style="margin-bottom: 26px;">
             <label style="display: block; font-size: 0.92rem; font-weight: 800; margin-bottom: 10px; color: var(--ink-charcoal);">
-                ૧. મૂળભૂત વિઝ્યુઅલ થીમ (Default Theme Mode)
+                ૧. વિઝ્યુઅલ મોડ (Visual Mode)
             </label>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px;">
-                <label style="border: 2px solid {% if site_settings.default_theme == 'light' %}#B45309{% else %}var(--border-subtle){% endif %}; border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; background: #FFFFFF;">
-                    <input type="radio" name="default_theme" value="light" {% if site_settings.default_theme == 'light' %}checked{% endif %} style="margin-top: 3px;">
-                    <div>
-                        <div style="font-weight: 700; font-size: 0.95rem; color: #1E293B;">☀️ લાઇટ મોડ (Light Mode)</div>
-                        <div style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">સફેદ કાગળ પૃષ્ઠભૂમિ, ચકાસાયેલ કાનૂની સંસ્થાઓ માટે નિર્ધારિત.</div>
+            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
+                <span style="font-size: 1.5rem;">☀️</span>
+                <div>
+                    <div style="font-weight: 700; font-size: 0.96rem; color: #1E293B;">માત્ર લાઇટ મોડ (Strict Light Mode)</div>
+                    <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">
+                        કાગળ-સફેદ પૃષ્ઠભૂમિ અને ઉચ્ચ ગુણવત્તાવાળા કાનૂની દસ્તાવેજીકરણ માટે સેટ કરેલ છે. ડાર્ક મોડ અને અન્ય મોડ્સ અક્ષમ છે.
                     </div>
-                </label>
-
-                <label style="border: 2px solid {% if site_settings.default_theme == 'dark' %}#B45309{% else %}var(--border-subtle){% endif %}; border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; background: #0F172A; color: #FFFFFF;">
-                    <input type="radio" name="default_theme" value="dark" {% if site_settings.default_theme == 'dark' %}checked{% endif %} style="margin-top: 3px;">
-                    <div>
-                        <div style="font-weight: 700; font-size: 0.95rem; color: #FFFFFF;">🌙 ડાર્ક મોડ (Dark Mode)</div>
-                        <div style="font-size: 0.8rem; color: #94A3B8; margin-top: 2px;">આંખોના રક્ષણ માટે ગહન નેવી અને સ્લેટ ડાર્ક પેલેટ.</div>
-                    </div>
-                </label>
-
-                <label style="border: 2px solid {% if site_settings.default_theme == 'contrast' %}#B45309{% else %}var(--border-subtle){% endif %}; border-radius: 8px; padding: 16px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; background: #000000; color: #FFFF00;">
-                    <input type="radio" name="default_theme" value="contrast" {% if site_settings.default_theme == 'contrast' %}checked{% endif %} style="margin-top: 3px;">
-                    <div>
-                        <div style="font-weight: 700; font-size: 0.95rem; color: #FFFF00;">♿ હાઈ કોન્ટ્રાસ્ટ (High Contrast)</div>
-                        <div style="font-size: 0.8rem; color: #E2E8F0; margin-top: 2px;">દ્રષ્ટિહીનતા અને સરળ વાંચન માટે સુલભતા મોડ.</div>
-                    </div>
-                </label>
+                </div>
+                <input type="hidden" name="default_theme" value="light">
             </div>
         </div>
 

@@ -381,7 +381,7 @@ def admin_settings_view(request):
     ip = get_client_ip(request)
 
     if request.method == "POST":
-        default_theme = request.POST.get('default_theme', 'light')
+        default_theme = 'light'
         primary_accent_color = request.POST.get('primary_accent_color', '#B45309')
         default_language = request.POST.get('default_language', 'gu')
         announcement_gu = request.POST.get('announcement_banner_gu', '').strip()
@@ -390,7 +390,7 @@ def admin_settings_view(request):
         official_source_url = request.POST.get('verified_official_source_url', '').strip()
 
         if settings:
-            settings.default_theme = default_theme
+            settings.default_theme = 'light'
             settings.primary_accent_color = primary_accent_color
             settings.default_language = default_language
             settings.announcement_banner_gu = announcement_gu
@@ -400,15 +400,15 @@ def admin_settings_view(request):
                 settings.verified_official_source_url = official_source_url
             settings.save()
 
-            # Update session theme immediately
-            request.session['site_theme'] = default_theme
+            # Ensure session theme is light
+            request.session['site_theme'] = 'light'
 
             log_admin_action(
-                request.user, "UPDATE_THEME_LANGUAGE_SETTINGS", "SiteSettings",
+                request.user, "UPDATE_PLATFORM_SETTINGS", "SiteSettings",
                 settings.id, "Platform Settings", ip=ip,
-                notes=f"Theme set to {default_theme}, Accent to {primary_accent_color}, Default Lang to {default_language}"
+                notes=f"Accent set to {primary_accent_color}, Default Lang to {default_language} (Light mode enforced)"
             )
-            messages.success(request, "Theme and Language preferences saved successfully.")
+            messages.success(request, "Platform preferences saved successfully.")
             return redirect('portal_admin_settings')
 
     return render(request, 'portal_admin/settings.html', {

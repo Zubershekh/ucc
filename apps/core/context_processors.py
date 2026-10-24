@@ -98,9 +98,8 @@ def site_context(request):
     status_label = StatusTaxonomy.LABELS_GU.get(status_key) if is_gujarati else StatusTaxonomy.LABELS_EN.get(status_key)
     status_badge_class = StatusTaxonomy.BADGE_CLASSES.get(status_key, 'status-badge-neutral')
     
-    # Get current theme and accent
-    default_theme = getattr(settings, 'default_theme', 'light') if settings else 'light'
-    current_theme = request.session.get('site_theme', default_theme)
+    # Strictly enforce light mode
+    current_theme = 'light'
     primary_accent = getattr(settings, 'primary_accent_color', '#B45309') if settings else '#B45309'
 
     user_profile = None

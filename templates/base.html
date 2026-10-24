@@ -28,7 +28,7 @@
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="lang-{{ current_lang|default:'gu' }} theme-{{ current_theme|default:'light' }}">
+<body class="lang-{{ current_lang|default:'gu' }} theme-light">
 
     <!-- Mandatory Legal Non-Affiliation Bar -->
     <div class="top-disclaimer-bar">
@@ -48,18 +48,11 @@
                 <div class="top-bar-links">
                     <a href="{% url 'editorial_policy' %}">{{ ui.editorial_policy }}</a>
                     <a href="{% url 'corrections_page' %}">{{ ui.corrections }}</a>
-                    
-                    <!-- Theme Switcher -->
-                    <div class="lang-selector-group" title="થીમ બદલો / Switch Theme">
-                        <a href="?theme=light{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}" class="lang-btn {% if current_theme == 'light' %}active{% endif %}" title="Light Mode">☀️</a>
-                        <a href="?theme=dark{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}" class="lang-btn {% if current_theme == 'dark' %}active{% endif %}" title="Dark Mode">🌙</a>
-                        <a href="?theme=contrast{% if request.GET.lang %}&lang={{ request.GET.lang }}{% endif %}" class="lang-btn {% if current_theme == 'contrast' %}active{% endif %}" title="High Contrast Mode">♿</a>
-                    </div>
 
                     <!-- Language Switcher Pill (Gujarati Default) -->
                     <div class="lang-selector-group" title="ભાષા બદલો / Switch Language">
-                        <a href="?lang=gu{% if request.GET.theme %}&theme={{ request.GET.theme }}{% endif %}" data-lang="gu" class="lang-btn {% if is_gujarati %}active{% endif %}">ગુજરાતી</a>
-                        <a href="?lang=en{% if request.GET.theme %}&theme={{ request.GET.theme }}{% endif %}" data-lang="en" class="lang-btn {% if not is_gujarati %}active{% endif %}">EN</a>
+                        <a href="?lang=gu" data-lang="gu" class="lang-btn {% if is_gujarati %}active{% endif %}">ગુજરાતી</a>
+                        <a href="?lang=en" data-lang="en" class="lang-btn {% if not is_gujarati %}active{% endif %}">EN</a>
                     </div>
 
                     <!-- Staff Portal Link -->

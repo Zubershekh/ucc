@@ -90,9 +90,10 @@ if os.environ.get("DATABASE_URL"):
 elif IS_VERCEL:
     tmp_db = Path("/tmp/db.sqlite3")
     local_db = BASE_DIR / "db.sqlite3"
-    if not tmp_db.exists() and local_db.exists():
+    if local_db.exists():
         try:
-            shutil.copy2(local_db, tmp_db)
+            if not tmp_db.exists() or local_db.stat().st_mtime > tmp_db.stat().st_mtime:
+                shutil.copy2(local_db, tmp_db)
         except Exception:
             pass
     DATABASES = {

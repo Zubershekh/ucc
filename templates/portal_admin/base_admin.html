@@ -22,12 +22,7 @@
             --admin-sidebar-active: #B45309;
             --admin-main-bg: #F8FAFC;
         }
-        body.theme-dark {
-            --admin-main-bg: #0B0F19;
-            --paper-white: #111827;
-            --border-subtle: #1F2937;
-            --ink-charcoal: #F9FAFB;
-        }
+
         .admin-layout {
             display: flex;
             min-height: 100vh;
@@ -255,7 +250,7 @@
     </style>
     {% block extra_admin_css %}{% endblock %}
 </head>
-<body class="lang-gu theme-{{ current_theme }}">
+<body class="lang-gu theme-light">
 
 <div class="admin-layout">
     <!-- Sidebar Navigation -->
@@ -291,7 +286,7 @@
             <span class="admin-nav-category">સિસ્ટમ નિયંત્રણ</span>
             <a href="{% url 'portal_admin_settings' %}" class="admin-nav-item {% if request.resolver_match.url_name == 'portal_admin_settings' %}active{% endif %}">
                 <svg class="icon-svg icon-md" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                <span>થીમ અને ભાષા નિયંત્રણ</span>
+                <span>સેટિંગ્સ અને ભાષા (Settings)</span>
             </a>
 
             {% if user_profile.is_portal_admin or request.user.is_superuser %}
