@@ -37,6 +37,9 @@ UI_STRINGS = {
         'explore_topics': 'Explore UCC Provisions by Subject',
         'latest_updates_head': 'Recent Legislative & Editorial Updates',
         'library_head': 'Official Gazette, Acts & Government Notifications',
+        'resources': 'Legal Resources',
+        'all_topics': 'All Topics',
+        'menu': 'Menu',
         'all_rights_reserved': 'All content published under verified editorial standards. Non-governmental public legal information initiative.',
     },
     'gu': {
@@ -51,6 +54,9 @@ UI_STRINGS = {
         'news': 'સમાચાર અને અપડેટ્સ',
         'faq': 'સામાન્ય પ્રશ્નોત્તરી (FAQ)',
         'glossary': 'કાનૂની શબ્દકોશ',
+        'resources': 'કાનૂની સંસાધનો',
+        'all_topics': 'તમામ વિષયો',
+        'menu': 'મેનુ',
         'editorial_policy': 'સંપાદકીય નીતિ',
         'corrections': 'ભૂલ સુધારો / પ્રતિસાદ',
         'about': 'અમારા વિશે',
@@ -102,6 +108,14 @@ def site_context(request):
     current_theme = 'light'
     primary_accent = getattr(settings, 'primary_accent_color', '#B45309') if settings else '#B45309'
 
+    # Nav topics for dropdown
+    nav_topics = []
+    try:
+        from apps.topics.models import Topic
+        nav_topics = list(Topic.objects.filter(is_active=True).order_by('order')[:6])
+    except Exception:
+        nav_topics = []
+
     user_profile = None
     if request.user.is_authenticated:
         try:
@@ -122,6 +136,7 @@ def site_context(request):
         'current_status_badge_class': status_badge_class,
         'current_theme': current_theme,
         'primary_accent_color': primary_accent,
+        'nav_topics': nav_topics,
         'user_profile': user_profile,
         'STATUS_LABELS_EN': StatusTaxonomy.LABELS_EN,
         'STATUS_LABELS_GU': StatusTaxonomy.LABELS_GU,

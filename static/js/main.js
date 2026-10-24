@@ -48,4 +48,68 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
+  // 4. Navigation Dropdown & Mobile Menu Handler
+  const mobileToggle = document.getElementById('mobileMenuToggle');
+  const mainNavLinks = document.getElementById('mainNavLinks');
+
+  if (mobileToggle && mainNavLinks) {
+    mobileToggle.addEventListener('click', function () {
+      const isOpen = mainNavLinks.classList.toggle('mobile-open');
+      mobileToggle.setAttribute('aria-expanded', isOpen);
+      const iconHam = mobileToggle.querySelector('.icon-hamburger');
+      const iconClose = mobileToggle.querySelector('.icon-close');
+      if (iconHam && iconClose) {
+        iconHam.style.display = isOpen ? 'none' : 'inline-block';
+        iconClose.style.display = isOpen ? 'inline-block' : 'none';
+      }
+    });
+  }
+
+  // Handle dropdown triggers on click/touch
+  const dropdownTriggers = document.querySelectorAll('.nav-dropdown > .dropdown-trigger');
+  dropdownTriggers.forEach(trigger => {
+    trigger.addEventListener('click', function (e) {
+      const parent = this.parentElement;
+      // On mobile or on clicking arrow or button, toggle dropdown
+      if (window.innerWidth <= 860 || e.target.closest('.dropdown-arrow')) {
+        e.preventDefault();
+        const wasOpen = parent.classList.contains('is-open');
+        document.querySelectorAll('.nav-dropdown.is-open').forEach(d => {
+          if (d !== parent) d.classList.remove('is-open');
+        });
+        parent.classList.toggle('is-open', !wasOpen);
+      }
+    });
+  });
+
+  // Close dropdowns on click outside
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.nav-dropdown')) {
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(d => {
+        d.classList.remove('is-open');
+      });
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.nav-dropdown.is-open').forEach(d => {
+        d.classList.remove('is-open');
+      });
+      if (mainNavLinks && mainNavLinks.classList.contains('mobile-open')) {
+        mainNavLinks.classList.remove('mobile-open');
+        if (mobileToggle) {
+          mobileToggle.setAttribute('aria-expanded', 'false');
+          const iconHam = mobileToggle.querySelector('.icon-hamburger');
+          const iconClose = mobileToggle.querySelector('.icon-close');
+          if (iconHam && iconClose) {
+            iconHam.style.display = 'inline-block';
+            iconClose.style.display = 'none';
+          }
+        }
+      }
+    }
+  });
 });

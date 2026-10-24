@@ -111,15 +111,68 @@
     <!-- Main Navigation Bar -->
     <nav class="main-nav-bar" aria-label="Main Navigation">
         <div class="container nav-inner">
-            <ul class="nav-links">
+            <!-- Mobile Menu Toggle Button -->
+            <button type="button" class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="મેનુ / Menu Toggle" aria-expanded="false">
+                <svg class="icon-svg icon-md icon-hamburger" viewBox="0 0 24 24"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg class="icon-svg icon-md icon-close" viewBox="0 0 24 24" style="display: none;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                <span>{{ ui.menu|default:'મેનુ' }}</span>
+            </button>
+
+            <ul class="nav-links" id="mainNavLinks">
                 <li><a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{{ ui.home }}</a></li>
                 <li><a href="{% url 'understand_ucc' %}" class="{% if request.resolver_match.url_name == 'understand_ucc' %}active{% endif %}">{{ ui.understand_ucc }}</a></li>
-                <li><a href="{% url 'topics_list' %}" class="{% if 'topic' in request.resolver_match.url_name %}active{% endif %}">{{ ui.topics }}</a></li>
+                
+                <!-- 1. Key Topics Dropdown -->
+                <li class="nav-dropdown">
+                    <a href="{% url 'topics_list' %}" class="dropdown-trigger {% if 'topic' in request.resolver_match.url_name %}active{% endif %}" aria-haspopup="true">
+                        <span>{{ ui.topics }}</span>
+                        <svg class="dropdown-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-header">
+                            <span>{{ ui.topics }}</span>
+                            <a href="{% url 'topics_list' %}" class="dropdown-view-all">{{ ui.all_topics|default:'તમામ વિષયો' }} →</a>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        {% for topic in nav_topics %}
+                        <a href="{% url 'topic_detail' slug=topic.slug %}" class="dropdown-item {% if request.resolver_match.kwargs.slug == topic.slug %}active{% endif %}">
+                            <span class="dropdown-item-title">{% if is_gujarati %}{{ topic.name_gu }}{% else %}{{ topic.name_en }}{% endif %}</span>
+                        </a>
+                        {% empty %}
+                        <a href="{% url 'topics_list' %}" class="dropdown-item">{{ ui.topics }}</a>
+                        {% endfor %}
+                    </div>
+                </li>
+
+                <!-- 2. Plain Language Guides -->
                 <li><a href="{% url 'explainers_list' %}" class="{% if 'explainer' in request.resolver_match.url_name %}active{% endif %}">{{ ui.explainers }}</a></li>
-                <li><a href="{% url 'library_list' %}" class="{% if 'library' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name %}active{% endif %}">{{ ui.library }}</a></li>
-                <li><a href="{% url 'timeline_page' %}" class="{% if request.resolver_match.url_name == 'timeline_page' %}active{% endif %}">{{ ui.timeline }}</a></li>
-                <li><a href="{% url 'news_list' %}" class="{% if 'news' in request.resolver_match.url_name %}active{% endif %}">{{ ui.news }}</a></li>
-                <li><a href="{% url 'faq_glossary' %}" class="{% if request.resolver_match.url_name == 'faq_glossary' %}active{% endif %}">{{ ui.faq }} & {{ ui.glossary }}</a></li>
+
+                <!-- 3. Legal Resources & Records Dropdown -->
+                <li class="nav-dropdown">
+                    <a href="{% url 'library_list' %}" class="dropdown-trigger {% if 'library' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name or request.resolver_match.url_name == 'timeline_page' or request.resolver_match.url_name == 'faq_glossary' or 'news' in request.resolver_match.url_name %}active{% endif %}" aria-haspopup="true">
+                        <span>{{ ui.resources|default:'કાનૂની સંસાધનો' }}</span>
+                        <svg class="dropdown-arrow" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </a>
+                    <div class="dropdown-menu">
+                        <a href="{% url 'library_list' %}" class="dropdown-item {% if 'library' in request.resolver_match.url_name or 'document' in request.resolver_match.url_name %}active{% endif %}">
+                            <div class="dropdown-item-title">{{ ui.library }}</div>
+                            <div class="dropdown-item-desc">{% if is_gujarati %}સત્તાવાર ગેઝેટ, કાયદા અને સરકારી દસ્તાવેજો{% else %}Official Gazettes, Acts &amp; Notifications{% endif %}</div>
+                        </a>
+                        <a href="{% url 'timeline_page' %}" class="dropdown-item {% if request.resolver_match.url_name == 'timeline_page' %}active{% endif %}">
+                            <div class="dropdown-item-title">{{ ui.timeline }}</div>
+                            <div class="dropdown-item-desc">{% if is_gujarati %}વિધાનસભા પસારથી ગેઝેટ સુધીની સત્તાવાર સફર{% else %}Legislative passage to Gazette timeline{% endif %}</div>
+                        </a>
+                        <a href="{% url 'faq_glossary' %}" class="dropdown-item {% if request.resolver_match.url_name == 'faq_glossary' %}active{% endif %}">
+                            <div class="dropdown-item-title">{{ ui.faq }} &amp; {{ ui.glossary }}</div>
+                            <div class="dropdown-item-desc">{% if is_gujarati %}સામાન્ય પ્રશ્નો અને કાનૂની પરિભાષાની સાદી સમજૂતી{% else %}Plain definitions and common legal questions{% endif %}</div>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'news_list' %}" class="dropdown-item {% if 'news' in request.resolver_match.url_name %}active{% endif %}">
+                            <div class="dropdown-item-title">{{ ui.news }}</div>
+                            <div class="dropdown-item-desc">{% if is_gujarati %}તાજા કાનૂની અને સંપાદકીય અપડેટ્સ{% else %}Latest legislative and editorial updates{% endif %}</div>
+                        </a>
+                    </div>
+                </li>
             </ul>
 
             <div class="nav-search-box">
