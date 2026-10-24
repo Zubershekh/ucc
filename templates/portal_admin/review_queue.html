@@ -1,27 +1,27 @@
 {% extends 'portal_admin/base_admin.html' %}
 {% load core_tags %}
 
-{% block admin_heading %}કાનૂની સમીક્ષા અને પ્રકાશન કતાર (Legal Review Workflow){% endblock %}
+{% block admin_heading %}Legal Review &amp; QA Queue{% endblock %}
 
 {% block admin_content %}
 
 <div class="card-panel">
     <div class="card-header-flex">
         <div>
-            <h3>વૈધાનિક ગુણવત્તા ચકાસણી બોર્ડ (Advocate QA Pipeline)</h3>
-            <p style="font-size: 0.84rem; color: var(--muted-grey); margin-top: 2px;">
-                કોઈપણ કાનૂની માહિતી ગુજરાત હાઈકોર્ટ / બાર કાઉન્સિલના વકીલ દ્વારા સમીક્ષા વગર સીધી પ્રકાશિત થઈ શકતી નથી.
+            <h3 class="card-header-title">Statutory Quality Assurance Board</h3>
+            <p class="card-header-desc">
+                Enforcing strict verification against Gujarat Act 17 of 2026 and Gazette Vol. LXVII before public release.
             </p>
         </div>
         <div style="display: flex; gap: 8px;">
-            <span class="role-pill role-legal">કાનૂની સમીક્ષા બાકી: {{ legal_review.count }}</span>
-            <span class="role-pill role-admin">મંજૂર થયેલ: {{ approved.count }}</span>
+            <span class="role-pill role-legal">Awaiting Review: {{ legal_review.count }}</span>
+            <span class="role-pill role-admin">Approved: {{ approved.count }}</span>
         </div>
     </div>
 
     <!-- 1. Active Review Queue Table -->
-    <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 14px; color: var(--ink-charcoal);">
-        ૧. કાનૂની સમીક્ષક વકીલની સહી/ચકાસણી માટે પેન્ડિંગ (Awaiting Legal Advocate QA)
+    <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0 0 14px; color: var(--admin-text-main);">
+        1. Explainers Awaiting Bar Council Advocate QA Sign-off
     </h4>
 
     {% if legal_review %}
@@ -29,25 +29,25 @@
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>શીર્ષક (Title)</th>
-                    <th>વિષય</th>
-                    <th>સ્ત્રોત કલમો</th>
-                    <th>વર્તમાન સ્થિતિ</th>
-                    <th>વકીલ સમીક્ષા ક્રિયા (Advocate QA Actions)</th>
+                    <th>Explainer Title</th>
+                    <th>Subject Topic</th>
+                    <th>Statutory Citations</th>
+                    <th>Status</th>
+                    <th>Advocate QA Sign-off Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in legal_review %}
                 <tr style="background: #FFFDF9;">
                     <td>
-                        <div style="font-weight: 800; font-size: 0.95rem; color: var(--ink-charcoal);">{{ item.title_gu }}</div>
-                        <div style="font-size: 0.8rem; color: var(--muted-grey);">{{ item.title_en }}</div>
+                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--admin-text-main);">{{ item.title_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ item.title_gu }}</div>
                     </td>
-                    <td><span style="font-size: 0.84rem; font-weight: 600;">{{ item.topic.title_gu }}</span></td>
-                    <td><code style="font-size: 0.8rem; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">{{ item.source_citations|truncatechars:35 }}</code></td>
+                    <td><span style="font-size: 0.84rem; font-weight: 600;">{{ item.topic.name_en }}</span></td>
+                    <td><code style="font-size: 0.78rem; background: #F1F5F9; padding: 2px 6px; border-radius: 4px;">{{ item.source_citations|truncatechars:35 }}</code></td>
                     <td>
-                        <span class="role-pill role-legal">
-                            {{ item.get_editorial_status_display }}
+                        <span class="role-pill status-pill-review">
+                            In Legal Review
                         </span>
                     </td>
                     <td>
@@ -55,21 +55,15 @@
                             {% csrf_token %}
                             <input type="hidden" name="transition_status" value="1">
                             <input type="hidden" name="explainer_id" value="{{ item.id }}">
-                            <input type="hidden" name="reviewer_name" value="{{ request.user.get_full_name|default:request.user.username }} (Legal Reviewer)">
+                            <input type="hidden" name="reviewer_name" value="{{ request.user.get_full_name|default:request.user.username }} (Advocate QA)">
 
                             <!-- Approve Button -->
-                            <button type="submit" name="new_status" value="APPROVED" class="btn-portal-primary" style="padding: 6px 12px; font-size: 0.8rem; background: #059669;">
-                                ✓ કાનૂની મંજૂરી (Approve)
+                            <input type="hidden" name="new_status" value="APPROVED">
+                            <input type="text" name="reviewer_notes" placeholder="Advocate verification notes..." class="form-input-clean" style="padding: 6px 10px; font-size: 0.8rem; width: 200px;">
+                            <button type="submit" class="btn-portal-success">
+                                <svg class="icon-svg icon-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                                <span>Sign &amp; Approve</span>
                             </button>
-
-                            <!-- Request updates -->
-                            <button type="submit" name="new_status" value="NEEDS_UPDATE" class="btn-portal-outline" style="padding: 6px 10px; font-size: 0.8rem; color: #DC2626; border-color: #FCA5A5;">
-                                સુધારો જરૂરી
-                            </button>
-
-                            <a href="{% url 'portal_admin_explainer_edit' item.id %}" class="btn-portal-outline" style="padding: 6px 10px; font-size: 0.8rem;">
-                                કલમ તપાસો ↗
-                            </a>
                         </form>
                     </td>
                 </tr>
@@ -78,40 +72,51 @@
         </table>
     </div>
     {% else %}
-    <div style="padding: 24px; border: 1px dashed var(--border-subtle); border-radius: 8px; text-align: center; color: var(--muted-grey); margin-bottom: 30px;">
-        ✓ કાનૂની સમીક્ષા માટે કોઈ માર્ગદર્શિકા હાલ પેન્ડિંગ નથી.
+    <div style="background: #F8FAFC; border: 1px dashed var(--admin-border); border-radius: 8px; padding: 28px; text-align: center; color: var(--admin-text-muted); margin-bottom: 30px;">
+        <svg class="icon-svg icon-lg" style="color: #10B981; margin-bottom: 6px;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div style="font-weight: 700; color: var(--admin-text-main);">Review Queue Clear</div>
+        <div style="font-size: 0.82rem; margin-top: 2px;">No explainers currently awaiting advocate verification.</div>
     </div>
     {% endif %}
 
-    <!-- 2. Approved Queue (Ready for Live Publishing) -->
-    <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 14px; color: var(--ink-charcoal);">
-        ૨. મંજૂર થયેલ માર્ગદર્શિકાઓ (Approved - Ready to Publish Live)
+    <!-- 2. Approved Articles (Awaiting Live Publication) -->
+    <h4 style="font-size: 0.95rem; font-weight: 800; margin: 0 0 14px; color: var(--admin-text-main);">
+        2. Advocate-Approved Content (Ready for Live Publishing)
     </h4>
 
     {% if approved %}
-    <div class="table-responsive" style="margin-bottom: 30px;">
+    <div class="table-responsive">
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>શીર્ષક</th>
-                    <th>વિષય</th>
-                    <th>ચકાસણી કરનાર વકીલ</th>
-                    <th>લાઈવ પ્રકાશન ક્રિયા</th>
+                    <th>Title &amp; Topic</th>
+                    <th>Verified By</th>
+                    <th>Status</th>
+                    <th>Publish Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in approved %}
                 <tr>
-                    <td style="font-weight: 700;">{{ item.title_gu }}</td>
-                    <td>{{ item.topic.title_gu }}</td>
-                    <td style="font-size: 0.84rem; color: #166534;">{{ item.legal_reviewer_name }}</td>
                     <td>
-                        <form method="post" action="{% url 'portal_admin_review_queue' %}" style="display: inline-flex; gap: 8px;">
+                        <div style="font-weight: 700; font-size: 0.9rem; color: var(--admin-text-main);">{{ item.title_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ item.title_gu }} &bull; {{ item.topic.name_en }}</div>
+                    </td>
+                    <td style="font-size: 0.84rem; color: #1E293B;">
+                        <strong>{{ item.legal_reviewer_name|default:"Verified Advocate" }}</strong>
+                    </td>
+                    <td>
+                        <span class="role-pill status-pill-approved">Approved</span>
+                    </td>
+                    <td>
+                        <form method="post" action="{% url 'portal_admin_review_queue' %}">
                             {% csrf_token %}
                             <input type="hidden" name="transition_status" value="1">
                             <input type="hidden" name="explainer_id" value="{{ item.id }}">
-                            <button type="submit" name="new_status" value="PUBLISHED" class="btn-portal-primary" style="padding: 6px 14px; font-size: 0.82rem;">
-                                🚀 લાઈવ પ્રકાશિત કરો (Publish Live)
+                            <input type="hidden" name="new_status" value="PUBLISHED">
+                            <button type="submit" class="btn-portal-primary">
+                                <svg class="icon-svg icon-xs" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                <span>Publish Live to Citizens</span>
                             </button>
                         </form>
                     </td>
@@ -121,57 +126,10 @@
         </table>
     </div>
     {% else %}
-    <div style="padding: 20px; border: 1px dashed var(--border-subtle); border-radius: 8px; text-align: center; color: var(--muted-grey); margin-bottom: 30px; font-size: 0.88rem;">
-        કોઈ મંજૂર થયેલ માર્ગદર્શિકા હાલ લાઈવ પ્રકાશન માટે બાકી નથી.
+    <div style="background: #F8FAFC; border: 1px dashed var(--admin-border); border-radius: 8px; padding: 22px; text-align: center; color: var(--admin-text-muted);">
+        <div style="font-size: 0.84rem;">No approved explainers currently waiting to be published.</div>
     </div>
     {% endif %}
-
-    <!-- 3. Drafts Queue (Can be submitted for QA) -->
-    <h4 style="font-size: 1rem; font-weight: 800; margin-bottom: 14px; color: var(--ink-charcoal);">
-        ૩. સંપાદકીય ખરડા (Drafts - In Preparation)
-    </h4>
-
-    {% if drafts %}
-    <div class="table-responsive">
-        <table class="portal-table">
-            <thead>
-                <tr>
-                    <th>શીર્ષક</th>
-                    <th>વિષય</th>
-                    <th>સ્થિતિ</th>
-                    <th>ક્રિયા</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in drafts %}
-                <tr>
-                    <td style="font-weight: 700;">{{ item.title_gu }}</td>
-                    <td>{{ item.topic.title_gu }}</td>
-                    <td><span class="role-pill role-editor">{{ item.get_editorial_status_display }}</span></td>
-                    <td>
-                        <form method="post" action="{% url 'portal_admin_review_queue' %}" style="display: inline-flex; gap: 8px;">
-                            {% csrf_token %}
-                            <input type="hidden" name="transition_status" value="1">
-                            <input type="hidden" name="explainer_id" value="{{ item.id }}">
-                            <button type="submit" name="new_status" value="LEGAL_REVIEW" class="btn-portal-outline" style="padding: 5px 12px; font-size: 0.8rem; font-weight: 700; color: #4338CA; border-color: #C7D2FE;">
-                                ⚖ કાનૂની સમીક્ષા માટે મોકલો
-                            </button>
-                            <a href="{% url 'portal_admin_explainer_edit' item.id %}" class="btn-portal-outline" style="padding: 5px 10px; font-size: 0.8rem;">
-                                સુધારો
-                            </a>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    {% else %}
-    <div style="padding: 20px; border: 1px dashed var(--border-subtle); border-radius: 8px; text-align: center; color: var(--muted-grey); font-size: 0.88rem;">
-        કોઈ નવા ખરડા બાકી નથી.
-    </div>
-    {% endif %}
-
 </div>
 
 {% endblock %}

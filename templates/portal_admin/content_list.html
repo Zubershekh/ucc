@@ -1,29 +1,29 @@
 {% extends 'portal_admin/base_admin.html' %}
 {% load core_tags %}
 
-{% block admin_heading %}સામગ્રી સંચાલન હબ (Content Management Desk){% endblock %}
+{% block admin_heading %}Content Management Desk{% endblock %}
 
 {% block admin_content %}
 
 <div class="card-panel">
-    <!-- Top Action Bar -->
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 14px;">
-        <!-- Tabs -->
-        <div style="display: flex; gap: 8px; border-bottom: 2px solid #E2E8F0; padding-bottom: 2px;">
-            <a href="?tab=explainers" class="btn-portal-outline" style="border: none; {% if active_tab == 'explainers' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800;{% endif %}">
-                કાનૂની માર્ગદર્શિકાઓ (Explainers)
+    <!-- Top Action & Navigation Bar -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 22px; flex-wrap: wrap; gap: 16px;">
+        <!-- Filter Tabs -->
+        <div style="display: flex; gap: 6px; border-bottom: 2px solid #F1F5F9; padding-bottom: 2px; flex-wrap: wrap;">
+            <a href="?tab=explainers" class="btn-portal-outline" style="border: none; {% if active_tab == 'explainers' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800; background: transparent;{% endif %}">
+                Explainers ({{ explainers.count }})
             </a>
-            <a href="?tab=topics" class="btn-portal-outline" style="border: none; {% if active_tab == 'topics' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800;{% endif %}">
-                મુખ્ય વિષયો (Topics)
+            <a href="?tab=topics" class="btn-portal-outline" style="border: none; {% if active_tab == 'topics' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800; background: transparent;{% endif %}">
+                Key Topics ({{ topics.count }})
             </a>
-            <a href="?tab=documents" class="btn-portal-outline" style="border: none; {% if active_tab == 'documents' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800;{% endif %}">
-                કાનૂની પુસ્તકાલય (Library)
+            <a href="?tab=documents" class="btn-portal-outline" style="border: none; {% if active_tab == 'documents' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800; background: transparent;{% endif %}">
+                Gazettes &amp; Library ({{ documents.count }})
             </a>
-            <a href="?tab=news" class="btn-portal-outline" style="border: none; {% if active_tab == 'news' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800;{% endif %}">
-                સમાચાર અને અપડેટ્સ (News)
+            <a href="?tab=news" class="btn-portal-outline" style="border: none; {% if active_tab == 'news' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800; background: transparent;{% endif %}">
+                News &amp; Updates ({{ news_items.count }})
             </a>
-            <a href="?tab=faqs" class="btn-portal-outline" style="border: none; {% if active_tab == 'faqs' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800;{% endif %}">
-                સામાન્ય પ્રશ્નોત્તરી (FAQs)
+            <a href="?tab=faqs" class="btn-portal-outline" style="border: none; {% if active_tab == 'faqs' %}color: #B45309; border-bottom: 3px solid #B45309; border-radius: 0; font-weight: 800; background: transparent;{% endif %}">
+                FAQs ({{ faqs.count }})
             </a>
         </div>
 
@@ -31,70 +31,77 @@
         <div style="display: flex; gap: 10px; align-items: center;">
             <form method="get" action="" style="display: flex; gap: 6px;">
                 <input type="hidden" name="tab" value="{{ active_tab }}">
-                <input type="text" name="q" value="{{ search_q }}" placeholder="શોધો (Search)..." style="padding: 8px 12px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.88rem;">
-                <button type="submit" class="btn-portal-outline" style="padding: 8px 12px;">શોધો</button>
+                <input type="text" name="q" value="{{ search_q }}" placeholder="Search records..." class="form-input-clean" style="padding: 7px 12px; font-size: 0.84rem; width: 180px;">
+                <button type="submit" class="btn-portal-outline" style="padding: 7px 12px;">Search</button>
             </form>
 
             {% if active_tab == 'explainers' %}
             <a href="{% url 'portal_admin_explainer_add' %}" class="btn-portal-primary">
-                + નવી માર્ગદર્શિકા ઉમેરો
+                <svg class="icon-svg icon-xs" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>New Explainer</span>
             </a>
             {% endif %}
         </div>
     </div>
 
-    <!-- Tab 1: Explainers -->
+    <!-- Tab 1: Plain-Language Explainers -->
     {% if active_tab == 'explainers' %}
     <div class="table-responsive">
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>શીર્ષક (ગુજરાતી / English)</th>
-                    <th>મુખ્ય વિષય</th>
-                    <th>કાનૂની સ્થિતિ બેજ</th>
-                    <th>સંપાદકીય સ્થિતિ</th>
-                    <th>કાનૂની સમીક્ષક વકીલ</th>
-                    <th>ક્રિયા</th>
+                    <th>Title &amp; Topic</th>
+                    <th>Statutory Citations</th>
+                    <th>Editorial Workflow</th>
+                    <th>Legal QA Reviewer</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for item in explainers %}
                 <tr>
                     <td>
-                        <div style="font-weight: 700; color: var(--ink-charcoal);">{{ item.title_gu }}</div>
-                        <div style="font-size: 0.8rem; color: var(--muted-grey);">{{ item.title_en }}</div>
+                        <div style="font-weight: 700; color: var(--admin-text-main); font-size: 0.9rem;">
+                            {{ item.title_en }}
+                        </div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted); margin-top: 2px;">
+                            {{ item.title_gu }} &bull; <strong style="color: #475569;">{{ item.topic.name_en }}</strong>
+                        </div>
                     </td>
                     <td>
-                        <span style="font-size: 0.84rem; font-weight: 600;">{{ item.topic.title_gu }}</span>
+                        <code style="font-size: 0.78rem; background: #F1F5F9; color: #334155; padding: 2px 6px; border-radius: 4px;">
+                            {{ item.source_citations|default:"Act 17 of 2026"|truncatechars:35 }}
+                        </code>
                     </td>
                     <td>
-                        <span class="status-badge status-badge-warning" style="font-size: 0.72rem;">
-                            {{ item.get_legal_status_badge_display }}
-                        </span>
+                        {% if item.editorial_status == 'DRAFT' %}
+                        <span class="role-pill status-pill-draft">Draft</span>
+                        {% elif item.editorial_status == 'LEGAL_REVIEW' %}
+                        <span class="role-pill status-pill-review">In Legal Review</span>
+                        {% elif item.editorial_status == 'APPROVED' %}
+                        <span class="role-pill status-pill-approved">Advocate Approved</span>
+                        {% elif item.editorial_status == 'PUBLISHED' %}
+                        <span class="role-pill status-pill-published">Published Live</span>
+                        {% endif %}
+                    </td>
+                    <td style="font-size: 0.82rem; color: #475569;">
+                        {{ item.legal_reviewer_name|default:"Awaiting Sign-off" }}
                     </td>
                     <td>
-                        <span class="role-pill {% if item.editorial_status == 'PUBLISHED' %}role-admin{% elif item.editorial_status == 'LEGAL_REVIEW' %}role-legal{% else %}role-editor{% endif %}">
-                            {{ item.get_editorial_status_display }}
-                        </span>
-                    </td>
-                    <td style="font-size: 0.82rem; color: #334155;">
-                        {{ item.legal_reviewer_name|default:"Advocate Review Awaited" }}
-                    </td>
-                    <td>
-                        <div style="display: flex; gap: 8px; align-items: center;">
-                            <a href="{% url 'portal_admin_explainer_edit' item.id %}" class="btn-portal-outline" style="padding: 4px 10px; font-size: 0.8rem;">
-                                સંપાદન (Edit)
+                        <div style="display: flex; gap: 8px;">
+                            <a href="{% url 'portal_admin_explainer_edit' pk=item.id %}" class="btn-portal-outline" style="padding: 4px 10px; font-size: 0.78rem;">
+                                Edit
                             </a>
-                            <a href="{% url 'explainer_detail' item.slug %}" target="_blank" style="color: #64748B;">
-                                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                            <a href="{% url 'explainer_detail' slug=item.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 8px; font-size: 0.78rem;" title="View Live">
+                                ↗
                             </a>
                         </div>
                     </td>
                 </tr>
                 {% empty %}
                 <tr>
-                    <td colspan="6" style="text-align: center; color: var(--muted-grey); padding: 30px;">
-                        કોઈ માર્ગદર્શિકા મળી નથી.
+                    <td colspan="5" style="text-align: center; color: var(--admin-text-muted); padding: 28px;">
+                        No explainers found matching your criteria.
                     </td>
                 </tr>
                 {% endfor %}
@@ -108,25 +115,30 @@
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>ક્રમ</th>
-                    <th>વિષય (ગુજરાતી)</th>
-                    <th>Title (English)</th>
+                    <th>Subject Title</th>
                     <th>Slug</th>
-                    <th>માર્ગદર્શિકાઓ સંખ્યા</th>
-                    <th>ક્રિયા</th>
+                    <th>Display Order</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 {% for t in topics %}
                 <tr>
-                    <td style="font-weight: 700;">#{{ t.order }}</td>
-                    <td style="font-weight: 700; color: var(--ink-charcoal);">{{ t.title_gu }}</td>
-                    <td>{{ t.title_en }}</td>
-                    <td><code>{{ t.slug }}</code></td>
-                    <td><span class="role-pill role-editor">{{ t.explainers.count }} Guides</span></td>
                     <td>
-                        <a href="{% url 'topic_detail' t.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 10px; font-size: 0.8rem;">
-                            જાહેર પેજ જુઓ
+                        <div style="font-weight: 700; font-size: 0.9rem;">{{ t.name_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ t.name_gu }}</div>
+                    </td>
+                    <td><code style="font-size: 0.8rem;">{{ t.slug }}</code></td>
+                    <td><span style="font-weight: 700;">#{{ t.order }}</span></td>
+                    <td>
+                        <span class="role-pill {% if t.is_active %}status-pill-published{% else %}status-pill-draft{% endif %}">
+                            {% if t.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'topic_detail' slug=t.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 8px; font-size: 0.78rem;">
+                            View Live ↗
                         </a>
                     </td>
                 </tr>
@@ -135,38 +147,38 @@
         </table>
     </div>
 
-    <!-- Tab 3: Documents -->
+    <!-- Tab 3: Documents / Gazettes -->
     {% elif active_tab == 'documents' %}
     <div class="table-responsive">
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>દસ્તાવેજ શીર્ષક</th>
-                    <th>પ્રકાર (Type)</th>
-                    <th>ગેઝેટ / એક્ટ નંબર</th>
-                    <th>પ્રકાશન તારીખ</th>
-                    <th>સત્તાવાર સ્ત્રોત</th>
+                    <th>Document Title</th>
+                    <th>Category</th>
+                    <th>Document No.</th>
+                    <th>Publication Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for doc in documents %}
                 <tr>
-                    <td style="font-weight: 700; color: var(--ink-charcoal);">
-                        {{ doc.title_gu }}
-                        <div style="font-size: 0.78rem; color: var(--muted-grey); font-weight: normal;">{{ doc.title_en }}</div>
-                    </td>
-                    <td><span class="role-pill role-admin">{{ doc.get_document_type_display }}</span></td>
-                    <td><code>{{ doc.act_or_gazette_number|default:"Act 17 of 2026" }}</code></td>
-                    <td style="font-size: 0.84rem;">{{ doc.publication_date|date:"d M Y" }}</td>
                     <td>
-                        {% if doc.official_source_url %}
-                        <a href="{{ doc.official_source_url }}" target="_blank" style="color: #B45309; font-weight: 700; font-size: 0.82rem; text-decoration: none;">
-                            PDF / ગેઝેટ જુઓ ↗
-                        </a>
-                        {% else %}
-                        -
-                        {% endif %}
+                        <div style="font-weight: 700; font-size: 0.9rem;">{{ doc.title_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ doc.title_gu }}</div>
                     </td>
+                    <td><span class="role-pill role-editor">{{ doc.get_document_type_display }}</span></td>
+                    <td><code>{{ doc.document_number|default:"-" }}</code></td>
+                    <td style="font-size: 0.82rem; color: var(--admin-text-muted);">{{ doc.publication_date|date:"d M Y" }}</td>
+                    <td>
+                        <a href="{% url 'document_detail' slug=doc.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 8px; font-size: 0.78rem;">
+                            View Details ↗
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; color: var(--admin-text-muted); padding: 28px;">No documents found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -179,32 +191,30 @@
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>સમાચાર શીર્ષક</th>
-                    <th>કેટેગરી</th>
-                    <th>તથ્ય ચકાસણી સ્થિતિ</th>
-                    <th>તારીખ</th>
-                    <th>ક્રિયા</th>
+                    <th>Headline</th>
+                    <th>Category</th>
+                    <th>Published Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for n in news_items %}
+                {% for item in news_items %}
                 <tr>
-                    <td style="font-weight: 700;">
-                        {{ n.title_gu }}
-                        {% if n.is_breaking %}<span class="status-badge status-badge-alert" style="font-size: 0.65rem; margin-left: 6px;">BREAKING</span>{% endif %}
-                    </td>
-                    <td><span class="role-pill role-editor">{{ n.category.name_gu|default:n.category.name_en }}</span></td>
                     <td>
-                        <span class="status-badge status-badge-success" style="font-size: 0.72rem;">
-                            {{ n.get_fact_check_status_display }}
-                        </span>
+                        <div style="font-weight: 700; font-size: 0.9rem;">{{ item.title_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ item.title_gu }}</div>
                     </td>
-                    <td style="font-size: 0.82rem;">{{ n.published_date|date:"d M Y" }}</td>
+                    <td><span class="role-pill role-admin">{{ item.category }}</span></td>
+                    <td style="font-size: 0.82rem; color: var(--admin-text-muted);">{{ item.published_date|date:"d M Y" }}</td>
                     <td>
-                        <a href="{% url 'news_detail' n.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 10px; font-size: 0.8rem;">
-                            વાંચો ↗
+                        <a href="{% url 'news_detail' slug=item.slug %}" target="_blank" class="btn-portal-outline" style="padding: 4px 8px; font-size: 0.78rem;">
+                            View Article ↗
                         </a>
                     </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--admin-text-muted); padding: 28px;">No news items found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -217,32 +227,36 @@
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>પ્રશ્ન (ગુજરાતી)</th>
-                    <th>Question (English)</th>
-                    <th>વિષય (Topic)</th>
-                    <th>સ્થિતિ</th>
+                    <th>Question</th>
+                    <th>Topic</th>
+                    <th>Order</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                {% for f in faqs %}
+                {% for faq in faqs %}
                 <tr>
-                    <td style="font-weight: 700;">{{ f.question_gu }}</td>
-                    <td style="color: var(--muted-grey); font-size: 0.84rem;">{{ f.question_en }}</td>
-                    <td><span class="role-pill role-editor">{{ f.topic.title_gu|default:"સામાન્ય" }}</span></td>
                     <td>
-                        {% if f.is_published %}
-                        <span class="status-badge status-badge-success" style="font-size: 0.72rem;">પ્રકાશિત</span>
-                        {% else %}
-                        <span class="status-badge status-badge-neutral" style="font-size: 0.72rem;">ખરડો</span>
-                        {% endif %}
+                        <div style="font-weight: 700; font-size: 0.88rem;">{{ faq.question_en }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ faq.question_gu }}</div>
                     </td>
+                    <td><span style="font-size: 0.82rem;">{{ faq.topic.name_en|default:"General" }}</span></td>
+                    <td>#{{ faq.order }}</td>
+                    <td>
+                        <span class="role-pill {% if faq.is_active %}status-pill-published{% else %}status-pill-draft{% endif %}">
+                            {% if faq.is_active %}Active{% else %}Inactive{% endif %}
+                        </span>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: var(--admin-text-muted); padding: 28px;">No FAQs found.</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     {% endif %}
-
 </div>
 
 {% endblock %}

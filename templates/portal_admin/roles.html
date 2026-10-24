@@ -1,16 +1,16 @@
 {% extends 'portal_admin/base_admin.html' %}
 {% load core_tags %}
 
-{% block admin_heading %}વપરાશકર્તા ભૂમિકાઓ અને વકીલ પ્રમાણપત્ર (User Roles & Advocate QA Credentials){% endblock %}
+{% block admin_heading %}User Roles &amp; Permissions{% endblock %}
 
 {% block admin_content %}
 
 <div class="card-panel">
     <div class="card-header-flex">
         <div>
-            <h3>સંપાદકીય અને કાનૂની ટીમ ભૂમિકા વ્યવસ્થાપન</h3>
-            <p style="font-size: 0.84rem; color: var(--muted-grey); margin-top: 2px;">
-                માત્ર 'કાનૂની સમીક્ષક વકીલ (Legal Reviewer)' ભૂમિકા ધરાવતા સભ્યો જ સામગ્રીને લાઈવ પ્રકાશન માટે મંજૂર કરી શકે છે.
+            <h3 class="card-header-title">Editorial &amp; Legal Team Access Governance</h3>
+            <p class="card-header-desc">
+                Enforces role segregation. Only users with the 'Legal Advocate Reviewer' role can approve explainers for public release.
             </p>
         </div>
     </div>
@@ -19,47 +19,47 @@
         <table class="portal-table">
             <thead>
                 <tr>
-                    <th>વપરાશકર્તા (User)</th>
-                    <th>ઈમેલ</th>
-                    <th>હાલની ભૂમિકા</th>
-                    <th>બાર કાઉન્સિલ નોંધણી નંબર (Bar Council No.)</th>
-                    <th>ભૂમિકા અપડેટ કરો</th>
+                    <th>User &amp; Full Name</th>
+                    <th>Email Address</th>
+                    <th>Current Role</th>
+                    <th>Bar Council Reg Number</th>
+                    <th>Update Access Privileges</th>
                 </tr>
             </thead>
             <tbody>
                 {% for u in users %}
                 <tr>
                     <td>
-                        <div style="font-weight: 800; font-size: 0.95rem; color: var(--ink-charcoal);">{{ u.username }}</div>
-                        <div style="font-size: 0.8rem; color: var(--muted-grey);">{{ u.get_full_name|default:"-" }}</div>
+                        <div style="font-weight: 700; font-size: 0.92rem; color: var(--admin-text-main);">{{ u.username }}</div>
+                        <div style="font-size: 0.8rem; color: var(--admin-text-muted);">{{ u.get_full_name|default:"Not specified" }}</div>
                     </td>
-                    <td style="font-size: 0.86rem;">{{ u.email|default:"-" }}</td>
+                    <td style="font-size: 0.84rem; color: #475569;">{{ u.email|default:"-" }}</td>
                     <td>
                         <span class="role-pill {% if u.profile.role == 'ADMIN' or u.is_superuser %}role-admin{% elif u.profile.role == 'LEGAL_REVIEWER' %}role-legal{% else %}role-editor{% endif %}">
                             {{ u.profile.get_role_display|default:"Content Editor" }}
                         </span>
                     </td>
                     <td>
-                        <code style="font-size: 0.82rem; background: #F1F5F9; padding: 3px 8px; border-radius: 4px;">
-                            {{ u.profile.bar_council_reg_number|default:"નોંધાયેલ નથી" }}
+                        <code style="font-size: 0.8rem; background: #F1F5F9; color: #1E293B; padding: 2px 7px; border-radius: 4px;">
+                            {{ u.profile.bar_council_reg_number|default:"Not Enrolled" }}
                         </code>
                     </td>
                     <td>
-                        <form method="post" action="{% url 'portal_admin_roles' %}" style="display: flex; gap: 8px; align-items: center;">
+                        <form method="post" action="{% url 'portal_admin_roles' %}" style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
                             {% csrf_token %}
                             <input type="hidden" name="update_user_role" value="1">
                             <input type="hidden" name="user_id" value="{{ u.id }}">
 
-                            <select name="role" style="padding: 6px 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.82rem;">
+                            <select name="role" class="form-input-clean" style="padding: 5px 8px; font-size: 0.8rem; width: auto;">
                                 {% for val, label in role_choices %}
                                 <option value="{{ val }}" {% if u.profile.role == val %}selected{% endif %}>{{ label }}</option>
                                 {% endfor %}
                             </select>
 
-                            <input type="text" name="bar_council_reg_number" value="{{ u.profile.bar_council_reg_number|default:'' }}" placeholder="Bar Reg No. (e.g. G/1422/2014)" style="padding: 6px 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.82rem; width: 170px;">
+                            <input type="text" name="bar_council_reg_number" value="{{ u.profile.bar_council_reg_number|default:'' }}" placeholder="Bar Reg No. (e.g. G/1234/2026)" class="form-input-clean" style="padding: 5px 8px; font-size: 0.8rem; width: 160px;">
 
-                            <button type="submit" class="btn-portal-primary" style="padding: 6px 12px; font-size: 0.8rem;">
-                                સાચવો
+                            <button type="submit" class="btn-portal-primary" style="padding: 5px 12px; font-size: 0.78rem;">
+                                Save Role
                             </button>
                         </form>
                     </td>

@@ -198,8 +198,8 @@ class PortalAdminDashboardTests(TestCase):
         # Access dashboard
         dash_res = self.client.get(reverse('portal_admin_home'))
         self.assertEqual(dash_res.status_code, 200)
-        self.assertContains(dash_res, "મુખ્ય નિયંત્રણ કેન્દ્ર")
-        self.assertContains(dash_res, "સત્તાવાર કાનૂની સ્થિતિ નિયંત્રણ")
+        self.assertContains(dash_res, "Command Center")
+        self.assertContains(dash_res, "Live Legal Status")
 
     def test_update_legal_status_action_and_audit_log(self):
         """Verify updating platform status persists and generates AuditLog."""
@@ -298,4 +298,4 @@ class PortalAdminDashboardTests(TestCase):
         self.client.login(username='admin_boss', password='password123')
         res_admin = self.client.get(reverse('portal_admin_roles'))
         self.assertEqual(res_admin.status_code, 200)
-        self.assertContains(res_admin, "વપરાશકર્તા ભૂમિકાઓ")
+        self.assertContains(res_admin, "User Roles &amp; Permissions")

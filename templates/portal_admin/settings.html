@@ -1,16 +1,16 @@
 {% extends 'portal_admin/base_admin.html' %}
 {% load core_tags %}
 
-{% block admin_heading %}પ્લેટફોર્મ સેટિંગ્સ અને ભાષા નિયંત્રણ (Platform Settings & Language Controls){% endblock %}
+{% block admin_heading %}Platform Appearance &amp; Settings{% endblock %}
 
 {% block admin_content %}
 
-<div class="card-panel" style="max-width: 880px;">
+<div class="card-panel" style="max-width: 860px;">
     <div class="card-header-flex">
         <div>
-            <h3>પ્લેટફોર્મ ડિસ્પ્લે અને રંગ નિયંત્રણ</h3>
-            <p style="font-size: 0.84rem; color: var(--muted-grey); margin-top: 2px;">
-                પ્લેટફોર્મની દ્રશ્ય પ્રાથમિકતાઓ, મુખ્ય રંગ અને મૂળભૂત ભાષા કસ્ટમાઇઝ કરો.
+            <h3 class="card-header-title">Platform Visual &amp; System Configuration</h3>
+            <p class="card-header-desc">
+                Customize primary brand accent colors, public language defaults, and citizen announcement banners.
             </p>
         </div>
     </div>
@@ -18,111 +18,103 @@
     <form method="post" action="{% url 'portal_admin_settings' %}">
         {% csrf_token %}
 
-        <!-- 1. Visual Mode (Permanent Light Mode) -->
-        <div style="margin-bottom: 26px;">
-            <label style="display: block; font-size: 0.92rem; font-weight: 800; margin-bottom: 10px; color: var(--ink-charcoal);">
-                ૧. વિઝ્યુઅલ મોડ (Visual Mode)
-            </label>
-            <div style="background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px;">
-                <span style="font-size: 1.5rem;">☀️</span>
+        <!-- 1. Strict Light Visual Mode Banner -->
+        <div style="margin-bottom: 24px;">
+            <label class="form-label-clean">1. Visual Theme Mode</label>
+            <div style="background: #F8FAFC; border: 1px solid var(--admin-border); border-radius: 8px; padding: 16px 18px; display: flex; align-items: center; gap: 14px;">
+                <span style="font-size: 1.4rem;">☀️</span>
                 <div>
-                    <div style="font-weight: 700; font-size: 0.96rem; color: #1E293B;">માત્ર લાઇટ મોડ (Strict Light Mode)</div>
-                    <div style="font-size: 0.82rem; color: #64748B; margin-top: 2px;">
-                        કાગળ-સફેદ પૃષ્ઠભૂમિ અને ઉચ્ચ ગુણવત્તાવાળા કાનૂની દસ્તાવેજીકરણ માટે સેટ કરેલ છે. ડાર્ક મોડ અને અન્ય મોડ્સ અક્ષમ છે.
+                    <div style="font-weight: 700; font-size: 0.92rem; color: #1E293B;">Permanent Clean Light Mode</div>
+                    <div style="font-size: 0.8rem; color: #64748B; margin-top: 2px;">
+                        Optimized for legal documents, statute reading, and statutory gazette publication.
                     </div>
                 </div>
                 <input type="hidden" name="default_theme" value="light">
             </div>
         </div>
 
-        <!-- 2. Primary Accent Color -->
+        <!-- 2. Primary Brand Accent Color -->
         <div style="margin-bottom: 26px;">
-            <label style="display: block; font-size: 0.92rem; font-weight: 800; margin-bottom: 10px; color: var(--ink-charcoal);">
-                ૨. પ્લેટફોર્મ મુખ્ય રંગ (Primary Brand Accent Color)
-            </label>
+            <label class="form-label-clean">2. Primary Brand Accent Color</label>
             <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 14px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="primary_accent_color" value="#B45309" {% if site_settings.primary_accent_color == '#B45309' %}checked{% endif %}>
-                    <span style="display: inline-block; width: 22px; height: 22px; background: #B45309; border-radius: 50%;"></span>
-                    <span style="font-size: 0.88rem; font-weight: 600;">કેસરી / ગોલ્ડન અંબર (#B45309)</span>
+                    <span style="display: inline-block; width: 18px; height: 18px; background: #B45309; border-radius: 50%;"></span>
+                    <span style="font-size: 0.86rem; font-weight: 600;">Golden Amber (#B45309)</span>
                 </label>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 14px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="primary_accent_color" value="#0D1B2A" {% if site_settings.primary_accent_color == '#0D1B2A' %}checked{% endif %}>
-                    <span style="display: inline-block; width: 22px; height: 22px; background: #0D1B2A; border-radius: 50%;"></span>
-                    <span style="font-size: 0.88rem; font-weight: 600;">રાજ્ય નેવી (#0D1B2A)</span>
+                    <span style="display: inline-block; width: 18px; height: 18px; background: #0D1B2A; border-radius: 50%;"></span>
+                    <span style="font-size: 0.86rem; font-weight: 600;">State Navy (#0D1B2A)</span>
                 </label>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 14px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="primary_accent_color" value="#059669" {% if site_settings.primary_accent_color == '#059669' %}checked{% endif %}>
-                    <span style="display: inline-block; width: 22px; height: 22px; background: #059669; border-radius: 50%;"></span>
-                    <span style="font-size: 0.88rem; font-weight: 600;">ચકાસણી લીલો (#059669)</span>
+                    <span style="display: inline-block; width: 18px; height: 18px; background: #059669; border-radius: 50%;"></span>
+                    <span style="font-size: 0.86rem; font-weight: 600;">Verification Green (#059669)</span>
                 </label>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 14px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="primary_accent_color" value="#D1382A" {% if site_settings.primary_accent_color == '#D1382A' %}checked{% endif %}>
-                    <span style="display: inline-block; width: 22px; height: 22px; background: #D1382A; border-radius: 50%;"></span>
-                    <span style="font-size: 0.88rem; font-weight: 600;">કોરલ રેડ (#D1382A)</span>
+                    <span style="display: inline-block; width: 18px; height: 18px; background: #D1382A; border-radius: 50%;"></span>
+                    <span style="font-size: 0.86rem; font-weight: 600;">Editorial Coral (#D1382A)</span>
                 </label>
             </div>
         </div>
 
-        <!-- 3. Default Language Selection -->
+        <!-- 3. Default Public Language -->
         <div style="margin-bottom: 26px;">
-            <label style="display: block; font-size: 0.92rem; font-weight: 800; margin-bottom: 10px; color: var(--ink-charcoal);">
-                ૩. મૂળભૂત ભાષા (Default Platform Language)
-            </label>
-            <div style="display: flex; gap: 20px;">
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+            <label class="form-label-clean">3. Default Public Platform Language</label>
+            <div style="display: flex; gap: 16px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 16px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="default_language" value="gu" {% if site_settings.default_language == 'gu' %}checked{% endif %}>
-                    <span style="font-size: 0.95rem; font-weight: 800; color: #B45309;">ગુજરાતી (Gujarati) - નિર્ધારિત ડિફોલ્ટ</span>
+                    <span style="font-size: 0.9rem; font-weight: 700; color: #B45309;">ગુજરાતી (Gujarati) - Primary Default</span>
                 </label>
 
-                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; background: #F8FAFC; padding: 8px 16px; border: 1px solid var(--admin-border); border-radius: 6px;">
                     <input type="radio" name="default_language" value="en" {% if site_settings.default_language == 'en' %}checked{% endif %}>
-                    <span style="font-size: 0.95rem; font-weight: 600;">English</span>
+                    <span style="font-size: 0.9rem; font-weight: 600;">English</span>
                 </label>
-            </div>
-            <div style="font-size: 0.8rem; color: var(--muted-grey); margin-top: 6px;">
-                નોંધ: વપરાશકર્તાની વિનંતી મુજબ તમામ નાગરિકો માટે ગુજરાતી ભાષા પ્રથમ પ્રદર્શિત થાય છે.
             </div>
         </div>
 
-        <!-- 4. Global Announcement Banner -->
-        <div style="margin-bottom: 26px; border-top: 1px solid var(--border-subtle); padding-top: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                <label style="font-size: 0.92rem; font-weight: 800; color: var(--ink-charcoal);">
-                    ૪. હોમપેજ ચેતવણી / જાહેરાત પટ્ટી (Announcement Banner)
-                </label>
-                <label style="display: flex; align-items: center; gap: 6px; font-size: 0.84rem; font-weight: 600; cursor: pointer;">
-                    <input type="checkbox" name="show_announcement" {% if site_settings.show_announcement %}checked{% endif %}>
-                    સક્રિય રાખો (Show Banner)
-                </label>
-            </div>
-
-            <div style="margin-bottom: 14px;">
-                <label style="display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 4px;">ગુજરાતી ટેક્સ્ટ</label>
-                <input type="text" name="announcement_banner_gu" value="{{ site_settings.announcement_banner_gu|default:'' }}" placeholder="e.g. ગુજરાત UCC: સત્તાવાર નિયમોનું જાહેરનામું સરકાર દ્વારા હજી બહાર પડાયું નથી." style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
-            </div>
-
-            <div>
-                <label style="display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 4px;">English Text</label>
-                <input type="text" name="announcement_banner_en" value="{{ site_settings.announcement_banner_en|default:'' }}" placeholder="e.g. Official implementation rules are currently pending government notification." style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
-            </div>
-        </div>
-
-        <!-- 5. Official Source Citation -->
+        <!-- 4. Announcement Banner -->
         <div style="margin-bottom: 26px;">
-            <label style="display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 4px;">
-                સત્તાવાર ગેઝેટ PDF કડી (Official NeVA Gazette URL)
-            </label>
-            <input type="url" name="verified_official_source_url" value="{{ site_settings.verified_official_source_url }}" style="width: 100%; padding: 10px; border: 1px solid var(--border-subtle); border-radius: 6px; font-size: 0.9rem;">
+            <label class="form-label-clean">4. Public Citizen Announcement Banner</label>
+            
+            <div style="margin-bottom: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                    <input type="checkbox" name="show_announcement" {% if site_settings.show_announcement %}checked{% endif %}>
+                    <span style="font-size: 0.86rem; font-weight: 600;">Display announcement banner across top of public pages</span>
+                </label>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div>
+                    <label class="form-help-clean" style="margin-bottom: 4px; display: block;">Banner Text (Gujarati)</label>
+                    <textarea name="announcement_banner_gu" rows="2" class="form-input-clean">{{ site_settings.announcement_banner_gu|default:'' }}</textarea>
+                </div>
+                <div>
+                    <label class="form-help-clean" style="margin-bottom: 4px; display: block;">Banner Text (English)</label>
+                    <textarea name="announcement_banner_en" rows="2" class="form-input-clean">{{ site_settings.announcement_banner_en|default:'' }}</textarea>
+                </div>
+            </div>
         </div>
 
-        <div style="border-top: 1px solid var(--border-subtle); padding-top: 20px;">
-            <button type="submit" class="btn-portal-primary" style="padding: 12px 28px; font-size: 0.95rem;">
-                <svg class="icon-svg icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-                પસંદગીઓ સાચવો (Save Preferences)
+        <!-- 5. Official Source URL -->
+        <div style="margin-bottom: 28px;">
+            <label class="form-label-clean">5. Verified Primary Source Document URL (NeVA / Gazette PDF)</label>
+            <input type="url" name="verified_official_source_url" value="{{ site_settings.verified_official_source_url|default:'' }}" class="form-input-clean" placeholder="https://cms.neva.gov.in/...">
+            <div class="form-help-clean">
+                Direct official link displayed in the live legal status banner on the public site.
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; border-top: 1px solid var(--admin-border); padding-top: 18px;">
+            <button type="submit" class="btn-portal-primary">
+                <svg class="icon-svg icon-xs" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Save Platform Settings</span>
             </button>
         </div>
     </form>
