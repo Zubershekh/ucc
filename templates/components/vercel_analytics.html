@@ -1,0 +1,35 @@
+<!-- Vercel Web Analytics (@vercel/analytics inject) -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script type="module">
+  try {
+    const { inject } = await import('https://cdn.jsdelivr.net/npm/@vercel/analytics@2.0.1/+esm');
+    inject();
+  } catch (err) {
+    if (!document.querySelector('script[src*="/_vercel/insights/script.js"]')) {
+      const s = document.createElement('script');
+      s.src = '/_vercel/insights/script.js';
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+  }
+</script>
+
+<!-- Vercel Speed Insights (@vercel/speed-insights inject) -->
+<script>
+  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+</script>
+<script type="module">
+  try {
+    const { injectSpeedInsights } = await import('https://cdn.jsdelivr.net/npm/@vercel/speed-insights@2.0.0/+esm');
+    injectSpeedInsights();
+  } catch (err) {
+    if (!document.querySelector('script[src*="/_vercel/speed-insights/script.js"]')) {
+      const s = document.createElement('script');
+      s.src = '/_vercel/speed-insights/script.js';
+      s.defer = true;
+      document.head.appendChild(s);
+    }
+  }
+</script>

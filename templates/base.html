@@ -27,6 +27,9 @@
         }
     </style>
     {% block extra_css %}{% endblock %}
+
+    <!-- Vercel Analytics & Speed Insights -->
+    {% include 'components/vercel_analytics.html' %}
 </head>
 <body class="lang-{{ current_lang|default:'gu' }} theme-light">
 
