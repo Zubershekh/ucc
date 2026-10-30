@@ -27,6 +27,12 @@
         }
     </style>
     {% block extra_css %}{% endblock %}
+    
+    <!-- Vercel Web Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body class="lang-{{ current_lang|default:'gu' }} theme-light">
 
@@ -222,7 +228,7 @@
                 </span>
                 <span class="disclaimer-text">
                     {% if is_gujarati %}
-                    આ એક બિન-સરકારી કાનૂની માહિતી મંચ છે. સામાન્ય માહિતી માત્ર; કોઈ ઔપચારિક કાનૂની સલાહ નથી.
+                    આ એક બિન-સરકારી કાનૂની માહિતી મંચ ��ે. સામાન્ય માહિતી માત્ર; કોઈ ઔપચારિક કાનૂની સલાહ નથી.
                     {% else %}
                     Independent legal information initiative. General informational content only; not formal legal advice.
                     {% endif %}
